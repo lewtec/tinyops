@@ -1,4 +1,7 @@
 # AGENTS.md
+## Objetivo
+tinyops é uma biblioteca de operações implementadas puramente em tinygrad. O objetivo é gerar kernels fusionados e otimizados que podem ser exportados para outras linguagens/runtimes.
+A restrição de usar apenas tinygrad para implementações (com libs externas apenas para testes de conformidade) garante que todo o grafo de computação passa pelo sistema de kernel fusion do tinygrad.
 
 ## Setup
 
