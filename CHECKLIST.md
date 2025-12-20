@@ -2,11 +2,11 @@
 
 ## linalg
 
-- [ ] `np.dot` → `tinyops.linalg.dot`
-- [ ] `np.matmul` → `tinyops.linalg.matmul`
-- [ ] `np.vdot` → `tinyops.linalg.vdot`
-- [ ] `np.inner` → `tinyops.linalg.inner`
-- [ ] `np.outer` → `tinyops.linalg.outer`
+- [x] `np.dot` → `tinyops.linalg.dot`
+- [x] `np.matmul` → `tinyops.linalg.matmul`
+- [x] `np.vdot` → `tinyops.linalg.vdot`
+- [x] `np.inner` → `tinyops.linalg.inner`
+- [x] `np.outer` → `tinyops.linalg.outer`
 - [ ] `np.tensordot` → `tinyops.linalg.tensordot`
 - [ ] `np.einsum` → `tinyops.linalg.einsum`
 - [ ] `np.linalg.inv` → `tinyops.linalg.inv`
