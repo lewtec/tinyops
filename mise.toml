@@ -1,6 +1,7 @@
 [tools]
 "github:lucasew/ci-status" = "0.0.4"
 uv = "0.9.11"
+"vfox:clang" = "18.1.8"
 
 [tasks.test]
 run = "ci-status run test -- uv run pytest"
