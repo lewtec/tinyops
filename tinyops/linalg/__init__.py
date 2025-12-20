@@ -12,3 +12,6 @@ from .lstsq import lstsq
 from .trace import trace
 from .norm import norm
 from .cond import cond
+from .matrix_power import matrix_power
+from .kron import kron
+from .diagonal import diagonal
