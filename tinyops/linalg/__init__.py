@@ -3,3 +3,12 @@ from .matmul import matmul
 from .vdot import vdot
 from .inner import inner
 from .outer import outer
+from .tensordot import tensordot
+from .einsum import einsum
+from .inv import inv
+from .pinv import pinv
+from .solve import solve
+from .lstsq import lstsq
+from .trace import trace
+from .norm import norm
+from .cond import cond

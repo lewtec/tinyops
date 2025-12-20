@@ -7,17 +7,17 @@
 - [x] `np.vdot` → `tinyops.linalg.vdot`
 - [x] `np.inner` → `tinyops.linalg.inner`
 - [x] `np.outer` → `tinyops.linalg.outer`
-- [ ] `np.tensordot` → `tinyops.linalg.tensordot`
-- [ ] `np.einsum` → `tinyops.linalg.einsum`
-- [ ] `np.linalg.inv` → `tinyops.linalg.inv`
-- [ ] `np.linalg.pinv` → `tinyops.linalg.pinv`
-- [ ] `np.linalg.solve` → `tinyops.linalg.solve`
-- [ ] `np.linalg.lstsq` → `tinyops.linalg.lstsq`
+- [x] `np.tensordot` → `tinyops.linalg.tensordot`
+- [x] `np.einsum` → `tinyops.linalg.einsum`
+- [x] `np.linalg.inv` → `tinyops.linalg.inv`
+- [x] `np.linalg.pinv` → `tinyops.linalg.pinv`
+- [x] `np.linalg.solve` → `tinyops.linalg.solve`
+- [x] `np.linalg.lstsq` → `tinyops.linalg.lstsq`
 - [ ] `np.linalg.det` → `tinyops.linalg.det`
-- [ ] `np.linalg.norm` → `tinyops.linalg.norm`
-- [ ] `np.linalg.cond` → `tinyops.linalg.cond`
+- [x] `np.linalg.norm` → `tinyops.linalg.norm`
+- [x] `np.linalg.cond` → `tinyops.linalg.cond`
 - [ ] `np.linalg.matrix_rank` → `tinyops.linalg.matrix_rank`
-- [ ] `np.trace` → `tinyops.linalg.trace`
+- [x] `np.trace` → `tinyops.linalg.trace`
 - [ ] `np.linalg.eig` → `tinyops.linalg.eig`
 - [ ] `np.linalg.eigh` → `tinyops.linalg.eigh`
 - [ ] `np.linalg.eigvals` → `tinyops.linalg.eigvals`
