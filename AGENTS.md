@@ -1,10 +1,12 @@
 # AGENTS.md
+
 ## Objetivo
 tinyops é uma biblioteca de operações implementadas puramente em tinygrad. O objetivo é gerar kernels fusionados e otimizados que podem ser exportados para outras linguagens/runtimes.
 A restrição de usar apenas tinygrad para implementações (com libs externas apenas para testes de conformidade) garante que todo o grafo de computação passa pelo sistema de kernel fusion do tinygrad.
 
-## Setup
+**Funções são stateless.** Não há train loops, classes com estado, ou interface fit/predict. O usuário monta o loop e gerencia estado. Funções recebem dados e retornam resultados.
 
+## Setup
 ```bash
 # instala mise se não tiver
 if ! command -v mise &> /dev/null; then
@@ -17,7 +19,6 @@ uv sync
 ```
 
 ## Estrutura
-
 ```
 src/tinyops/
 ├── _core/          # helpers internos (tipos, tolerâncias, validação)
@@ -26,11 +27,11 @@ src/tinyops/
 ├── image/          # transformações de imagem
 ├── audio/          # processamento de áudio
 ├── signal/         # processamento de sinais
-└── io/             # encoder/decoder de arquivos, se implementável em tinygrad (wav, bmp)
+├── io/             # encoder/decoder de arquivos, se implementável em tinygrad (wav, bmp)
+└── ml/             # algoritmos de machine learning (sklearn-like)
 ```
 
 Cada função em arquivo próprio com teste colocalizado:
-
 ```
 modulo/
 ├── __init__.py
@@ -39,7 +40,6 @@ modulo/
 ```
 
 ## Implementação
-
 - Única dependência runtime: `tinygrad`
 - Recebe/retorna `tinygrad.Tensor`
 - Type hints obrigatórios
@@ -56,7 +56,6 @@ def hist(x: Tensor, bins: int) -> Tensor:
 ```
 
 ## Testes
-
 - Arquivo `*_test.py` ao lado da implementação
 - Compara output com lib original (numpy, cv2, torch*, etc)
 - Usa helper `_core.assert_close` pra tolerância
@@ -75,13 +74,14 @@ def test_hist():
 ```
 
 ## Adicionar nova função
-
-1. Cria arquivo em `src/tinyops/{modulo}/{func}.py`
-2. Implementa função com type hints
-3. Cria `src/tinyops/{modulo}/{func}_test.py`
-4. Importa no `__init__.py` do módulo
-5. Roda `mise run test -- -k {func}` pra validar
-6. Marca como done no checklist
+1. Escolhe próxima função não marcada no `CHECKLIST.md`
+2. Consulta documentação da lib original pra entender comportamento esperado
+3. Cria arquivo em `src/tinyops/{modulo}/{func}.py`
+4. Implementa função usando apenas `tinygrad`
+5. Cria `src/tinyops/{modulo}/{func}_test.py` comparando com lib original
+6. Importa no `__init__.py` do módulo
+7. Roda `mise run test -- -k {func}` pra validar
+8. Marca como `[x]` no `CHECKLIST.md`
 
 Exemplo para `stats.median`:
 
@@ -119,7 +119,6 @@ from .median import median
 ```
 
 ## Comandos
-
 ```bash
 mise run test           # roda todos os testes
 mise run test -- -k hist  # testa só hist

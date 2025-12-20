@@ -114,3 +114,101 @@
 - [ ] wav encode → `tinyops.io.encode_wav`
 - [ ] bmp decode → `tinyops.io.decode_bmp`
 - [ ] bmp encode → `tinyops.io.encode_bmp`
+
+## ml
+
+### preprocessing
+
+- [ ] `sklearn.preprocessing.StandardScaler` → `tinyops.ml.standard_scaler`
+- [ ] `sklearn.preprocessing.MinMaxScaler` → `tinyops.ml.minmax_scaler`
+- [ ] `sklearn.preprocessing.MaxAbsScaler` → `tinyops.ml.maxabs_scaler`
+- [ ] `sklearn.preprocessing.RobustScaler` → `tinyops.ml.robust_scaler`
+- [ ] `sklearn.preprocessing.Normalizer` → `tinyops.ml.normalizer`
+- [ ] `sklearn.preprocessing.Binarizer` → `tinyops.ml.binarizer`
+- [ ] `sklearn.preprocessing.OneHotEncoder` → `tinyops.ml.onehot_encoder`
+- [ ] `sklearn.preprocessing.LabelEncoder` → `tinyops.ml.label_encoder`
+- [ ] `sklearn.preprocessing.PolynomialFeatures` → `tinyops.ml.polynomial_features`
+
+### decomposition
+
+- [ ] `sklearn.decomposition.PCA` → `tinyops.ml.pca`
+- [ ] `sklearn.decomposition.TruncatedSVD` → `tinyops.ml.truncated_svd`
+- [ ] `sklearn.decomposition.NMF` → `tinyops.ml.nmf`
+- [ ] `sklearn.decomposition.FastICA` → `tinyops.ml.fastica`
+- [ ] `sklearn.decomposition.FactorAnalysis` → `tinyops.ml.factor_analysis`
+
+### cluster
+
+- [ ] `sklearn.cluster.KMeans` → `tinyops.ml.kmeans`
+- [ ] `sklearn.cluster.MiniBatchKMeans` → `tinyops.ml.minibatch_kmeans`
+- [ ] `sklearn.cluster.DBSCAN` → `tinyops.ml.dbscan`
+- [ ] `sklearn.cluster.AgglomerativeClustering` → `tinyops.ml.agglomerative`
+- [ ] `sklearn.cluster.SpectralClustering` → `tinyops.ml.spectral_clustering`
+- [ ] `sklearn.cluster.MeanShift` → `tinyops.ml.mean_shift`
+
+### linear_model
+
+- [ ] `sklearn.linear_model.LinearRegression` → `tinyops.ml.linear_regression`
+- [ ] `sklearn.linear_model.Ridge` → `tinyops.ml.ridge`
+- [ ] `sklearn.linear_model.Lasso` → `tinyops.ml.lasso`
+- [ ] `sklearn.linear_model.ElasticNet` → `tinyops.ml.elastic_net`
+- [ ] `sklearn.linear_model.LogisticRegression` → `tinyops.ml.logistic_regression`
+- [ ] `sklearn.linear_model.SGDClassifier` → `tinyops.ml.sgd_classifier`
+- [ ] `sklearn.linear_model.SGDRegressor` → `tinyops.ml.sgd_regressor`
+
+### neighbors
+
+- [ ] `sklearn.neighbors.KNeighborsClassifier` → `tinyops.ml.knn_classifier`
+- [ ] `sklearn.neighbors.KNeighborsRegressor` → `tinyops.ml.knn_regressor`
+- [ ] `sklearn.neighbors.NearestNeighbors` → `tinyops.ml.nearest_neighbors`
+
+### naive_bayes
+
+- [ ] `sklearn.naive_bayes.GaussianNB` → `tinyops.ml.gaussian_nb`
+- [ ] `sklearn.naive_bayes.MultinomialNB` → `tinyops.ml.multinomial_nb`
+- [ ] `sklearn.naive_bayes.BernoulliNB` → `tinyops.ml.bernoulli_nb`
+
+### svm
+
+- [ ] `sklearn.svm.SVC` → `tinyops.ml.svc`
+- [ ] `sklearn.svm.SVR` → `tinyops.ml.svr`
+- [ ] `sklearn.svm.LinearSVC` → `tinyops.ml.linear_svc`
+- [ ] `sklearn.svm.LinearSVR` → `tinyops.ml.linear_svr`
+
+### tree
+
+- [ ] `sklearn.tree.DecisionTreeClassifier` → `tinyops.ml.decision_tree_classifier`
+- [ ] `sklearn.tree.DecisionTreeRegressor` → `tinyops.ml.decision_tree_regressor`
+
+### ensemble
+
+- [ ] `sklearn.ensemble.RandomForestClassifier` → `tinyops.ml.random_forest_classifier`
+- [ ] `sklearn.ensemble.RandomForestRegressor` → `tinyops.ml.random_forest_regressor`
+- [ ] `sklearn.ensemble.GradientBoostingClassifier` → `tinyops.ml.gradient_boosting_classifier`
+- [ ] `sklearn.ensemble.GradientBoostingRegressor` → `tinyops.ml.gradient_boosting_regressor`
+- [ ] `sklearn.ensemble.AdaBoostClassifier` → `tinyops.ml.adaboost_classifier`
+- [ ] `sklearn.ensemble.AdaBoostRegressor` → `tinyops.ml.adaboost_regressor`
+
+### metrics
+
+- [ ] `sklearn.metrics.accuracy_score` → `tinyops.ml.accuracy`
+- [ ] `sklearn.metrics.precision_score` → `tinyops.ml.precision`
+- [ ] `sklearn.metrics.recall_score` → `tinyops.ml.recall`
+- [ ] `sklearn.metrics.f1_score` → `tinyops.ml.f1`
+- [ ] `sklearn.metrics.confusion_matrix` → `tinyops.ml.confusion_matrix`
+- [ ] `sklearn.metrics.roc_auc_score` → `tinyops.ml.roc_auc`
+- [ ] `sklearn.metrics.mean_squared_error` → `tinyops.ml.mse`
+- [ ] `sklearn.metrics.mean_absolute_error` → `tinyops.ml.mae`
+- [ ] `sklearn.metrics.r2_score` → `tinyops.ml.r2`
+- [ ] `sklearn.metrics.silhouette_score` → `tinyops.ml.silhouette`
+
+### manifold
+
+- [ ] `sklearn.manifold.TSNE` → `tinyops.ml.tsne`
+- [ ] `sklearn.manifold.Isomap` → `tinyops.ml.isomap`
+- [ ] `sklearn.manifold.MDS` → `tinyops.ml.mds`
+
+### mixture
+
+- [ ] `sklearn.mixture.GaussianMixture` → `tinyops.ml.gmm`
+- [ ] `sklearn.mixture.BayesianGaussianMixture` → `tinyops.ml.bayesian_gmm`
