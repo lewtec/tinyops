@@ -1,7 +1,5 @@
 # CHECKLIST
 
-## linalg
-
 - [x] `np.dot` → `tinyops.linalg.dot`
 - [x] `np.matmul` → `tinyops.linalg.matmul`
 - [x] `np.vdot` → `tinyops.linalg.vdot`
@@ -9,27 +7,24 @@
 - [x] `np.outer` → `tinyops.linalg.outer`
 - [x] `np.tensordot` → `tinyops.linalg.tensordot`
 - [x] `np.einsum` → `tinyops.linalg.einsum`
+- [x] `np.trace` → `tinyops.linalg.trace`
+- [x] `np.diagonal` → `tinyops.linalg.diagonal`
+- [x] `np.kron` → `tinyops.linalg.kron`
+- [x] `np.linalg.norm` → `tinyops.linalg.norm`
+- [x] `np.linalg.det` → `tinyops.linalg.det`
 - [x] `np.linalg.inv` → `tinyops.linalg.inv`
 - [x] `np.linalg.pinv` → `tinyops.linalg.pinv`
 - [x] `np.linalg.solve` → `tinyops.linalg.solve`
 - [x] `np.linalg.lstsq` → `tinyops.linalg.lstsq`
-- [x] `np.linalg.det` → `tinyops.linalg.det`
-- [x] `np.linalg.norm` → `tinyops.linalg.norm`
 - [x] `np.linalg.cond` → `tinyops.linalg.cond`
 - [ ] `np.linalg.matrix_rank` → `tinyops.linalg.matrix_rank`
-- [x] `np.trace` → `tinyops.linalg.trace`
+- [x] `np.linalg.cholesky` → `tinyops.linalg.cholesky`
+- [x] `np.linalg.qr` → `tinyops.linalg.qr`
 - [ ] `np.linalg.eig` → `tinyops.linalg.eig`
 - [ ] `np.linalg.eigh` → `tinyops.linalg.eigh`
 - [ ] `np.linalg.eigvals` → `tinyops.linalg.eigvals`
 - [ ] `np.linalg.svd` → `tinyops.linalg.svd`
-- [x] `np.linalg.qr` → `tinyops.linalg.qr`
-- [x] `np.linalg.cholesky` → `tinyops.linalg.cholesky`
 - [x] `np.linalg.matrix_power` → `tinyops.linalg.matrix_power`
-- [x] `np.kron` → `tinyops.linalg.kron`
-- [x] `np.diagonal` → `tinyops.linalg.diagonal`
-
-## stats
-
 - [x] `np.mean` → `tinyops.stats.mean`
 - [x] `np.median` → `tinyops.stats.median`
 - [x] `np.std` → `tinyops.stats.std`
@@ -38,17 +33,31 @@
 - [x] `np.percentile` → `tinyops.stats.percentile`
 - [x] `np.quantile` → `tinyops.stats.quantile`
 - [x] `np.ptp` → `tinyops.stats.ptp`
-- [x] `np.histogram` → `tinyops.stats.hist`
-- [ ] `np.histogram2d` → `tinyops.stats.hist2d`
-- [ ] `np.histogramdd` → `tinyops.stats.histdd`
 - [x] `np.bincount` → `tinyops.stats.bincount`
 - [x] `np.digitize` → `tinyops.stats.digitize`
 - [x] `np.corrcoef` → `tinyops.stats.corrcoef`
 - [x] `np.correlate` → `tinyops.stats.correlate`
 - [x] `np.cov` → `tinyops.stats.cov`
-
-## image
-
+- [x] `np.histogram` → `tinyops.stats.hist`
+- [ ] `np.histogram2d` → `tinyops.stats.hist2d`
+- [ ] `np.histogramdd` → `tinyops.stats.histdd`
+- [ ] `np.convolve` → `tinyops.signal.convolve`
+- [ ] `np.correlate` → `tinyops.signal.correlate`
+- [ ] `np.hanning` → `tinyops.signal.hanning`
+- [ ] `np.hamming` → `tinyops.signal.hamming`
+- [ ] `np.blackman` → `tinyops.signal.blackman`
+- [ ] `np.kaiser` → `tinyops.signal.kaiser`
+- [ ] `np.fft.fft` → `tinyops.signal.fft`
+- [ ] `np.fft.ifft` → `tinyops.signal.ifft`
+- [ ] `np.fft.fft2` → `tinyops.signal.fft2`
+- [ ] `np.fft.ifft2` → `tinyops.signal.ifft2`
+- [ ] `np.fft.rfft` → `tinyops.signal.rfft`
+- [ ] `np.fft.irfft` → `tinyops.signal.irfft`
+- [ ] `np.fft.fftfreq` → `tinyops.signal.fftfreq`
+- [ ] wav decode → `tinyops.io.decode_wav`
+- [ ] wav encode → `tinyops.io.encode_wav`
+- [ ] bmp decode → `tinyops.io.decode_bmp`
+- [ ] bmp encode → `tinyops.io.encode_bmp`
 - [x] `cv2.resize` → `tinyops.image.resize`
 - [x] `cv2.rotate` → `tinyops.image.rotate`
 - [x] `cv2.flip` → `tinyops.image.flip`
@@ -75,50 +84,29 @@
 - [ ] `torchvision.transforms.CenterCrop` → `tinyops.image.center_crop`
 - [ ] `torchvision.transforms.Pad` → `tinyops.image.pad`
 - [ ] `torchvision.transforms.ColorJitter` → `tinyops.image.color_jitter`
-
-## audio
-
-- [ ] `torchaudio.transforms.Spectrogram` → `tinyops.audio.spectrogram`
-- [ ] `torchaudio.transforms.MelSpectrogram` → `tinyops.audio.mel_spectrogram`
-- [ ] `torchaudio.transforms.MFCC` → `tinyops.audio.mfcc`
 - [ ] `torchaudio.transforms.MelScale` → `tinyops.audio.mel_scale`
 - [ ] `torchaudio.transforms.AmplitudeToDB` → `tinyops.audio.amplitude_to_db`
-- [ ] `torchaudio.transforms.GriffinLim` → `tinyops.audio.griffin_lim`
 - [ ] `torchaudio.transforms.Resample` → `tinyops.audio.resample`
 - [ ] `torchaudio.transforms.MuLawEncoding` → `tinyops.audio.mu_law_encode`
 - [ ] `torchaudio.transforms.MuLawDecoding` → `tinyops.audio.mu_law_decode`
+- [ ] `torchaudio.transforms.Fade` → `tinyops.audio.fade`
+- [ ] `torchaudio.transforms.Spectrogram` → `tinyops.audio.spectrogram`
+- [ ] `torchaudio.transforms.MelSpectrogram` → `tinyops.audio.mel_spectrogram`
+- [ ] `torchaudio.transforms.MFCC` → `tinyops.audio.mfcc`
+- [ ] `torchaudio.transforms.GriffinLim` → `tinyops.audio.griffin_lim`
 - [ ] `torchaudio.transforms.TimeStretch` → `tinyops.audio.time_stretch`
 - [ ] `torchaudio.transforms.FrequencyMasking` → `tinyops.audio.freq_mask`
 - [ ] `torchaudio.transforms.TimeMasking` → `tinyops.audio.time_mask`
-- [ ] `torchaudio.transforms.Fade` → `tinyops.audio.fade`
-
-## signal
-
-- [ ] `np.fft.fft` → `tinyops.signal.fft`
-- [ ] `np.fft.ifft` → `tinyops.signal.ifft`
-- [ ] `np.fft.fft2` → `tinyops.signal.fft2`
-- [ ] `np.fft.ifft2` → `tinyops.signal.ifft2`
-- [ ] `np.fft.rfft` → `tinyops.signal.rfft`
-- [ ] `np.fft.irfft` → `tinyops.signal.irfft`
-- [ ] `np.fft.fftfreq` → `tinyops.signal.fftfreq`
-- [ ] `np.convolve` → `tinyops.signal.convolve`
-- [ ] `np.correlate` → `tinyops.signal.correlate`
-- [ ] `np.hanning` → `tinyops.signal.hanning`
-- [ ] `np.hamming` → `tinyops.signal.hamming`
-- [ ] `np.blackman` → `tinyops.signal.blackman`
-- [ ] `np.kaiser` → `tinyops.signal.kaiser`
-
-## io
-
-- [ ] wav decode → `tinyops.io.decode_wav`
-- [ ] wav encode → `tinyops.io.encode_wav`
-- [ ] bmp decode → `tinyops.io.decode_bmp`
-- [ ] bmp encode → `tinyops.io.encode_bmp`
-
-## ml
-
-### preprocessing
-
+- [ ] `scipy.spatial.distance.hamming` → `tinyops.text.hamming_distance`
+- [ ] `difflib.SequenceMatcher.ratio` → `tinyops.text.sequence_matcher_ratio`
+- [ ] `Levenshtein.distance` → `tinyops.text.levenshtein_distance`
+- [ ] `nltk.edit_distance` → `tinyops.text.edit_distance`
+- [ ] `rapidfuzz.distance.Levenshtein.distance` → `tinyops.text.levenshtein_distance`
+- [ ] `jellyfish.levenshtein_distance` → `tinyops.text.levenshtein_distance`
+- [ ] `jellyfish.jaro_winkler_similarity` → `tinyops.text.jaro_winkler_similarity`
+- [ ] `sklearn.metrics.pairwise_distances(metric='hamming')` → `tinyops.text.pairwise_hamming_distance`
+- [ ] `sklearn.feature_extraction.text.CountVectorizer` → `tinyops.text.count_vectorizer`
+- [ ] `sklearn.feature_extraction.text.TfidfVectorizer` → `tinyops.text.tfidf_vectorizer`
 - [ ] `sklearn.preprocessing.StandardScaler` → `tinyops.ml.standard_scaler`
 - [ ] `sklearn.preprocessing.MinMaxScaler` → `tinyops.ml.minmax_scaler`
 - [ ] `sklearn.preprocessing.MaxAbsScaler` → `tinyops.ml.maxabs_scaler`
@@ -128,69 +116,6 @@
 - [ ] `sklearn.preprocessing.OneHotEncoder` → `tinyops.ml.onehot_encoder`
 - [ ] `sklearn.preprocessing.LabelEncoder` → `tinyops.ml.label_encoder`
 - [ ] `sklearn.preprocessing.PolynomialFeatures` → `tinyops.ml.polynomial_features`
-
-### decomposition
-
-- [ ] `sklearn.decomposition.PCA` → `tinyops.ml.pca`
-- [ ] `sklearn.decomposition.TruncatedSVD` → `tinyops.ml.truncated_svd`
-- [ ] `sklearn.decomposition.NMF` → `tinyops.ml.nmf`
-- [ ] `sklearn.decomposition.FastICA` → `tinyops.ml.fastica`
-- [ ] `sklearn.decomposition.FactorAnalysis` → `tinyops.ml.factor_analysis`
-
-### cluster
-
-- [ ] `sklearn.cluster.KMeans` → `tinyops.ml.kmeans`
-- [ ] `sklearn.cluster.MiniBatchKMeans` → `tinyops.ml.minibatch_kmeans`
-- [ ] `sklearn.cluster.DBSCAN` → `tinyops.ml.dbscan`
-- [ ] `sklearn.cluster.AgglomerativeClustering` → `tinyops.ml.agglomerative`
-- [ ] `sklearn.cluster.SpectralClustering` → `tinyops.ml.spectral_clustering`
-- [ ] `sklearn.cluster.MeanShift` → `tinyops.ml.mean_shift`
-
-### linear_model
-
-- [ ] `sklearn.linear_model.LinearRegression` → `tinyops.ml.linear_regression`
-- [ ] `sklearn.linear_model.Ridge` → `tinyops.ml.ridge`
-- [ ] `sklearn.linear_model.Lasso` → `tinyops.ml.lasso`
-- [ ] `sklearn.linear_model.ElasticNet` → `tinyops.ml.elastic_net`
-- [ ] `sklearn.linear_model.LogisticRegression` → `tinyops.ml.logistic_regression`
-- [ ] `sklearn.linear_model.SGDClassifier` → `tinyops.ml.sgd_classifier`
-- [ ] `sklearn.linear_model.SGDRegressor` → `tinyops.ml.sgd_regressor`
-
-### neighbors
-
-- [ ] `sklearn.neighbors.KNeighborsClassifier` → `tinyops.ml.knn_classifier`
-- [ ] `sklearn.neighbors.KNeighborsRegressor` → `tinyops.ml.knn_regressor`
-- [ ] `sklearn.neighbors.NearestNeighbors` → `tinyops.ml.nearest_neighbors`
-
-### naive_bayes
-
-- [ ] `sklearn.naive_bayes.GaussianNB` → `tinyops.ml.gaussian_nb`
-- [ ] `sklearn.naive_bayes.MultinomialNB` → `tinyops.ml.multinomial_nb`
-- [ ] `sklearn.naive_bayes.BernoulliNB` → `tinyops.ml.bernoulli_nb`
-
-### svm
-
-- [ ] `sklearn.svm.SVC` → `tinyops.ml.svc`
-- [ ] `sklearn.svm.SVR` → `tinyops.ml.svr`
-- [ ] `sklearn.svm.LinearSVC` → `tinyops.ml.linear_svc`
-- [ ] `sklearn.svm.LinearSVR` → `tinyops.ml.linear_svr`
-
-### tree
-
-- [ ] `sklearn.tree.DecisionTreeClassifier` → `tinyops.ml.decision_tree_classifier`
-- [ ] `sklearn.tree.DecisionTreeRegressor` → `tinyops.ml.decision_tree_regressor`
-
-### ensemble
-
-- [ ] `sklearn.ensemble.RandomForestClassifier` → `tinyops.ml.random_forest_classifier`
-- [ ] `sklearn.ensemble.RandomForestRegressor` → `tinyops.ml.random_forest_regressor`
-- [ ] `sklearn.ensemble.GradientBoostingClassifier` → `tinyops.ml.gradient_boosting_classifier`
-- [ ] `sklearn.ensemble.GradientBoostingRegressor` → `tinyops.ml.gradient_boosting_regressor`
-- [ ] `sklearn.ensemble.AdaBoostClassifier` → `tinyops.ml.adaboost_classifier`
-- [ ] `sklearn.ensemble.AdaBoostRegressor` → `tinyops.ml.adaboost_regressor`
-
-### metrics
-
 - [ ] `sklearn.metrics.accuracy_score` → `tinyops.ml.accuracy`
 - [ ] `sklearn.metrics.precision_score` → `tinyops.ml.precision`
 - [ ] `sklearn.metrics.recall_score` → `tinyops.ml.recall`
@@ -201,27 +126,44 @@
 - [ ] `sklearn.metrics.mean_absolute_error` → `tinyops.ml.mae`
 - [ ] `sklearn.metrics.r2_score` → `tinyops.ml.r2`
 - [ ] `sklearn.metrics.silhouette_score` → `tinyops.ml.silhouette`
-
-### manifold
-
-- [ ] `sklearn.manifold.TSNE` → `tinyops.ml.tsne`
-- [ ] `sklearn.manifold.Isomap` → `tinyops.ml.isomap`
+- [ ] `sklearn.neighbors.NearestNeighbors` → `tinyops.ml.nearest_neighbors`
+- [ ] `sklearn.neighbors.KNeighborsClassifier` → `tinyops.ml.knn_classifier`
+- [ ] `sklearn.neighbors.KNeighborsRegressor` → `tinyops.ml.knn_regressor`
+- [ ] `sklearn.naive_bayes.GaussianNB` → `tinyops.ml.gaussian_nb`
+- [ ] `sklearn.naive_bayes.MultinomialNB` → `tinyops.ml.multinomial_nb`
+- [ ] `sklearn.naive_bayes.BernoulliNB` → `tinyops.ml.bernoulli_nb`
+- [ ] `sklearn.linear_model.LinearRegression` → `tinyops.ml.linear_regression`
+- [ ] `sklearn.linear_model.Ridge` → `tinyops.ml.ridge`
+- [ ] `sklearn.linear_model.Lasso` → `tinyops.ml.lasso`
+- [ ] `sklearn.linear_model.ElasticNet` → `tinyops.ml.elastic_net`
+- [ ] `sklearn.linear_model.LogisticRegression` → `tinyops.ml.logistic_regression`
+- [ ] `sklearn.linear_model.SGDClassifier` → `tinyops.ml.sgd_classifier`
+- [ ] `sklearn.linear_model.SGDRegressor` → `tinyops.ml.sgd_regressor`
+- [ ] `sklearn.svm.LinearSVC` → `tinyops.ml.linear_svc`
+- [ ] `sklearn.svm.LinearSVR` → `tinyops.ml.linear_svr`
+- [ ] `sklearn.svm.SVC` → `tinyops.ml.svc`
+- [ ] `sklearn.svm.SVR` → `tinyops.ml.svr`
+- [ ] `sklearn.tree.DecisionTreeClassifier` → `tinyops.ml.decision_tree_classifier`
+- [ ] `sklearn.tree.DecisionTreeRegressor` → `tinyops.ml.decision_tree_regressor`
+- [ ] `sklearn.cluster.KMeans` → `tinyops.ml.kmeans`
+- [ ] `sklearn.cluster.MiniBatchKMeans` → `tinyops.ml.minibatch_kmeans`
+- [ ] `sklearn.cluster.MeanShift` → `tinyops.ml.mean_shift`
+- [ ] `sklearn.cluster.DBSCAN` → `tinyops.ml.dbscan`
+- [ ] `sklearn.cluster.AgglomerativeClustering` → `tinyops.ml.agglomerative`
+- [ ] `sklearn.cluster.SpectralClustering` → `tinyops.ml.spectral_clustering`
+- [ ] `sklearn.decomposition.PCA` → `tinyops.ml.pca`
+- [ ] `sklearn.decomposition.TruncatedSVD` → `tinyops.ml.truncated_svd`
+- [ ] `sklearn.decomposition.NMF` → `tinyops.ml.nmf`
+- [ ] `sklearn.decomposition.FastICA` → `tinyops.ml.fastica`
+- [ ] `sklearn.decomposition.FactorAnalysis` → `tinyops.ml.factor_analysis`
 - [ ] `sklearn.manifold.MDS` → `tinyops.ml.mds`
-
-### mixture
-
+- [ ] `sklearn.manifold.Isomap` → `tinyops.ml.isomap`
+- [ ] `sklearn.manifold.TSNE` → `tinyops.ml.tsne`
 - [ ] `sklearn.mixture.GaussianMixture` → `tinyops.ml.gmm`
 - [ ] `sklearn.mixture.BayesianGaussianMixture` → `tinyops.ml.bayesian_gmm`
-
-## text
-
-- [ ] `Levenshtein.distance` → `tinyops.text.levenshtein_distance`
-- [ ] `nltk.edit_distance` → `tinyops.text.edit_distance`
-- [ ] `sklearn.metrics.pairwise_distances(metric='hamming')` → `tinyops.text.pairwise_hamming_distance`
-- [ ] `scipy.spatial.distance.hamming` → `tinyops.text.hamming_distance`
-- [ ] `difflib.SequenceMatcher.ratio` → `tinyops.text.sequence_matcher_ratio`
-- [ ] `rapidfuzz.distance.Levenshtein.distance` → `tinyops.text.levenshtein_distance`
-- [ ] `jellyfish.levenshtein_distance` → `tinyops.text.levenshtein_distance`
-- [ ] `jellyfish.jaro_winkler_similarity` → `tinyops.text.jaro_winkler_similarity`
-- [ ] `sklearn.feature_extraction.text.TfidfVectorizer` → `tinyops.text.tfidf_vectorizer`
-- [ ] `sklearn.feature_extraction.text.CountVectorizer` → `tinyops.text.count_vectorizer`
+- [ ] `sklearn.ensemble.RandomForestClassifier` → `tinyops.ml.random_forest_classifier`
+- [ ] `sklearn.ensemble.RandomForestRegressor` → `tinyops.ml.random_forest_regressor`
+- [ ] `sklearn.ensemble.AdaBoostClassifier` → `tinyops.ml.adaboost_classifier`
+- [ ] `sklearn.ensemble.AdaBoostRegressor` → `tinyops.ml.adaboost_regressor`
+- [ ] `sklearn.ensemble.GradientBoostingClassifier` → `tinyops.ml.gradient_boosting_classifier`
+- [ ] `sklearn.ensemble.GradientBoostingRegressor` → `tinyops.ml.gradient_boosting_regressor`
