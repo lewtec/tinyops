@@ -78,9 +78,9 @@
 
 ## audio
 
-- [ ] `torchaudio.transforms.Spectrogram` → `tinyops.audio.spectrogram` <!-- SKIPPED: Missing FFT in tinygrad -->
-- [ ] `torchaudio.transforms.MelSpectrogram` → `tinyops.audio.mel_spectrogram` <!-- SKIPPED: Missing FFT in tinygrad -->
-- [ ] `torchaudio.transforms.MFCC` → `tinyops.audio.mfcc` <!-- SKIPPED: Missing FFT in tinygrad -->
+- [ ] `torchaudio.transforms.Spectrogram` → `tinyops.audio.spectrogram` <!-- SKIPPED: Custom FFT is too slow -->
+- [ ] `torchaudio.transforms.MelSpectrogram` → `tinyops.audio.mel_spectrogram` <!-- SKIPPED: Custom FFT is too slow -->
+- [ ] `torchaudio.transforms.MFCC` → `tinyops.audio.mfcc` <!-- SKIPPED: Custom FFT is too slow -->
 - [ ] `torchaudio.transforms.MelScale` → `tinyops.audio.mel_scale`
 - [ ] `torchaudio.transforms.AmplitudeToDB` → `tinyops.audio.amplitude_to_db`
 - [ ] `torchaudio.transforms.GriffinLim` → `tinyops.audio.griffin_lim`
@@ -94,7 +94,7 @@
 
 ## signal
 
-- [ ] `np.fft.fft` → `tinyops.signal.fft`
+- [x] `np.fft.fft` → `tinyops.signal.fft`
 - [ ] `np.fft.ifft` → `tinyops.signal.ifft`
 - [ ] `np.fft.fft2` → `tinyops.signal.fft2`
 - [ ] `np.fft.ifft2` → `tinyops.signal.ifft2`
