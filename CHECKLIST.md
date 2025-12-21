@@ -13,7 +13,7 @@
 - [x] `np.linalg.pinv` → `tinyops.linalg.pinv`
 - [x] `np.linalg.solve` → `tinyops.linalg.solve`
 - [x] `np.linalg.lstsq` → `tinyops.linalg.lstsq`
-- [ ] `np.linalg.det` → `tinyops.linalg.det`
+- [x] `np.linalg.det` → `tinyops.linalg.det`
 - [x] `np.linalg.norm` → `tinyops.linalg.norm`
 - [x] `np.linalg.cond` → `tinyops.linalg.cond`
 - [ ] `np.linalg.matrix_rank` → `tinyops.linalg.matrix_rank`
@@ -42,7 +42,7 @@
 - [ ] `np.histogram2d` → `tinyops.stats.hist2d`
 - [ ] `np.histogramdd` → `tinyops.stats.histdd`
 - [x] `np.bincount` → `tinyops.stats.bincount`
-- [ ] `np.digitize` → `tinyops.stats.digitize`
+- [x] `np.digitize` → `tinyops.stats.digitize`
 - [x] `np.corrcoef` → `tinyops.stats.corrcoef`
 - [x] `np.correlate` → `tinyops.stats.correlate`
 - [x] `np.cov` → `tinyops.stats.cov`
@@ -54,15 +54,15 @@
 - [x] `cv2.flip` → `tinyops.image.flip`
 - [ ] `cv2.warpAffine` → `tinyops.image.warp_affine`
 - [ ] `cv2.warpPerspective` → `tinyops.image.warp_perspective`
-- [ ] `cv2.blur` → `tinyops.image.blur`
-- [ ] `cv2.boxFilter` → `tinyops.image.box_filter`
-- [ ] `cv2.GaussianBlur` → `tinyops.image.gaussian_blur`
+- [x] `cv2.blur` → `tinyops.image.blur`
+- [x] `cv2.boxFilter` → `tinyops.image.box_filter`
+- [x] `cv2.GaussianBlur` → `tinyops.image.gaussian_blur`
 - [ ] `cv2.medianBlur` → `tinyops.image.median_blur`
 - [ ] `cv2.bilateralFilter` → `tinyops.image.bilateral_filter`
-- [ ] `cv2.filter2D` → `tinyops.image.filter2d`
+- [x] `cv2.filter2D` → `tinyops.image.filter2d`
 - [ ] `cv2.Sobel` → `tinyops.image.sobel`
-- [ ] `cv2.Scharr` → `tinyops.image.scharr`
-- [ ] `cv2.Laplacian` → `tinyops.image.laplacian`
+- [x] `cv2.Scharr` → `tinyops.image.scharr`
+- [x] `cv2.Laplacian` → `tinyops.image.laplacian`
 - [ ] `cv2.Canny` → `tinyops.image.canny`
 - [ ] `cv2.dilate` → `tinyops.image.dilate`
 - [ ] `cv2.erode` → `tinyops.image.erode`
