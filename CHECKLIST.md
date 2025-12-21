@@ -73,9 +73,9 @@
 - [x] `cv2.Scharr` → `tinyops.image.scharr`
 - [x] `cv2.Laplacian` → `tinyops.image.laplacian`
 - [ ] `cv2.Canny` → `tinyops.image.canny`
-- [ ] `cv2.dilate` → `tinyops.image.dilate`
-- [ ] `cv2.erode` → `tinyops.image.erode`
-- [ ] `cv2.morphologyEx` → `tinyops.image.morphology`
+- [x] `cv2.dilate` → `tinyops.image.dilate`
+- [x] `cv2.erode` → `tinyops.image.erode`
+- [x] `cv2.morphologyEx` → `tinyops.image.morphology`
 - [x] `cv2.threshold` → `tinyops.image.threshold`
 - [ ] `cv2.adaptiveThreshold` → `tinyops.image.adaptive_threshold`
 - [x] `cv2.cvtColor` → `tinyops.image.cvt_color`

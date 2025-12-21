@@ -12,3 +12,6 @@ from .blur import blur
 from .gaussian_blur import gaussian_blur
 from .filter2d import filter2d
 from .pad import pad
+from .dilate import dilate
+from .erode import erode
+from .morphology import morphology, MORPH_OPEN, MORPH_CLOSE, MORPH_GRADIENT, MORPH_TOPHAT, MORPH_BLACKHAT
