@@ -17,7 +17,7 @@
 - [x] `np.linalg.solve` → `tinyops.linalg.solve`
 - [x] `np.linalg.lstsq` → `tinyops.linalg.lstsq`
 - [x] `np.linalg.cond` → `tinyops.linalg.cond`
-- [ ] `np.linalg.matrix_rank` → `tinyops.linalg.matrix_rank`
+- [x] `np.linalg.matrix_rank` → `tinyops.linalg.matrix_rank`
 - [x] `np.linalg.cholesky` → `tinyops.linalg.cholesky`
 - [x] `np.linalg.qr` → `tinyops.linalg.qr`
 - [ ] `np.linalg.eig` → `tinyops.linalg.eig`

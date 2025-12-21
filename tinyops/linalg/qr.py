@@ -27,8 +27,9 @@ def qr(a: Tensor) -> tuple[Tensor, Tensor]:
             v = v - proj
 
         norm_v = v.pow(2).sum().sqrt()
-        # Add a small epsilon for numerical stability
-        q_j = v / (norm_v + 1e-9)
+        # If the norm is close to zero, the vector is linearly dependent.
+        # Treat the corresponding column of Q as a zero vector to reflect this.
+        q_j = Tensor.where(norm_v > 1e-7, v / norm_v, Tensor.zeros(*v.shape, dtype=v.dtype))
         q_cols.append(q_j)
 
     q = Tensor.stack(q_cols, dim=1)
