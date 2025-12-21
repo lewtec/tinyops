@@ -12,3 +12,4 @@ from .cov import cov
 from .corrcoef import corrcoef
 from .correlate import correlate
 from .digitize import digitize
+from .hist2d import hist2d
