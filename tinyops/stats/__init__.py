@@ -8,3 +8,6 @@ from .quantile import quantile
 from .ptp import ptp
 from .bincount import bincount
 from .hist import hist
+from .cov import cov
+from .corrcoef import corrcoef
+from .correlate import correlate
