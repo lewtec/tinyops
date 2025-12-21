@@ -72,8 +72,8 @@
 - [ ] `cv2.cvtColor` → `tinyops.image.cvt_color`
 - [ ] `cv2.equalizeHist` → `tinyops.image.equalize_hist`
 - [ ] `cv2.normalize` → `tinyops.image.normalize`
-- [ ] `torchvision.transforms.CenterCrop` → `tinyops.image.center_crop`
-- [ ] `torchvision.transforms.Pad` → `tinyops.image.pad`
+- [x] `torchvision.transforms.CenterCrop` → `tinyops.image.center_crop`
+- [x] `torchvision.transforms.Pad` → `tinyops.image.pad`
 - [ ] `torchvision.transforms.ColorJitter` → `tinyops.image.color_jitter`
 
 ## audio
