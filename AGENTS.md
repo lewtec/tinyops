@@ -59,17 +59,33 @@ def hist(x: Tensor, bins: int) -> Tensor:
 - Arquivo `*_test.py` ao lado da implementação
 - Compara output com lib original (numpy, cv2, torch*, etc)
 - Usa helper `_core.assert_close` pra tolerância
+- **Validação de Kernels (CRÍTICO):** Todos os testes de operadores devem validar a continuidade e eficiência do kernel fusing. Para isso, use o decorator `@assert_one_kernel` (do `tinyops.test_utils`) em seus testes. O teste deve ser construído de forma que a operação sob teste, juntamente com a realização do resultado, gere **exatamente um kernel**.
+    - Isso implica que a preparação de dados (criação de tensores, carregamento) deve ser feita fora da função de teste decorada (usando fixtures) ou deve ser realizada *antes* da execução da função de teste (embora o decorator reinicie o contador ao iniciar).
+    - O objetivo é garantir que não haja quebras no grafo de computação que impeçam o fusing completo da operação.
 
 ```python
 # src/tinyops/stats/hist_test.py
 import numpy as np
+from tinygrad import Tensor
 from tinyops.stats.hist import hist
 from tinyops._core import assert_close
+from tinyops.test_utils import assert_one_kernel
+import pytest
 
-def test_hist():
-    x = ...  # dados de teste
-    result = hist(x, bins=256)
-    expected = np.histogram(x.numpy(), bins=256)[0]
+@pytest.fixture
+def realized_data():
+    x = Tensor(np.random.randn(100).astype(np.float32))
+    x.realize() # Realiza antes para não contar kernels de setup
+    return x
+
+@assert_one_kernel
+def test_hist(realized_data):
+    # Setup já feito no fixture
+    result = hist(realized_data, bins=256)
+    result.realize() # Realiza resultado. O contador deve dar exatamente 1.
+
+    # Validação de valor pode ser feita depois, ou dentro (se não gerar kernels extras)
+    expected = np.histogram(realized_data.numpy(), bins=256)[0]
     assert_close(result, expected)
 ```
 
@@ -105,11 +121,23 @@ import numpy as np
 from tinygrad import Tensor
 from tinyops.stats.median import median
 from tinyops._core import assert_close
+from tinyops.test_utils import assert_one_kernel
+import pytest
 
-def test_median():
-    data = np.random.randn(100).astype(np.float32)
-    result = median(Tensor(data))
-    expected = np.median(data)
+@pytest.fixture
+def data_setup():
+    d = Tensor(np.random.randn(100).astype(np.float32))
+    d.realize()
+    return d
+
+@assert_one_kernel
+def test_median(data_setup):
+    result = median(data_setup)
+    result.realize()
+    # Note: .numpy() chama realize implicitamente, mas para contar kernels,
+    # devemos garantir que a realização acontece dentro do escopo monitorado de forma controlada.
+
+    expected = np.median(data_setup.numpy())
     assert_close(result, expected)
 ```
 
