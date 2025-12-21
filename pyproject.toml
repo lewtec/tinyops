@@ -12,6 +12,7 @@ dependencies = [
 dev = [
     "numpy>=2.4.0",
     "pytest>=9.0.2",
+    "opencv-python-headless>=4.9.0.80",
 ]
 
 [tool.pytest.ini_options]
