@@ -212,3 +212,16 @@
 
 - [ ] `sklearn.mixture.GaussianMixture` → `tinyops.ml.gmm`
 - [ ] `sklearn.mixture.BayesianGaussianMixture` → `tinyops.ml.bayesian_gmm`
+
+## text
+
+- [ ] `Levenshtein.distance` → `tinyops.text.levenshtein_distance`
+- [ ] `nltk.edit_distance` → `tinyops.text.edit_distance`
+- [ ] `sklearn.metrics.pairwise_distances(metric='hamming')` → `tinyops.text.pairwise_hamming_distance`
+- [ ] `scipy.spatial.distance.hamming` → `tinyops.text.hamming_distance`
+- [ ] `difflib.SequenceMatcher.ratio` → `tinyops.text.sequence_matcher_ratio`
+- [ ] `rapidfuzz.distance.Levenshtein.distance` → `tinyops.text.levenshtein_distance`
+- [ ] `jellyfish.levenshtein_distance` → `tinyops.text.levenshtein_distance`
+- [ ] `jellyfish.jaro_winkler_similarity` → `tinyops.text.jaro_winkler_similarity`
+- [ ] `sklearn.feature_extraction.text.TfidfVectorizer` → `tinyops.text.tfidf_vectorizer`
+- [ ] `sklearn.feature_extraction.text.CountVectorizer` → `tinyops.text.count_vectorizer`
