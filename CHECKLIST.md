@@ -13,7 +13,7 @@
 - [x] `np.linalg.pinv` → `tinyops.linalg.pinv`
 - [x] `np.linalg.solve` → `tinyops.linalg.solve`
 - [x] `np.linalg.lstsq` → `tinyops.linalg.lstsq`
-- [ ] `np.linalg.det` → `tinyops.linalg.det`
+- [x] `np.linalg.det` → `tinyops.linalg.det`
 - [x] `np.linalg.norm` → `tinyops.linalg.norm`
 - [x] `np.linalg.cond` → `tinyops.linalg.cond`
 - [ ] `np.linalg.matrix_rank` → `tinyops.linalg.matrix_rank`
