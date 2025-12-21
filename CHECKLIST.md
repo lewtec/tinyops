@@ -22,7 +22,7 @@
 - [ ] `np.linalg.eigh` → `tinyops.linalg.eigh`
 - [ ] `np.linalg.eigvals` → `tinyops.linalg.eigvals`
 - [ ] `np.linalg.svd` → `tinyops.linalg.svd`
-- [ ] `np.linalg.qr` → `tinyops.linalg.qr`
+- [x] `np.linalg.qr` → `tinyops.linalg.qr`
 - [x] `np.linalg.cholesky` → `tinyops.linalg.cholesky`
 - [x] `np.linalg.matrix_power` → `tinyops.linalg.matrix_power`
 - [x] `np.kron` → `tinyops.linalg.kron`
