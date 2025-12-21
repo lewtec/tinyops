@@ -67,7 +67,7 @@
 - [ ] `cv2.dilate` → `tinyops.image.dilate`
 - [ ] `cv2.erode` → `tinyops.image.erode`
 - [ ] `cv2.morphologyEx` → `tinyops.image.morphology`
-- [ ] `cv2.threshold` → `tinyops.image.threshold`
+- [x] `cv2.threshold` → `tinyops.image.threshold`
 - [ ] `cv2.adaptiveThreshold` → `tinyops.image.adaptive_threshold`
 - [x] `cv2.cvtColor` → `tinyops.image.cvt_color`
 - [x] `cv2.equalizeHist` → `tinyops.image.equalize_hist`
