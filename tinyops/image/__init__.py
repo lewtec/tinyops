@@ -2,3 +2,4 @@ from .threshold import threshold, THRESH_BINARY, THRESH_BINARY_INV, THRESH_TRUNC
 from .cvt_color import cvt_color
 from .equalize_hist import equalize_hist
 from .normalize import normalize
+from .filter2d import filter2d
