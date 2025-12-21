@@ -39,7 +39,7 @@
 - [x] `np.correlate` → `tinyops.stats.correlate`
 - [x] `np.cov` → `tinyops.stats.cov`
 - [x] `np.histogram` → `tinyops.stats.hist`
-- [ ] `np.histogram2d` → `tinyops.stats.hist2d`
+- [x] `np.histogram2d` → `tinyops.stats.hist2d`
 - [ ] `np.histogramdd` → `tinyops.stats.histdd`
 - [ ] `np.convolve` → `tinyops.signal.convolve`
 - [ ] `np.correlate` → `tinyops.signal.correlate`
