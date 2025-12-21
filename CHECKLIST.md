@@ -54,9 +54,9 @@
 - [ ] `cv2.flip` → `tinyops.image.flip`
 - [ ] `cv2.warpAffine` → `tinyops.image.warp_affine`
 - [ ] `cv2.warpPerspective` → `tinyops.image.warp_perspective`
-- [ ] `cv2.blur` → `tinyops.image.blur`
-- [ ] `cv2.boxFilter` → `tinyops.image.box_filter`
-- [ ] `cv2.GaussianBlur` → `tinyops.image.gaussian_blur`
+- [x] `cv2.blur` → `tinyops.image.blur`
+- [x] `cv2.boxFilter` → `tinyops.image.box_filter`
+- [x] `cv2.GaussianBlur` → `tinyops.image.gaussian_blur`
 - [ ] `cv2.medianBlur` → `tinyops.image.median_blur`
 - [ ] `cv2.bilateralFilter` → `tinyops.image.bilateral_filter`
 - [x] `cv2.filter2D` → `tinyops.image.filter2d`
