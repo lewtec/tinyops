@@ -37,11 +37,11 @@
 - [x] `np.average` → `tinyops.stats.average`
 - [x] `np.percentile` → `tinyops.stats.percentile`
 - [x] `np.quantile` → `tinyops.stats.quantile`
-- [ ] `np.ptp` → `tinyops.stats.ptp`
-- [ ] `np.histogram` → `tinyops.stats.hist`
+- [x] `np.ptp` → `tinyops.stats.ptp`
+- [x] `np.histogram` → `tinyops.stats.hist`
 - [ ] `np.histogram2d` → `tinyops.stats.hist2d`
 - [ ] `np.histogramdd` → `tinyops.stats.histdd`
-- [ ] `np.bincount` → `tinyops.stats.bincount`
+- [x] `np.bincount` → `tinyops.stats.bincount`
 - [ ] `np.digitize` → `tinyops.stats.digitize`
 - [ ] `np.corrcoef` → `tinyops.stats.corrcoef`
 - [ ] `np.correlate` → `tinyops.stats.correlate`
