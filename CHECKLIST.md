@@ -49,9 +49,9 @@
 
 ## image
 
-- [ ] `cv2.resize` → `tinyops.image.resize`
-- [ ] `cv2.rotate` → `tinyops.image.rotate`
-- [ ] `cv2.flip` → `tinyops.image.flip`
+- [x] `cv2.resize` → `tinyops.image.resize`
+- [x] `cv2.rotate` → `tinyops.image.rotate`
+- [x] `cv2.flip` → `tinyops.image.flip`
 - [ ] `cv2.warpAffine` → `tinyops.image.warp_affine`
 - [ ] `cv2.warpPerspective` → `tinyops.image.warp_perspective`
 - [x] `cv2.blur` → `tinyops.image.blur`
