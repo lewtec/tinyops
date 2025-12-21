@@ -47,8 +47,8 @@
 - [ ] `np.hamming` → `tinyops.signal.hamming`
 - [ ] `np.blackman` → `tinyops.signal.blackman`
 - [ ] `np.kaiser` → `tinyops.signal.kaiser`
-- [ ] `np.fft.fft` → `tinyops.signal.fft`
-- [ ] `np.fft.ifft` → `tinyops.signal.ifft`
+- [x] `np.fft.fft` → `tinyops.signal.fft`
+- [x] `np.fft.ifft` → `tinyops.signal.ifft`
 - [ ] `np.fft.fft2` → `tinyops.signal.fft2`
 - [ ] `np.fft.ifft2` → `tinyops.signal.ifft2`
 - [ ] `np.fft.rfft` → `tinyops.signal.rfft`
