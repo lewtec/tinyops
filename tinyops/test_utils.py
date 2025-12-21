@@ -1,6 +1,10 @@
 from functools import wraps
 from tinygrad.helpers import GlobalCounters
 
+class KernelCountError(AssertionError):
+    """Exception raised when the kernel count is not as expected."""
+    pass
+
 def assert_one_kernel(func):
     """
     Decorator for tests to ensure that the test function generates exactly one tinygrad kernel.
@@ -28,8 +32,8 @@ def assert_one_kernel(func):
         # Validate the count
         # "Não zero, não dois, um!"
         if GlobalCounters.kernel_count != 1:
-            raise AssertionError(f"Expected exactly 1 kernel, but got {GlobalCounters.kernel_count}. "
-                                 f"Make sure inputs are realized before the measured block if they cause extra kernels, "
-                                 f"or that the operation is properly fused.")
+            raise KernelCountError(f"Expected exactly 1 kernel, but got {GlobalCounters.kernel_count}. "
+                                   f"Make sure inputs are realized before the measured block if they cause extra kernels, "
+                                   f"or that the operation is properly fused.")
         return ret
     return wrapper
