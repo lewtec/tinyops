@@ -12,3 +12,4 @@ from .blur import blur
 from .gaussian_blur import gaussian_blur
 from .filter2d import filter2d
 from .pad import pad
+from .center_crop import center_crop
