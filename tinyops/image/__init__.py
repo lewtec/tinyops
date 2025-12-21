@@ -4,3 +4,7 @@ from .equalize_hist import equalize_hist
 from .normalize import normalize
 from .scharr import scharr
 from .laplacian import laplacian
+from .box_filter import box_filter
+from .blur import blur
+from .gaussian_blur import gaussian_blur
+from .filter2d import filter2d
