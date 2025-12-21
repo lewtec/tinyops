@@ -15,3 +15,4 @@ from .cond import cond
 from .matrix_power import matrix_power
 from .kron import kron
 from .diagonal import diagonal
+from .cholesky import cholesky
