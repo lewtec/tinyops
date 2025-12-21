@@ -95,8 +95,8 @@
 - [ ] `torchaudio.transforms.MFCC` → `tinyops.audio.mfcc`
 - [ ] `torchaudio.transforms.GriffinLim` → `tinyops.audio.griffin_lim`
 - [ ] `torchaudio.transforms.TimeStretch` → `tinyops.audio.time_stretch`
-- [ ] `torchaudio.transforms.FrequencyMasking` → `tinyops.audio.freq_mask`
-- [ ] `torchaudio.transforms.TimeMasking` → `tinyops.audio.time_mask`
+- [x] `torchaudio.transforms.FrequencyMasking` → `tinyops.audio.freq_mask`
+- [x] `torchaudio.transforms.TimeMasking` → `tinyops.audio.time_mask`
 - [ ] `scipy.spatial.distance.hamming` → `tinyops.text.hamming_distance`
 - [ ] `difflib.SequenceMatcher.ratio` → `tinyops.text.sequence_matcher_ratio`
 - [ ] `Levenshtein.distance` → `tinyops.text.levenshtein_distance`
