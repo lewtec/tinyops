@@ -42,7 +42,7 @@
 - [ ] `np.histogram2d` → `tinyops.stats.hist2d`
 - [ ] `np.histogramdd` → `tinyops.stats.histdd`
 - [x] `np.bincount` → `tinyops.stats.bincount`
-- [ ] `np.digitize` → `tinyops.stats.digitize`
+- [x] `np.digitize` → `tinyops.stats.digitize`
 - [x] `np.corrcoef` → `tinyops.stats.corrcoef`
 - [x] `np.correlate` → `tinyops.stats.correlate`
 - [x] `np.cov` → `tinyops.stats.cov`
