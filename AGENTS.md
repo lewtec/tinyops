@@ -59,17 +59,40 @@ def hist(x: Tensor, bins: int) -> Tensor:
 - Arquivo `*_test.py` ao lado da implementação
 - Compara output com lib original (numpy, cv2, torch*, etc)
 - Usa helper `_core.assert_close` pra tolerância
+- **Validação de Kernels (CRÍTICO):** Todos os testes de operadores devem validar a continuidade e eficiência do kernel fusing. Para isso, use o decorator `@assert_one_kernel` (do `tinyops.test_utils`) em seus testes. O teste deve ser construído de forma que a operação sob teste, juntamente com a realização do resultado, gere **exatamente um kernel**.
+    - **NÃO use fixtures** para preparação de dados. Use `@pytest.mark.parametrize` mesmo se tiver apenas um caso de teste.
+    - Instancie e realize (`.realize()`) os tensores de entrada *antes* de definir a função interna decorada, ou garanta que eles sejam constantes que não geram kernels extras durante a execução da função.
+    - O objetivo é garantir que não haja quebras no grafo de computação que impeçam o fusing completo da operação.
 
 ```python
 # src/tinyops/stats/hist_test.py
 import numpy as np
+from tinygrad import Tensor
 from tinyops.stats.hist import hist
 from tinyops._core import assert_close
+from tinyops.test_utils import assert_one_kernel
+import pytest
 
-def test_hist():
-    x = ...  # dados de teste
-    result = hist(x, bins=256)
-    expected = np.histogram(x.numpy(), bins=256)[0]
+# Use parametrize para inputs, evitando fixtures
+@pytest.mark.parametrize("size, bins", [(100, 256)])
+def test_hist(size, bins):
+    # Setup: Cria e realiza inputs fora do escopo monitorado
+    # Importante: Realizar inputs aqui garante que kernels de Load/Criação não contem
+    data_np = np.random.randn(size).astype(np.float32)
+    x = Tensor(data_np)
+    x.realize()
+
+    @assert_one_kernel
+    def run_kernel():
+        result = hist(x, bins=bins)
+        result.realize() # Realiza resultado. O contador deve dar exatamente 1.
+        return result
+
+    # Executa a função decorada
+    result = run_kernel()
+
+    # Validação de valor
+    expected = np.histogram(data_np, bins=bins)[0]
     assert_close(result, expected)
 ```
 
@@ -105,11 +128,25 @@ import numpy as np
 from tinygrad import Tensor
 from tinyops.stats.median import median
 from tinyops._core import assert_close
+from tinyops.test_utils import assert_one_kernel
+import pytest
 
-def test_median():
-    data = np.random.randn(100).astype(np.float32)
-    result = median(Tensor(data))
-    expected = np.median(data)
+@pytest.mark.parametrize("shape", [(100,)])
+def test_median(shape):
+    # Setup
+    data_np = np.random.randn(*shape).astype(np.float32)
+    data = Tensor(data_np)
+    data.realize()
+
+    @assert_one_kernel
+    def run_median():
+        result = median(data)
+        result.realize()
+        return result
+
+    result = run_median()
+
+    expected = np.median(data_np)
     assert_close(result, expected)
 ```
 
