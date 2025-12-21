@@ -82,7 +82,7 @@
 - [x] `cv2.equalizeHist` → `tinyops.image.equalize_hist`
 - [x] `cv2.normalize` → `tinyops.image.normalize`
 - [ ] `torchvision.transforms.CenterCrop` → `tinyops.image.center_crop`
-- [ ] `torchvision.transforms.Pad` → `tinyops.image.pad`
+- [x] `torchvision.transforms.Pad` → `tinyops.image.pad`
 - [ ] `torchvision.transforms.ColorJitter` → `tinyops.image.color_jitter`
 - [ ] `torchaudio.transforms.MelScale` → `tinyops.audio.mel_scale`
 - [ ] `torchaudio.transforms.AmplitudeToDB` → `tinyops.audio.amplitude_to_db`
