@@ -24,19 +24,19 @@
 - [ ] `np.linalg.svd` → `tinyops.linalg.svd`
 - [ ] `np.linalg.qr` → `tinyops.linalg.qr`
 - [ ] `np.linalg.cholesky` → `tinyops.linalg.cholesky`
-- [ ] `np.linalg.matrix_power` → `tinyops.linalg.matrix_power`
-- [ ] `np.kron` → `tinyops.linalg.kron`
-- [ ] `np.diagonal` → `tinyops.linalg.diagonal`
+- [x] `np.linalg.matrix_power` → `tinyops.linalg.matrix_power`
+- [x] `np.kron` → `tinyops.linalg.kron`
+- [x] `np.diagonal` → `tinyops.linalg.diagonal`
 
 ## stats
 
-- [ ] `np.mean` → `tinyops.stats.mean`
-- [ ] `np.median` → `tinyops.stats.median`
-- [ ] `np.std` → `tinyops.stats.std`
-- [ ] `np.var` → `tinyops.stats.var`
-- [ ] `np.average` → `tinyops.stats.average`
-- [ ] `np.percentile` → `tinyops.stats.percentile`
-- [ ] `np.quantile` → `tinyops.stats.quantile`
+- [x] `np.mean` → `tinyops.stats.mean`
+- [x] `np.median` → `tinyops.stats.median`
+- [x] `np.std` → `tinyops.stats.std`
+- [x] `np.var` → `tinyops.stats.var`
+- [x] `np.average` → `tinyops.stats.average`
+- [x] `np.percentile` → `tinyops.stats.percentile`
+- [x] `np.quantile` → `tinyops.stats.quantile`
 - [ ] `np.ptp` → `tinyops.stats.ptp`
 - [ ] `np.histogram` → `tinyops.stats.hist`
 - [ ] `np.histogram2d` → `tinyops.stats.hist2d`
