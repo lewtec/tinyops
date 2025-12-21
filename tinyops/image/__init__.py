@@ -5,3 +5,4 @@ from .normalize import normalize
 from .box_filter import box_filter
 from .blur import blur
 from .gaussian_blur import gaussian_blur
+from .filter2d import filter2d
