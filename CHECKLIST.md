@@ -52,8 +52,8 @@
 - [ ] `cv2.resize` → `tinyops.image.resize`
 - [ ] `cv2.rotate` → `tinyops.image.rotate`
 - [ ] `cv2.flip` → `tinyops.image.flip`
-- [ ] `cv2.warpAffine` → `tinyops.image.warp_affine`
-- [ ] `cv2.warpPerspective` → `tinyops.image.warp_perspective`
+- [x] `cv2.warpAffine` → `tinyops.image.warp_affine`
+- [x] `cv2.warpPerspective` → `tinyops.image.warp_perspective`
 - [ ] `cv2.blur` → `tinyops.image.blur`
 - [ ] `cv2.boxFilter` → `tinyops.image.box_filter`
 - [ ] `cv2.GaussianBlur` → `tinyops.image.gaussian_blur`
