@@ -82,7 +82,7 @@
 - [ ] `torchaudio.transforms.MelSpectrogram` → `tinyops.audio.mel_spectrogram`
 - [ ] `torchaudio.transforms.MFCC` → `tinyops.audio.mfcc`
 - [ ] `torchaudio.transforms.MelScale` → `tinyops.audio.mel_scale`
-- [ ] `torchaudio.transforms.AmplitudeToDB` → `tinyops.audio.amplitude_to_db`
+- [x] `torchaudio.transforms.AmplitudeToDB` → `tinyops.audio.amplitude_to_db`
 - [ ] `torchaudio.transforms.GriffinLim` → `tinyops.audio.griffin_lim`
 - [ ] `torchaudio.transforms.Resample` → `tinyops.audio.resample`
 - [ ] `torchaudio.transforms.MuLawEncoding` → `tinyops.audio.mu_law_encode`
