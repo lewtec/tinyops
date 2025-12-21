@@ -59,7 +59,7 @@
 - [ ] `cv2.GaussianBlur` → `tinyops.image.gaussian_blur`
 - [ ] `cv2.medianBlur` → `tinyops.image.median_blur`
 - [ ] `cv2.bilateralFilter` → `tinyops.image.bilateral_filter`
-- [ ] `cv2.filter2D` → `tinyops.image.filter2d`
+- [x] `cv2.filter2D` → `tinyops.image.filter2d`
 - [ ] `cv2.Sobel` → `tinyops.image.sobel`
 - [ ] `cv2.Scharr` → `tinyops.image.scharr`
 - [ ] `cv2.Laplacian` → `tinyops.image.laplacian`
