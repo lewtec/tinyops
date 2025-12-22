@@ -43,9 +43,9 @@
 - [ ] `np.histogramdd` → `tinyops.stats.histdd`
 - [ ] `np.convolve` → `tinyops.signal.convolve`
 - [ ] `np.correlate` → `tinyops.signal.correlate`
-- [ ] `np.hanning` → `tinyops.signal.hanning`
-- [ ] `np.hamming` → `tinyops.signal.hamming`
-- [ ] `np.blackman` → `tinyops.signal.blackman`
+- [x] `np.hanning` → `tinyops.signal.hanning`
+- [x] `np.hamming` → `tinyops.signal.hamming`
+- [x] `np.blackman` → `tinyops.signal.blackman`
 - [ ] `np.kaiser` → `tinyops.signal.kaiser`
 - [x] `np.fft.fft` → `tinyops.signal.fft`
 - [x] `np.fft.ifft` → `tinyops.signal.ifft`
@@ -69,13 +69,13 @@
 - [ ] `cv2.medianBlur` → `tinyops.image.median_blur`
 - [ ] `cv2.bilateralFilter` → `tinyops.image.bilateral_filter`
 - [x] `cv2.filter2D` → `tinyops.image.filter2d`
-- [ ] `cv2.Sobel` → `tinyops.image.sobel`
+- [x] `cv2.Sobel` → `tinyops.image.sobel`
 - [x] `cv2.Scharr` → `tinyops.image.scharr`
 - [x] `cv2.Laplacian` → `tinyops.image.laplacian`
 - [ ] `cv2.Canny` → `tinyops.image.canny`
-- [ ] `cv2.dilate` → `tinyops.image.dilate`
-- [ ] `cv2.erode` → `tinyops.image.erode`
-- [ ] `cv2.morphologyEx` → `tinyops.image.morphology`
+- [x] `cv2.dilate` → `tinyops.image.dilate`
+- [x] `cv2.erode` → `tinyops.image.erode`
+- [x] `cv2.morphologyEx` → `tinyops.image.morphology`
 - [x] `cv2.threshold` → `tinyops.image.threshold`
 - [ ] `cv2.adaptiveThreshold` → `tinyops.image.adaptive_threshold`
 - [x] `cv2.cvtColor` → `tinyops.image.cvt_color`
@@ -87,16 +87,16 @@
 - [ ] `torchaudio.transforms.MelScale` → `tinyops.audio.mel_scale`
 - [ ] `torchaudio.transforms.AmplitudeToDB` → `tinyops.audio.amplitude_to_db`
 - [ ] `torchaudio.transforms.Resample` → `tinyops.audio.resample`
-- [ ] `torchaudio.transforms.MuLawEncoding` → `tinyops.audio.mu_law_encode`
-- [ ] `torchaudio.transforms.MuLawDecoding` → `tinyops.audio.mu_law_decode`
-- [ ] `torchaudio.transforms.Fade` → `tinyops.audio.fade`
+- [x] `torchaudio.transforms.MuLawEncoding` → `tinyops.audio.mu_law_encode`
+- [x] `torchaudio.transforms.MuLawDecoding` → `tinyops.audio.mu_law_decode`
+- [ ] `torchaudio.transforms.Fade` → `tinyops.audio.fade` (skipped)
 - [ ] `torchaudio.transforms.Spectrogram` → `tinyops.audio.spectrogram`
 - [ ] `torchaudio.transforms.MelSpectrogram` → `tinyops.audio.mel_spectrogram`
 - [ ] `torchaudio.transforms.MFCC` → `tinyops.audio.mfcc`
 - [ ] `torchaudio.transforms.GriffinLim` → `tinyops.audio.griffin_lim`
 - [ ] `torchaudio.transforms.TimeStretch` → `tinyops.audio.time_stretch`
-- [ ] `torchaudio.transforms.FrequencyMasking` → `tinyops.audio.freq_mask`
-- [ ] `torchaudio.transforms.TimeMasking` → `tinyops.audio.time_mask`
+- [x] `torchaudio.transforms.FrequencyMasking` → `tinyops.audio.freq_mask`
+- [x] `torchaudio.transforms.TimeMasking` → `tinyops.audio.time_mask`
 - [ ] `scipy.spatial.distance.hamming` → `tinyops.text.hamming_distance`
 - [ ] `difflib.SequenceMatcher.ratio` → `tinyops.text.sequence_matcher_ratio`
 - [ ] `Levenshtein.distance` → `tinyops.text.levenshtein_distance`
