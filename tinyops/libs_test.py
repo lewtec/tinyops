@@ -1,7 +1,7 @@
 import importlib
 import pytest
 
-# Lista de bibliotecas de referência extraídas de CHECKLIST.md
+# List of reference libraries extracted from CHECKLIST.md
 LIBRARIES = [
     "numpy",
     "tinygrad",
@@ -13,39 +13,39 @@ LIBRARIES = [
     "rapidfuzz",
     "jellyfish",
     "nltk",
-    "Levenshtein",  # A biblioteca python-Levenshtein é importada como 'Levenshtein'
+    "Levenshtein",  # The python-Levenshtein library is imported as 'Levenshtein'
 ]
 
 @pytest.mark.parametrize("library", LIBRARIES)
 def test_import_libraries(library):
-    """Testa se cada biblioteca de referência pode ser importada."""
+    """Tests if each reference library can be imported."""
     try:
         importlib.import_module(library)
     except ImportError:
-        pytest.fail(f"A biblioteca de referência '{library}' não está instalada. Adicione-a ao pyproject.toml.")
+        pytest.fail(f"The reference library '{library}' is not installed. Add it to pyproject.toml.")
 
 def test_cv2_headless_mode():
-    """Garante que o OpenCV (cv2) está rodando em modo headless."""
+    """Ensures that OpenCV (cv2) is running in headless mode."""
     try:
         import cv2
-        # Em um ambiente headless, tentar usar uma função de GUI deve falhar
-        # com um erro específico ou o backend da GUI deve ser 'headless'.
-        # A simples ausência de erro em 'imshow' não é suficiente, pois pode travar.
-        # Uma abordagem mais segura é verificar se não há backends de GUI disponíveis.
-        # No entanto, a forma mais simples é garantir que 'opencv-python-headless' seja a dependência.
-        # Este teste apenas confirma que o import funciona. A configuração do pacote
-        # no pyproject.toml é a verdadeira garantia.
+        # In a headless environment, trying to use a GUI function should fail
+        # with a specific error or the GUI backend should be 'headless'.
+        # The simple absence of error in 'imshow' is not sufficient, as it might hang.
+        # A safer approach is to check if there are no GUI backends available.
+        # However, the simplest way is to ensure 'opencv-python-headless' is the dependency.
+        # This test just confirms that the import works. The package configuration
+        # in pyproject.toml is the real guarantee.
         assert cv2.__version__ is not None
     except ImportError:
-        pytest.fail("A biblioteca 'cv2' não está instalada.")
+        pytest.fail("The 'cv2' library is not installed.")
     except Exception as e:
-        # Se um erro de GUI acontecer, ele será capturado aqui.
-        # Exemplo: "cv2.error: OpenCV(4.9.0) /io/opencv/modules/highgui/src/window.cpp:1274: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Carbon support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvShowImage'"
+        # If a GUI error happens, it will be captured here.
+        # Example: "cv2.error: OpenCV(4.9.0) /io/opencv/modules/highgui/src/window.cpp:1274: error: (-2:Unspecified error) The function is not implemented. Rebuild the library with Windows, GTK+ 2.x or Carbon support. If you are on Ubuntu or Debian, install libgtk2.0-dev and pkg-config, then re-run cmake or configure script in function 'cvShowImage'"
         if "highgui" in str(e) and "not implemented" in str(e):
-            # Este erro é esperado em um ambiente headless se tentarmos usar a GUI.
-            # Para este teste, vamos considerá-lo uma confirmação do modo headless.
+            # This error is expected in a headless environment if we try to use the GUI.
+            # For this test, we consider it a confirmation of headless mode.
             pass
-        elif "display" in str(e).lower(): # Erros comuns em ambientes sem servidor X
+        elif "display" in str(e).lower(): # Common errors in environments without X server
             pass
         else:
-            pytest.fail(f"Erro inesperado ao importar ou verificar o cv2: {e}")
+            pytest.fail(f"Unexpected error when importing or checking cv2: {e}")

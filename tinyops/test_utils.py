@@ -33,7 +33,7 @@ def assert_one_kernel(func):
         ret = func(*args, **kwargs)
 
         # Validate the count
-        # "Não zero, não dois, um!"
+        # "Not zero, not two, one!"
         # if GlobalCounters.kernel_count != 1:
         #    raise KernelCountError(f"Expected exactly 1 kernel, but got {GlobalCounters.kernel_count}. "
         #                           f"Make sure inputs are realized before the measured block if they cause extra kernels, "
