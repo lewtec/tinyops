@@ -1,25 +1,12 @@
-from tinygrad import Tensor
+import pytest
 import scipy.signal.windows as windows
 from tinyops.signal.hanning import hanning
 from tinyops._core import assert_close
+from tinyops.test_utils import assert_one_kernel
 
-def test_hanning():
-    M = 10
-    result = hanning(M)
-    expected = windows.hann(M)
-    assert_close(result, expected)
-
-    M = 11
-    result = hanning(M)
-    expected = windows.hann(M)
-    assert_close(result, expected)
-
-    M = 10
-    result = hanning(M, sym=False)
-    expected = windows.hann(M, sym=False)
-    assert_close(result, expected)
-
-    M = 11
-    result = hanning(M, sym=False)
-    expected = windows.hann(M, sym=False)
+@pytest.mark.parametrize("M, sym", [(10, True), (11, True), (10, False), (11, False)])
+@assert_one_kernel
+def test_hanning(M, sym):
+    result = hanning(M, sym=sym).realize()
+    expected = windows.hann(M, sym=sym)
     assert_close(result, expected)
