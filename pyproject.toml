@@ -22,6 +22,7 @@ dev = [
     "jellyfish>=1.1.0",
     "nltk>=3.8.1",
     "python-Levenshtein>=0.25.1",
+    "filterpy>=1.4.5",
 ]
 
 [tool.pytest.ini_options]
