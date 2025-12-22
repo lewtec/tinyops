@@ -1,27 +1,27 @@
 # tinyops
 
-Implementações de operações complexas puramente em `tinygrad`.
+Complex operations implemented purely in `tinygrad`.
 
-## Metodologia
+## Methodology
 
-Este é um projeto experimental. O objetivo é reconstruir algoritmos de domínios como visão computacional, áudio e machine learning utilizando estritamente as primitivas do `tinygrad`.
+This is an experimental project. The goal is to reconstruct algorithms from domains such as computer vision, audio, and machine learning using strictly `tinygrad` primitives.
 
-Ao evitar bibliotecas externas no runtime, garantimos que todo o fluxo de execução passe pelo grafo do `tinygrad`. Isso permite o uso agressivo de **kernel fusion**, onde múltiplas operações são compiladas em um único kernel de GPU/acelerador, maximizando a eficiência e portabilidade.
+By avoiding external runtime libraries, we ensure that the entire execution flow passes through the `tinygrad` graph. This allows for aggressive **kernel fusion**, where multiple operations are compiled into a single GPU/accelerator kernel, maximizing efficiency and portability.
 
-## Dependências
+## Dependencies
 
-A única dependência de runtime é o **tinygrad**.
+The only runtime dependency is **tinygrad**.
 
-Bibliotecas como `numpy`, `opencv-python` e `scikit-learn` são dependências de desenvolvimento, utilizadas exclusivamente nos testes para verificar a paridade numérica e funcional das implementações.
+Libraries such as `numpy`, `opencv-python`, and `scikit-learn` are development dependencies, used exclusively in tests to verify the numerical and functional parity of the implementations.
 
-## Desenvolvimento
+## Development
 
-Utilizamos `mise` para gerenciar o ambiente de desenvolvimento.
+We use `mise` to manage the development environment.
 
 ```bash
-# Instalar dependências
+# Install dependencies
 mise install
 
-# Rodar testes
+# Run tests
 mise run test
 ```
