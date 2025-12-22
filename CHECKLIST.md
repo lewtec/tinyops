@@ -94,7 +94,7 @@
 - [ ] `torchaudio.transforms.Resample` → `tinyops.audio.resample`
 - [x] `torchaudio.transforms.MuLawEncoding` → `tinyops.audio.mu_law_encode`
 - [x] `torchaudio.transforms.MuLawDecoding` → `tinyops.audio.mu_law_decode`
-- [ ] `torchaudio.transforms.Fade` → `tinyops.audio.fade`
+- [x] `torchaudio.transforms.Fade` → `tinyops.audio.fade`
 - [ ] `torchaudio.transforms.Spectrogram` → `tinyops.audio.spectrogram`
 - [ ] `torchaudio.transforms.MelSpectrogram` → `tinyops.audio.mel_spectrogram`
 - [ ] `torchaudio.transforms.MFCC` → `tinyops.audio.mfcc`
@@ -112,10 +112,10 @@
 - [ ] `sklearn.metrics.pairwise_distances(metric='hamming')` → `tinyops.text.pairwise_hamming_distance`
 - [ ] `sklearn.feature_extraction.text.CountVectorizer` → `tinyops.text.count_vectorizer`
 - [ ] `sklearn.feature_extraction.text.TfidfVectorizer` → `tinyops.text.tfidf_vectorizer`
-- [ ] `sklearn.preprocessing.StandardScaler` → `tinyops.ml.standard_scaler`
-- [ ] `sklearn.preprocessing.MinMaxScaler` → `tinyops.ml.minmax_scaler`
-- [ ] `sklearn.preprocessing.MaxAbsScaler` → `tinyops.ml.maxabs_scaler`
-- [ ] `sklearn.preprocessing.RobustScaler` → `tinyops.ml.robust_scaler`
+- [x] `sklearn.preprocessing.StandardScaler` → `tinyops.ml.standard_scaler`
+- [x] `sklearn.preprocessing.MinMaxScaler` → `tinyops.ml.minmax_scaler`
+- [x] `sklearn.preprocessing.MaxAbsScaler` → `tinyops.ml.maxabs_scaler`
+- [x] `sklearn.preprocessing.RobustScaler` → `tinyops.ml.robust_scaler`
 - [ ] `sklearn.preprocessing.Normalizer` → `tinyops.ml.normalizer`
 - [ ] `sklearn.preprocessing.Binarizer` → `tinyops.ml.binarizer`
 - [ ] `sklearn.preprocessing.OneHotEncoder` → `tinyops.ml.onehot_encoder`
