@@ -41,7 +41,7 @@
 - [x] `np.histogram` → `tinyops.stats.hist`
 - [x] `np.histogram2d` → `tinyops.stats.hist2d`
 - [ ] `np.histogramdd` → `tinyops.stats.histdd`
-- [ ] `np.convolve` → `tinyops.signal.convolve`
+- [x] `np.convolve` → `tinyops.signal.convolve`
 - [ ] `np.correlate` → `tinyops.signal.correlate`
 - [x] `np.hanning` → `tinyops.signal.hanning`
 - [x] `np.hamming` → `tinyops.signal.hamming`
@@ -142,7 +142,7 @@
 - [ ] `sklearn.linear_model.Lasso` → `tinyops.ml.lasso`
 - [ ] `sklearn.linear_model.ElasticNet` → `tinyops.ml.elastic_net`
 - [x] `sklearn.linear_model.LogisticRegression` → `tinyops.ml.logistic_regression`
-- [x] `sklearn.linear_model.SGDClassifier` → `tinyops.ml.sgd_classifier` (hinge only)
+- [x] `sklearn.linear_model.SGDClassifier` → `tinyops.ml.sgd_classifier`
 - [x] `sklearn.linear_model.SGDRegressor` → `tinyops.ml.sgd_regressor`
 - [ ] `sklearn.linear_model.SGDClassifier` → `tinyops.ml.sgd_classifier`
 - [ ] `sklearn.linear_model.SGDRegressor` → `tinyops.ml.sgd_regressor`
