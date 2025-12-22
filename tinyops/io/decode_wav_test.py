@@ -1,9 +1,9 @@
-
 import numpy as np
 import pytest
 from tinygrad import dtypes
 from tinyops._core import assert_close
 from tinyops.io.decode_wav import decode_wav
+from tinyops.test_utils import assert_one_kernel
 import io
 import wave
 import struct
@@ -42,6 +42,7 @@ def generate_24bit_wav_bytes(sample_rate, channels, frames, data_int24):
     (np.int16, 2),
     (np.int32, 4)
 ])
+@assert_one_kernel
 def test_decode_wav_scipy_comparable(channels, dtype, sampwidth):
     sample_rate = 44100
     duration = 0.1
@@ -63,6 +64,7 @@ def test_decode_wav_scipy_comparable(channels, dtype, sampwidth):
 
     # Decode with tinyops
     rate_to, tensor_to = decode_wav(wav_bytes)
+    tensor_to = tensor_to.realize()
 
     # Decode with scipy for comparison
     rate_sp, data_sp = wavfile.read(io.BytesIO(wav_bytes))
@@ -82,6 +84,7 @@ def test_decode_wav_scipy_comparable(channels, dtype, sampwidth):
 
 @pytest.mark.skipif(wavfile is None, reason="scipy is not installed")
 @pytest.mark.parametrize("channels", [1, 2])
+@assert_one_kernel
 def test_decode_wav_24bit(channels):
     sample_rate = 44100
     duration = 0.1
@@ -99,6 +102,7 @@ def test_decode_wav_24bit(channels):
 
     # Decode with tinyops
     rate_to, tensor_to = decode_wav(wav_bytes)
+    tensor_to = tensor_to.realize()
 
     # Expected data after normalization
     norm_factor = 2**23

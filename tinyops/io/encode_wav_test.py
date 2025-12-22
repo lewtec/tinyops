@@ -1,9 +1,9 @@
-
 import numpy as np
 import pytest
 from tinygrad import Tensor, dtypes
 from tinyops._core import assert_close
 from tinyops.io.encode_wav import encode_wav
+from tinyops.test_utils import assert_one_kernel
 import io
 
 # SciPy is a test-only dependency
@@ -19,6 +19,7 @@ except ImportError:
     (2, np.int16),
     (4, np.int32),
 ])
+@assert_one_kernel
 def test_encode_wav_scipy_comparable(channels, sampwidth, dtype):
     sample_rate = 44100
     duration = 0.1
@@ -27,7 +28,7 @@ def test_encode_wav_scipy_comparable(channels, sampwidth, dtype):
     # Generate audio data as float32 tensor
     original_data = np.sin(2 * np.pi * 440 * np.arange(n_frames * channels) / sample_rate)
     original_data = original_data.reshape(n_frames, channels).astype(np.float32)
-    tensor = Tensor(original_data, dtype=dtypes.float32)
+    tensor = Tensor(original_data, dtype=dtypes.float32).realize()
 
     # Encode with tinyops
     wav_bytes = encode_wav(tensor, sample_rate, sampwidth=sampwidth)
@@ -56,6 +57,7 @@ def test_encode_wav_scipy_comparable(channels, sampwidth, dtype):
 
 @pytest.mark.skipif(wavfile is None, reason="scipy is not installed")
 @pytest.mark.parametrize("channels", [1, 2])
+@assert_one_kernel
 def test_encode_wav_24bit(channels):
     # This test is more complex because scipy.io.wavfile doesn't support 24-bit write.
     # We will encode, then decode with our own decode_wav function to check consistency.
@@ -68,13 +70,14 @@ def test_encode_wav_24bit(channels):
     # Generate audio data as float32 tensor
     original_data = np.sin(2 * np.pi * 440 * np.arange(n_frames * channels) / sample_rate)
     original_data = original_data.reshape(n_frames, channels).astype(np.float32)
-    tensor = Tensor(original_data, dtype=dtypes.float32)
+    tensor = Tensor(original_data, dtype=dtypes.float32).realize()
 
     # Encode with tinyops
     wav_bytes = encode_wav(tensor, sample_rate, sampwidth=3)
 
     # Decode with our own decoder
     rate_decoded, tensor_decoded = decode_wav(wav_bytes)
+    tensor_decoded = tensor_decoded.realize()
 
     assert rate_decoded == sample_rate
     assert_close(tensor, tensor_decoded, atol=1e-5, rtol=1e-5)

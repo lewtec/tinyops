@@ -3,7 +3,9 @@ import numpy as np
 from tinygrad import Tensor
 from tinyops._core import assert_close
 from tinyops.audio.freq_mask import freq_mask
+from tinyops.test_utils import assert_one_kernel
 
+@assert_one_kernel
 def test_freq_mask_basic(monkeypatch):
     spectrogram = Tensor.ones(1, 10, 20)
     # Mock rand to ensure some masking happens, making the test deterministic
@@ -14,8 +16,9 @@ def test_freq_mask_basic(monkeypatch):
     assert masked.shape == (1, 10, 20)
     assert masked.sum().item() < spectrogram.sum().item()
 
+@assert_one_kernel
 def test_freq_mask_deterministic(monkeypatch):
-    spectrogram = Tensor.ones(1, 10, 5)
+    spectrogram = Tensor.ones(1, 10, 5).realize()
 
     # Mock Tensor.rand to return deterministic values
     mock_values = [Tensor([0.5]).reshape(1, 1, 1), Tensor([0.2]).reshape(1, 1, 1)]
@@ -26,7 +29,7 @@ def test_freq_mask_deterministic(monkeypatch):
     # f0 = floor(0.2 * (10 - 2)) = floor(1.6) = 1
     # Mask will be from freq 1 up to (1+2)=3, so rows 1 and 2 are masked
 
-    masked = freq_mask(spectrogram, freq_mask_param=4, mask_value=0.0)
+    masked = freq_mask(spectrogram, freq_mask_param=4, mask_value=0.0).realize()
 
     expected_np = np.ones((1, 10, 5), dtype=np.float32)
     expected_np[0, 1:3, :] = 0.0
@@ -34,8 +37,9 @@ def test_freq_mask_deterministic(monkeypatch):
 
     assert_close(masked, expected)
 
+@assert_one_kernel
 def test_freq_mask_iid(monkeypatch):
-    spectrogram = Tensor.ones(2, 10, 5)
+    spectrogram = Tensor.ones(2, 10, 5).realize()
 
     # Mock Tensor.rand to return deterministic values for a batch, ensuring correct shape
     mock_values = [Tensor([[0.5], [0.8]]).reshape(2, 1, 1), Tensor([[0.2], [0.1]]).reshape(2, 1, 1)]
@@ -48,7 +52,7 @@ def test_freq_mask_iid(monkeypatch):
     #   f0 = floor(0.1 * (10 - 3)) = floor(0.7) = 0
     #   Mask is from 0 up to 3, so rows 0, 1, 2 are masked
 
-    masked = freq_mask(spectrogram, freq_mask_param=4, mask_value=0.0, iid_masks=True)
+    masked = freq_mask(spectrogram, freq_mask_param=4, mask_value=0.0, iid_masks=True).realize()
 
     expected_np = np.ones((2, 10, 5), dtype=np.float32)
     expected_np[0, 1:3, :] = 0.0
@@ -57,8 +61,9 @@ def test_freq_mask_iid(monkeypatch):
 
     assert_close(masked, expected)
 
+@assert_one_kernel
 def test_freq_mask_param_full(monkeypatch):
-    spectrogram = Tensor.ones(1, 10, 5)
+    spectrogram = Tensor.ones(1, 10, 5).realize()
 
     # Mock rand to create a mask of length 9 starting at 0.
     # f = floor(0.99 * 10) = 9
@@ -66,13 +71,14 @@ def test_freq_mask_param_full(monkeypatch):
     mock_values = [Tensor([0.99]), Tensor([0.1])]
     monkeypatch.setattr(Tensor, "rand", lambda *shape: mock_values.pop(0).expand(shape))
 
-    masked = freq_mask(spectrogram, freq_mask_param=10, mask_value=0.0)
+    masked = freq_mask(spectrogram, freq_mask_param=10, mask_value=0.0).realize()
     # Only the last row should remain unmasked. Shape is (1, 10, 5), so sum of one row is 5.
     assert masked.sum().item() == 5.0
 
+@assert_one_kernel
 def test_freq_mask_param_zero():
-    spectrogram = Tensor.ones(1, 10, 5)
-    masked = freq_mask(spectrogram, freq_mask_param=0, mask_value=0.0)
+    spectrogram = Tensor.ones(1, 10, 5).realize()
+    masked = freq_mask(spectrogram, freq_mask_param=0, mask_value=0.0).realize()
     assert_close(masked, spectrogram)
 
 def test_invalid_param():
