@@ -141,9 +141,9 @@
 - [ ] `sklearn.linear_model.Ridge` → `tinyops.ml.ridge`
 - [ ] `sklearn.linear_model.Lasso` → `tinyops.ml.lasso`
 - [ ] `sklearn.linear_model.ElasticNet` → `tinyops.ml.elastic_net`
-- [ ] `sklearn.linear_model.LogisticRegression` → `tinyops.ml.logistic_regression`
-- [ ] `sklearn.linear_model.SGDClassifier` → `tinyops.ml.sgd_classifier`
-- [ ] `sklearn.linear_model.SGDRegressor` → `tinyops.ml.sgd_regressor`
+- [x] `sklearn.linear_model.LogisticRegression` → `tinyops.ml.logistic_regression`
+- [x] `sklearn.linear_model.SGDClassifier` → `tinyops.ml.sgd_classifier` (hinge only)
+- [x] `sklearn.linear_model.SGDRegressor` → `tinyops.ml.sgd_regressor`
 - [ ] `sklearn.svm.LinearSVC` → `tinyops.ml.linear_svc`
 - [ ] `sklearn.svm.LinearSVR` → `tinyops.ml.linear_svr`
 - [ ] `sklearn.svm.SVC` → `tinyops.ml.svc`
