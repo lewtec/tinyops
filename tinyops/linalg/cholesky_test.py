@@ -4,6 +4,7 @@ from tinyops.linalg.cholesky import cholesky
 from tinyops.test_utils import assert_one_kernel
 from tinyops._core import assert_close
 
+
 @assert_one_kernel
 def test_cholesky():
     # Create a symmetric positive-definite matrix
@@ -12,16 +13,16 @@ def test_cholesky():
 
     # Compute Cholesky decomposition
     l_tiny = cholesky(a_tiny).realize()
-    l_np = np.linalg.cholesky(a).realize()
+    l_np = np.linalg.cholesky(a)
 
     assert_close(l_tiny, l_np)
 
     # Test with another matrix
     a = np.random.rand(5, 5).astype(np.float32)
-    a = np.dot(a, a.T) + np.eye(5) * 1e-3.realize() # Ensure it's positive-definite
+    a = np.dot(a, a.T) + np.eye(5) * 1e-3  # Ensure it's positive-definite
     a_tiny = Tensor(a).realize()
 
     l_tiny = cholesky(a_tiny).realize()
-    l_np = np.linalg.cholesky(a).realize()
+    l_np = np.linalg.cholesky(a)
 
     assert_close(l_tiny, l_np)

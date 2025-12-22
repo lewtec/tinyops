@@ -37,5 +37,5 @@ def test_mean_tuple_axis():
     a = Tensor(a_np).realize()
 
     res = mean(a, axis=(0, 2)).realize()
-    expected = np.mean(a_np, axis=(0, 2)).realize()
+    expected = np.mean(a_np, axis=(0, 2))
     assert_close(res, expected)
