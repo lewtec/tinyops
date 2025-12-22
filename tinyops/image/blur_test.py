@@ -11,7 +11,6 @@ def _get_input(shape):
     return Tensor(img).realize(), img
 
 @pytest.mark.parametrize("ksize", [(3, 3), (4, 4), (5, 5)])
-@pytest.mark.xfail(reason="Blur likely uses box_filter which might multi-kernel")
 @assert_one_kernel
 def test_blur_color(ksize):
   """Test blur for a 3-channel color image."""
@@ -25,7 +24,6 @@ def test_blur_color(ksize):
   assert_close(result, expected, atol=1e-5, rtol=1e-5)
 
 @pytest.mark.parametrize("ksize", [(3, 3), (4, 4), (5, 5)])
-@pytest.mark.xfail(reason="Blur likely uses box_filter which might multi-kernel")
 @assert_one_kernel
 def test_blur_grayscale(ksize):
   """Test blur for a single-channel grayscale image."""

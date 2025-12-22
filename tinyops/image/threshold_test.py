@@ -19,7 +19,6 @@ THRESH_PARAMS = [
 ]
 
 @pytest.mark.parametrize("type, cv2_type", THRESH_PARAMS)
-@pytest.mark.xfail(reason="Threshold creates multiple kernels")
 @assert_one_kernel
 def test_threshold(type, cv2_type):
     src_tensor, src = _get_input()

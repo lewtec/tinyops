@@ -10,7 +10,6 @@ def _get_input():
     gray_image = np.random.randint(0, 256, size=(100, 200), dtype=np.uint8)
     return Tensor(gray_image, dtype=dtypes.uint8).realize(), gray_image
 
-@pytest.mark.xfail(reason="Equalize hist uses multiple kernels")
 @assert_one_kernel
 def test_equalize_hist_grayscale():
   gray_tensor, gray_image = _get_input()

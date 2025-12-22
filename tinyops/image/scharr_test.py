@@ -13,7 +13,6 @@ def _get_input(shape):
 
 @pytest.mark.parametrize("shape", [(10, 20)])
 @pytest.mark.parametrize("dx, dy", [(1, 0), (0, 1)])
-@pytest.mark.xfail(reason="Scharr uses multiple kernels")
 @assert_one_kernel
 def test_scharr_grayscale(shape, dx, dy):
     tensor_img, img = _get_input(shape)
@@ -25,7 +24,6 @@ def test_scharr_grayscale(shape, dx, dy):
 
 @pytest.mark.parametrize("shape", [(10, 20, 3)])
 @pytest.mark.parametrize("dx, dy", [(1, 0), (0, 1)])
-@pytest.mark.xfail(reason="Scharr uses multiple kernels")
 @assert_one_kernel
 def test_scharr_color(shape, dx, dy):
     tensor_img, img = _get_input(shape)
@@ -40,7 +38,6 @@ def test_scharr_color(shape, dx, dy):
 
 @pytest.mark.parametrize("shape", [(5, 10, 20, 3)])
 @pytest.mark.parametrize("dx, dy", [(1, 0), (0, 1)])
-@pytest.mark.xfail(reason="Scharr uses multiple kernels")
 @assert_one_kernel
 def test_scharr_batch(shape, dx, dy):
     tensor_img, img = _get_input(shape)

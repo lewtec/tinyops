@@ -10,7 +10,6 @@ def _get_input(shape):
     return Tensor.rand(*shape).realize()
 
 @pytest.mark.parametrize("size", [128])
-@pytest.mark.xfail(reason="Center crop creates multiple kernels")
 @assert_one_kernel
 def test_center_crop_smaller(size):
     img_tensor = _get_input((3, 256, 256))
@@ -23,7 +22,6 @@ def test_center_crop_smaller(size):
     assert_close(tinyops_result, torch_result.numpy())
 
 @pytest.mark.parametrize("size", [256])
-@pytest.mark.xfail(reason="Center crop larger might involve padding which splits kernels")
 @assert_one_kernel
 def test_center_crop_larger(size):
     img_tensor = _get_input((3, 128, 128))
@@ -36,7 +34,6 @@ def test_center_crop_larger(size):
     assert_close(tinyops_result, torch_result.numpy())
 
 @pytest.mark.parametrize("size", [(100, 150)])
-@pytest.mark.xfail(reason="Center crop creates multiple kernels")
 @assert_one_kernel
 def test_center_crop_tuple(size):
     img_tensor = _get_input((3, 256, 256))
@@ -49,7 +46,6 @@ def test_center_crop_tuple(size):
     assert_close(tinyops_result, torch_result.numpy())
 
 @pytest.mark.parametrize("size", [128])
-@pytest.mark.xfail(reason="Center crop creates multiple kernels")
 @assert_one_kernel
 def test_center_crop_batched(size):
     img_tensor = _get_input((4, 3, 256, 256))

@@ -17,7 +17,6 @@ def _get_input(input_dtype, output_dtype):
     (np.float32, dtypes.float32),
     (np.uint8, dtypes.uint8)
 ])
-@pytest.mark.xfail(reason="Normalize uses min/max which creates multiple kernels")
 @assert_one_kernel
 def test_normalize_minmax(input_dtype, output_dtype):
     alpha, beta = 0, 255
