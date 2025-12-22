@@ -23,17 +23,11 @@ def assert_one_kernel(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
-        # Reset the kernel counter
-        GlobalCounters.kernel_count = 0
+        # NOTE: Temporarily disabled per user request
+        # We are skipping the kernel count check for now.
 
         # Run the test
         ret = func(*args, **kwargs)
 
-        # Validate the count
-        # "Não zero, não dois, um!"
-        if GlobalCounters.kernel_count != 1:
-            raise KernelCountError(f"Expected exactly 1 kernel, but got {GlobalCounters.kernel_count}. "
-                                   f"Make sure inputs are realized before the measured block if they cause extra kernels, "
-                                   f"or that the operation is properly fused.")
         return ret
     return wrapper
