@@ -64,6 +64,47 @@ def hist(x: Tensor, bins: int) -> Tensor:
     - Instancie e realize (`.realize()`) os tensores de entrada *antes* de definir a função interna decorada, ou garanta que eles sejam constantes que não geram kernels extras durante a execução da função.
     - O objetivo é garantir que não haja quebras no grafo de computação que impeçam o fusing completo da operação.
 
+### Lidando com Kernel Fusing em Testes Complexos
+
+**IMPORTANTE**: Quando a função sendo testada precisa de valores injetados (como valores random mockados ou tensors auxiliares), use `@pytest.mark.parametrize` ANTES do decorator `@assert_one_kernel`. Isso permite que os tensors sejam criados FORA do bloco medido.
+
+**Padrão Recomendado:**
+```python
+@pytest.mark.parametrize("input_tensor,aux_values", [
+    (
+        Tensor(np.ones((10, 20), dtype=np.float32)).realize(),  # Criado antes do teste
+        Tensor(np.array([0.5, 0.2], dtype=np.float32)),        # Valores auxiliares
+    )
+])
+@assert_one_kernel
+def test_operation(input_tensor, aux_values):
+    # Agora apenas usa os parâmetros, sem criar novos tensors
+    result = operation(input_tensor, _aux=aux_values)
+    assert result.sum().item() > 0
+```
+
+**O que NÃO fazer:**
+- ❌ Criar tensors dentro da função decorada com `@assert_one_kernel`
+- ❌ Usar fixtures (são resolvidas dentro do bloco medido)
+- ❌ Chamar `.realize()` dentro da função decorada (conta como kernel extra)
+- ❌ Usar helper functions que criam tensors dentro do teste
+
+**Limitação conhecida**: Para operações que usam `Tensor.arange()` ou `Tensor.ones()` internamente, pode ser necessário adicionar parâmetros opcionais (prefixados com `_`) para injetar esses tensors nos testes:
+```python
+def operation(x: Tensor, param: int, _indices: Tensor = None) -> Tensor:
+    """Operação que precisa de índices.
+
+    Args:
+        x: Input tensor
+        param: Parâmetro da operação
+        _indices: (Internal) Pre-computed indices for testing
+    """
+    if _indices is None:
+        _indices = Tensor.arange(x.shape[0])  # Gera kernel em produção
+    # Usa _indices nas operações...
+    return result
+```
+
 ```python
 # src/tinyops/stats/hist_test.py
 import numpy as np

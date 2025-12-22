@@ -11,7 +11,6 @@ def _get_input(shape):
     img = img.astype(np.uint8)
     return Tensor(img, dtype=dtypes.uint8).realize(), img
 
-@pytest.mark.xfail(reason="Laplacian uses multiple kernels")
 @assert_one_kernel
 def test_laplacian_ksize_1():
     tensor_img, img = _get_input((10, 20))
@@ -21,7 +20,6 @@ def test_laplacian_ksize_1():
 
     assert_close(result_tinyops, result_opencv, atol=1e-5, rtol=1e-5)
 
-@pytest.mark.xfail(reason="Laplacian uses multiple kernels")
 @assert_one_kernel
 def test_laplacian_color():
     tensor_img, img = _get_input((10, 20, 3))
@@ -34,7 +32,6 @@ def test_laplacian_color():
 
     assert_close(result_tinyops, result_opencv, atol=1e-5, rtol=1e-5)
 
-@pytest.mark.xfail(reason="Laplacian uses multiple kernels")
 @assert_one_kernel
 def test_laplacian_batch():
     tensor_img, img = _get_input((5, 10, 20, 3))

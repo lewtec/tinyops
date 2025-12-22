@@ -19,7 +19,6 @@ def _get_kernel(kernel_shape, kernel_type):
 
 @pytest.mark.parametrize("kernel_shape", [(3, 3), (5, 5)])
 @pytest.mark.parametrize("kernel_type", ["rect", "cross"])
-@pytest.mark.xfail(reason="Dilate creates multiple kernels")
 @assert_one_kernel
 def test_dilate_grayscale(kernel_shape, kernel_type):
     tensor_img, img = _get_input((20, 20))
@@ -32,7 +31,6 @@ def test_dilate_grayscale(kernel_shape, kernel_type):
 
 @pytest.mark.parametrize("kernel_shape", [(3, 3), (5, 5)])
 @pytest.mark.parametrize("kernel_type", ["rect", "cross"])
-@pytest.mark.xfail(reason="Dilate creates multiple kernels")
 @assert_one_kernel
 def test_dilate_color(kernel_shape, kernel_type):
     tensor_img, img = _get_input((20, 20, 3))

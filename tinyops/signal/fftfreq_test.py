@@ -1,26 +1,18 @@
 import numpy as np
-import unittest
+import pytest
 from tinyops.signal.fftfreq import fftfreq
+from tinyops.test_utils import assert_one_kernel
 from tinyops._core import assert_close
 
-class TestFFTFreq(unittest.TestCase):
-  def test_fftfreq(self):
-    n = 16
-    d = 0.1
-    y_np = np.fft.fftfreq(n, d)
-    y_to = fftfreq(n, d).numpy()
-    assert_close(y_to, y_np)
+TEST_PARAMS = [
+    (16, 0.1),
+    (10, 1.0),
+    (11, 1.0),
+]
 
-  def test_fftfreq_even(self):
-    n = 10
-    d = 1.0
+@pytest.mark.parametrize("n,d", TEST_PARAMS)
+@assert_one_kernel
+def test_fftfreq(n, d):
     y_np = np.fft.fftfreq(n, d)
-    y_to = fftfreq(n, d).numpy()
-    assert_close(y_to, y_np)
-
-  def test_fftfreq_odd(self):
-    n = 11
-    d = 1.0
-    y_np = np.fft.fftfreq(n, d)
-    y_to = fftfreq(n, d).numpy()
+    y_to = fftfreq(n, d).realize()
     assert_close(y_to, y_np)

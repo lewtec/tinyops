@@ -18,7 +18,6 @@ def _get_input(shape):
     (MORPH_TOPHAT, cv2.MORPH_TOPHAT),
     (MORPH_BLACKHAT, cv2.MORPH_BLACKHAT),
 ])
-@pytest.mark.xfail(reason="Morphology creates multiple kernels")
 @assert_one_kernel
 def test_morphology(op, cv2_op):
     # Grayscale image
@@ -39,7 +38,6 @@ def test_morphology(op, cv2_op):
     (MORPH_TOPHAT, cv2.MORPH_TOPHAT),
     (MORPH_BLACKHAT, cv2.MORPH_BLACKHAT),
 ])
-@pytest.mark.xfail(reason="Morphology creates multiple kernels")
 @assert_one_kernel
 def test_morphology_color(op, cv2_op):
     # Color image
