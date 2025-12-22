@@ -56,8 +56,8 @@
 - [x] `np.fft.fftfreq` → `tinyops.signal.fftfreq`
 - [x] wav decode → `tinyops.io.decode_wav`
 - [x] wav encode → `tinyops.io.encode_wav`
-- [ ] bmp decode → `tinyops.io.decode_bmp` (skipped)
-- [ ] bmp encode → `tinyops.io.encode_bmp` (skipped)
+- [ ] bmp decode → `tinyops.io.decode_bmp`
+- [ ] bmp encode → `tinyops.io.encode_bmp`
 - [x] `cv2.resize` → `tinyops.image.resize`
 - [x] `cv2.rotate` → `tinyops.image.rotate`
 - [x] `cv2.flip` → `tinyops.image.flip`
