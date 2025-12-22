@@ -90,7 +90,7 @@
 - [x] `torchvision.transforms.Pad` → `tinyops.image.pad`
 - [ ] `torchvision.transforms.ColorJitter` → `tinyops.image.color_jitter` (skipped)
 - [ ] `torchaudio.transforms.MelScale` → `tinyops.audio.mel_scale`
-- [ ] `torchaudio.transforms.AmplitudeToDB` → `tinyops.audio.amplitude_to_db`
+- [x] `torchaudio.transforms.AmplitudeToDB` → `tinyops.audio.amplitude_to_db`
 - [ ] `torchaudio.transforms.Resample` → `tinyops.audio.resample`
 - [x] `torchaudio.transforms.MuLawEncoding` → `tinyops.audio.mu_law_encode`
 - [x] `torchaudio.transforms.MuLawDecoding` → `tinyops.audio.mu_law_decode`
