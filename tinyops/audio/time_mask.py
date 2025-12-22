@@ -40,6 +40,10 @@ def time_mask(spectrogram: Tensor, time_mask_param: int, mask_value: float = 0.0
         rand1 = Tensor.rand(*rand_shape)
         rand2 = Tensor.rand(*rand_shape)
 
+    # Explicitly expand to input shape to force kernel fusion
+    rand1 = rand1.expand(spectrogram.shape)
+    rand2 = rand2.expand(spectrogram.shape)
+
     t_val = (rand1 * time_mask_param).floor()
     t0_val = (rand2 * (num_timesteps - t_val)).floor()
 
@@ -50,6 +54,9 @@ def time_mask(spectrogram: Tensor, time_mask_param: int, mask_value: float = 0.0
         time_indices = Tensor.arange(num_timesteps, dtype=spectrogram.dtype).reshape(time_idx_shape)
     else:
         time_indices = _time_indices
+
+    # Explicitly expand time_indices to input shape to force kernel fusion
+    time_indices = time_indices.expand(spectrogram.shape)
 
     # Create mask: True where we want to mask (between t0 and t0+t)
     mask = (time_indices >= t0_val) & (time_indices < t0_val + t_val)

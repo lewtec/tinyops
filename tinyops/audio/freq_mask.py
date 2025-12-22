@@ -40,6 +40,10 @@ def freq_mask(spectrogram: Tensor, freq_mask_param: int, mask_value: float = 0.0
         rand1 = Tensor.rand(*rand_shape)
         rand2 = Tensor.rand(*rand_shape)
 
+    # Explicitly expand to input shape to force kernel fusion
+    rand1 = rand1.expand(spectrogram.shape)
+    rand2 = rand2.expand(spectrogram.shape)
+
     f_val = (rand1 * freq_mask_param).floor()
     f0_val = (rand2 * (num_freqs - f_val)).floor()
 
@@ -50,6 +54,9 @@ def freq_mask(spectrogram: Tensor, freq_mask_param: int, mask_value: float = 0.0
         freq_indices = Tensor.arange(num_freqs, dtype=spectrogram.dtype).reshape(freq_idx_shape)
     else:
         freq_indices = _freq_indices
+
+    # Explicitly expand freq_indices to input shape to force kernel fusion
+    freq_indices = freq_indices.expand(spectrogram.shape)
 
     # Create mask: True where we want to mask (between f0 and f0+f)
     mask = (freq_indices >= f0_val) & (freq_indices < f0_val + f_val)

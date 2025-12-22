@@ -40,18 +40,21 @@ IMG_COLOR = np.stack([
 
 KERNEL_ONES = np.ones((3, 3), dtype=np.float32) / 9.0
 
-TEST_PARAMS = [
+# Pre-realize tensors for testing fusion
+TEST_PARAMS_DATA = [
     (IMG_GRAYSCALE, KERNEL_SYMMETRIC),
     (IMG_GRAYSCALE, KERNEL_NON_SYMMETRIC),
     (IMG_COLOR, KERNEL_ONES),
 ]
 
-@pytest.mark.parametrize("img,kernel", TEST_PARAMS)
-@assert_one_kernel
-def test_filter2d(img, kernel):
-    tensor_img = Tensor(img).realize()
-    tensor_kernel = Tensor(kernel).realize()
+TEST_PARAMS = [
+    (Tensor(img).realize(), Tensor(kernel).realize(), img, kernel)
+    for img, kernel in TEST_PARAMS_DATA
+]
 
+@pytest.mark.parametrize("tensor_img, tensor_kernel, img, kernel", TEST_PARAMS)
+@assert_one_kernel
+def test_filter2d(tensor_img, tensor_kernel, img, kernel):
     result = filter2d(tensor_img, tensor_kernel).realize()
     expected = cv2.filter2D(img, -1, kernel, borderType=cv2.BORDER_REFLECT_101)
 
