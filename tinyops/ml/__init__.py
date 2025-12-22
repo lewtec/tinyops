@@ -1,3 +1,7 @@
+from .normalizer import normalizer
+from .binarizer import binarizer
+from .onehot_encoder import onehot_encoder
+from .label_encoder import label_encoder
 from .standard_scaler import standard_scaler
 from .minmax_scaler import minmax_scaler
 from .maxabs_scaler import maxabs_scaler
