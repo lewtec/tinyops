@@ -1,3 +1,4 @@
+from .adaboost_classifier import adaboost_classifier
 from .normalizer import normalizer
 from .binarizer import binarizer
 from .onehot_encoder import onehot_encoder
