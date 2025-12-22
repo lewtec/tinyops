@@ -1,3 +1,5 @@
+from .linear_svc import linear_svc
+from .linear_svr import linear_svr
 from .decision_tree_classifier import decision_tree_classifier
 from .decision_tree_regressor import decision_tree_regressor
 from .random_forest_classifier import random_forest_classifier
