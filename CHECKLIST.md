@@ -94,7 +94,7 @@
 - [ ] `torchaudio.transforms.Resample` → `tinyops.audio.resample`
 - [x] `torchaudio.transforms.MuLawEncoding` → `tinyops.audio.mu_law_encode`
 - [x] `torchaudio.transforms.MuLawDecoding` → `tinyops.audio.mu_law_decode`
-- [ ] `torchaudio.transforms.Fade` → `tinyops.audio.fade`
+- [x] `torchaudio.transforms.Fade` → `tinyops.audio.fade`
 - [ ] `torchaudio.transforms.Spectrogram` → `tinyops.audio.spectrogram`
 - [ ] `torchaudio.transforms.MelSpectrogram` → `tinyops.audio.mel_spectrogram`
 - [ ] `torchaudio.transforms.MFCC` → `tinyops.audio.mfcc`
