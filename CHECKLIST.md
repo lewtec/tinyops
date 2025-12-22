@@ -90,11 +90,11 @@
 - [x] `torchvision.transforms.Pad` → `tinyops.image.pad`
 - [ ] `torchvision.transforms.ColorJitter` → `tinyops.image.color_jitter` (skipped)
 - [ ] `torchaudio.transforms.MelScale` → `tinyops.audio.mel_scale`
-- [ ] `torchaudio.transforms.AmplitudeToDB` → `tinyops.audio.amplitude_to_db`
+- [x] `torchaudio.transforms.AmplitudeToDB` → `tinyops.audio.amplitude_to_db`
 - [ ] `torchaudio.transforms.Resample` → `tinyops.audio.resample`
 - [x] `torchaudio.transforms.MuLawEncoding` → `tinyops.audio.mu_law_encode`
 - [x] `torchaudio.transforms.MuLawDecoding` → `tinyops.audio.mu_law_decode`
-- [ ] `torchaudio.transforms.Fade` → `tinyops.audio.fade`
+- [x] `torchaudio.transforms.Fade` → `tinyops.audio.fade`
 - [ ] `torchaudio.transforms.Spectrogram` → `tinyops.audio.spectrogram`
 - [ ] `torchaudio.transforms.MelSpectrogram` → `tinyops.audio.mel_spectrogram`
 - [ ] `torchaudio.transforms.MFCC` → `tinyops.audio.mfcc`
@@ -112,10 +112,10 @@
 - [ ] `sklearn.metrics.pairwise_distances(metric='hamming')` → `tinyops.text.pairwise_hamming_distance`
 - [ ] `sklearn.feature_extraction.text.CountVectorizer` → `tinyops.text.count_vectorizer`
 - [ ] `sklearn.feature_extraction.text.TfidfVectorizer` → `tinyops.text.tfidf_vectorizer`
-- [ ] `sklearn.preprocessing.StandardScaler` → `tinyops.ml.standard_scaler`
-- [ ] `sklearn.preprocessing.MinMaxScaler` → `tinyops.ml.minmax_scaler`
-- [ ] `sklearn.preprocessing.MaxAbsScaler` → `tinyops.ml.maxabs_scaler`
-- [ ] `sklearn.preprocessing.RobustScaler` → `tinyops.ml.robust_scaler`
+- [x] `sklearn.preprocessing.StandardScaler` → `tinyops.ml.standard_scaler`
+- [x] `sklearn.preprocessing.MinMaxScaler` → `tinyops.ml.minmax_scaler`
+- [x] `sklearn.preprocessing.MaxAbsScaler` → `tinyops.ml.maxabs_scaler`
+- [x] `sklearn.preprocessing.RobustScaler` → `tinyops.ml.robust_scaler`
 - [ ] `sklearn.preprocessing.Normalizer` → `tinyops.ml.normalizer`
 - [ ] `sklearn.preprocessing.Binarizer` → `tinyops.ml.binarizer`
 - [ ] `sklearn.preprocessing.OneHotEncoder` → `tinyops.ml.onehot_encoder`
@@ -141,9 +141,9 @@
 - [ ] `sklearn.linear_model.Ridge` → `tinyops.ml.ridge`
 - [ ] `sklearn.linear_model.Lasso` → `tinyops.ml.lasso`
 - [ ] `sklearn.linear_model.ElasticNet` → `tinyops.ml.elastic_net`
-- [ ] `sklearn.linear_model.LogisticRegression` → `tinyops.ml.logistic_regression`
-- [ ] `sklearn.linear_model.SGDClassifier` → `tinyops.ml.sgd_classifier`
-- [ ] `sklearn.linear_model.SGDRegressor` → `tinyops.ml.sgd_regressor`
+- [x] `sklearn.linear_model.LogisticRegression` → `tinyops.ml.logistic_regression`
+- [x] `sklearn.linear_model.SGDClassifier` → `tinyops.ml.sgd_classifier` (hinge only)
+- [x] `sklearn.linear_model.SGDRegressor` → `tinyops.ml.sgd_regressor`
 - [ ] `sklearn.svm.LinearSVC` → `tinyops.ml.linear_svc`
 - [ ] `sklearn.svm.LinearSVR` → `tinyops.ml.linear_svr`
 - [ ] `sklearn.svm.SVC` → `tinyops.ml.svc`
@@ -168,7 +168,7 @@
 - [ ] `sklearn.mixture.BayesianGaussianMixture` → `tinyops.ml.bayesian_gmm`
 - [ ] `sklearn.ensemble.RandomForestClassifier` → `tinyops.ml.random_forest_classifier`
 - [ ] `sklearn.ensemble.RandomForestRegressor` → `tinyops.ml.random_forest_regressor`
-- [ ] `sklearn.ensemble.AdaBoostClassifier` → `tinyops.ml.adaboost_classifier`
-- [ ] `sklearn.ensemble.AdaBoostRegressor` → `tinyops.ml.adaboost_regressor`
+- [x] `sklearn.ensemble.AdaBoostClassifier` → `tinyops.ml.adaboost_classifier`
+- [ ] `sklearn.ensemble.AdaBoostRegressor` → `tinyops.ml.adaboost_regressor` (skipped)
 - [ ] `sklearn.ensemble.GradientBoostingClassifier` → `tinyops.ml.gradient_boosting_classifier`
 - [ ] `sklearn.ensemble.GradientBoostingRegressor` → `tinyops.ml.gradient_boosting_regressor`

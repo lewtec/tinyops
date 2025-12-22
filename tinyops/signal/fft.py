@@ -1,7 +1,7 @@
 import numpy as np
 from tinygrad import Tensor
 
-def _fft_cooley_tukey(x: Tensor) -> Tensor:
+def fft_cooley_tukey(x: Tensor) -> Tensor:
   """Computes FFT using Cooley-Tukey algorithm for power-of-two sizes."""
   N = x.shape[0]
   if N <= 1:
@@ -31,7 +31,7 @@ def _fft_cooley_tukey(x: Tensor) -> Tensor:
   return Tensor.cat(res_first_half, res_second_half, dim=0)
 
 
-def _fft_bluestein(x: Tensor) -> Tensor:
+def fft_bluestein(x: Tensor) -> Tensor:
   """Computes FFT using Bluestein's algorithm for non-power-of-two sizes."""
   N = x.shape[0]
   M = 1 << (2 * N - 1).bit_length()
@@ -103,30 +103,7 @@ def fft(x: Tensor) -> Tensor:
 
   # Dispatch to the appropriate algorithm
   if (N & (N - 1)) == 0 and N != 0:
-    return _fft_cooley_tukey(x)
+    return fft_cooley_tukey(x)
   else:
-    return _fft_bluestein(x)
+    return fft_bluestein(x)
 
-
-def ifft(x: Tensor) -> Tensor:
-  """
-  Computes the one-dimensional inverse discrete Fourier Transform.
-
-  Args:
-    x: The input tensor.
-
-  Returns:
-    The inverse FFT of the input tensor.
-  """
-  N = x.shape[0]
-
-  # Conjugate the input
-  x_conj = Tensor.stack([x[:, 0], -x[:, 1]], dim=1)
-
-  # Apply FFT
-  y = fft(x_conj)
-
-  # Conjugate the result and scale
-  y_conj = Tensor.stack([y[:, 0], -y[:, 1]], dim=1)
-
-  return y_conj / N

@@ -1,7 +1,6 @@
 import numpy as np
-import pytest
 from tinygrad import Tensor
-from tinyops.signal.fft import fft, ifft
+from tinyops.signal.fft import fft
 from tinyops.test_utils import assert_one_kernel
 from tinyops._core import assert_close
 
@@ -26,24 +25,4 @@ def test_fft(size):
     y_np_complex = np.stack([y_np.real, y_np.imag], axis=-1).astype(np.float32)
 
     # Bluestein's algorithm can have slightly larger floating point errors
-    assert_close(yt, y_np_complex, atol=1e-5, rtol=1e-5)
-
-@pytest.mark.parametrize("size", [16, 15, 17, 100])
-def test_ifft(size):
-    x_np = (np.random.randn(size) + 1j * np.random.randn(size)).astype(np.complex64)
-    x_complex_np = np.stack([x_np.real, x_np.imag], axis=-1)
-    xt = Tensor(x_complex_np).realize()
-
-    @assert_one_kernel
-    def run_kernel():
-        result = ifft(xt)
-        result.realize()
-        return result
-
-    yt = run_kernel()
-
-    y_np = np.fft.ifft(x_np)
-    y_np_complex = np.stack([y_np.real, y_np.imag], axis=-1).astype(np.float32)
-
-    # Loosen tolerance for the same reason as FFT
     assert_close(yt, y_np_complex, atol=1e-5, rtol=1e-5)
