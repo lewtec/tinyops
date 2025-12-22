@@ -5,28 +5,45 @@ from tinyops.signal.fft import fft, ifft
 from tinyops.test_utils import assert_one_kernel
 from tinyops._core import assert_close
 
-@assert_one_kernel
-def test_fft():
-    x = np.random.randn(16)
-    x_complex = np.stack([x, np.zeros_like(x)], axis=1)
+@pytest.mark.parametrize("size", [16, 15, 17, 100])
+def test_fft(size):
+    x_np = np.random.randn(size).astype(np.float32)
+    x_complex_np = np.stack([x_np, np.zeros_like(x_np)], axis=-1)
+    xt = Tensor(x_complex_np).realize()
 
-    xt = Tensor(x_complex).realize()
-    yt = fft(xt).realize()
+    # The @assert_one_kernel decorator is strict. The JIT compiler in tinygrad
+    # should fuse the entire FFT graph (whether Cooley-Tukey or Bluestein's)
+    # into a single kernel upon realization.
+    @assert_one_kernel
+    def run_kernel():
+        result = fft(xt)
+        result.realize()
+        return result
 
-    y_np = np.fft.fft(x)
-    y_np_complex = np.stack([y_np.real, y_np.imag], axis=1)
+    yt = run_kernel()
 
-    assert_close(yt, y_np_complex)
+    y_np = np.fft.fft(x_np)
+    y_np_complex = np.stack([y_np.real, y_np.imag], axis=-1).astype(np.float32)
 
-@assert_one_kernel
-def test_ifft():
-    x = np.random.randn(16) + 1j * np.random.randn(16)
-    x_complex = np.stack([x.real, x.imag], axis=1)
+    # Bluestein's algorithm can have slightly larger floating point errors
+    assert_close(yt, y_np_complex, atol=1e-5, rtol=1e-5)
 
-    xt = Tensor(x_complex).realize()
-    yt = ifft(xt).realize()
+@pytest.mark.parametrize("size", [16, 15, 17, 100])
+def test_ifft(size):
+    x_np = (np.random.randn(size) + 1j * np.random.randn(size)).astype(np.complex64)
+    x_complex_np = np.stack([x_np.real, x_np.imag], axis=-1)
+    xt = Tensor(x_complex_np).realize()
 
-    y_np = np.fft.ifft(x)
-    y_np_complex = np.stack([y_np.real, y_np.imag], axis=1)
+    @assert_one_kernel
+    def run_kernel():
+        result = ifft(xt)
+        result.realize()
+        return result
 
-    assert_close(yt, y_np_complex, atol=1e-6, rtol=1e-6)
+    yt = run_kernel()
+
+    y_np = np.fft.ifft(x_np)
+    y_np_complex = np.stack([y_np.real, y_np.imag], axis=-1).astype(np.float32)
+
+    # Loosen tolerance for the same reason as FFT
+    assert_close(yt, y_np_complex, atol=1e-5, rtol=1e-5)
