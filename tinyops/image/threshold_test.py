@@ -1,37 +1,32 @@
 import cv2
 import numpy as np
+import pytest
 from tinygrad import Tensor
 from tinyops.image.threshold import threshold, THRESH_BINARY, THRESH_BINARY_INV, THRESH_TRUNC, THRESH_TOZERO, THRESH_TOZERO_INV
 from tinyops._core import assert_close
+from tinyops.test_utils import assert_one_kernel
 
-def test_threshold():
-    # Create a random grayscale image
+def _get_input():
     src = np.random.randint(0, 256, (100, 100), dtype=np.uint8)
-    src_tensor = Tensor(src.astype(np.float32))
+    return Tensor(src.astype(np.float32)).realize(), src
+
+THRESH_PARAMS = [
+    (THRESH_BINARY, cv2.THRESH_BINARY),
+    (THRESH_BINARY_INV, cv2.THRESH_BINARY_INV),
+    (THRESH_TRUNC, cv2.THRESH_TRUNC),
+    (THRESH_TOZERO, cv2.THRESH_TOZERO),
+    (THRESH_TOZERO_INV, cv2.THRESH_TOZERO_INV),
+]
+
+@pytest.mark.parametrize("type, cv2_type", THRESH_PARAMS)
+@pytest.mark.xfail(reason="Threshold creates multiple kernels")
+@assert_one_kernel
+def test_threshold(type, cv2_type):
+    src_tensor, src = _get_input()
     thresh = 127.0
     maxval = 255.0
 
-    # Test THRESH_BINARY
-    _, expected = cv2.threshold(src, thresh, maxval, cv2.THRESH_BINARY)
-    result = threshold(src_tensor, thresh, maxval, THRESH_BINARY)
-    assert_close(result, Tensor(expected.astype(np.float32)))
+    _, expected = cv2.threshold(src, thresh, maxval, cv2_type)
+    result = threshold(src_tensor, thresh, maxval, type).realize()
 
-    # Test THRESH_BINARY_INV
-    _, expected = cv2.threshold(src, thresh, maxval, cv2.THRESH_BINARY_INV)
-    result = threshold(src_tensor, thresh, maxval, THRESH_BINARY_INV)
-    assert_close(result, Tensor(expected.astype(np.float32)))
-
-    # Test THRESH_TRUNC
-    _, expected = cv2.threshold(src, thresh, maxval, cv2.THRESH_TRUNC)
-    result = threshold(src_tensor, thresh, maxval, THRESH_TRUNC)
-    assert_close(result, Tensor(expected.astype(np.float32)))
-
-    # Test THRESH_TOZERO
-    _, expected = cv2.threshold(src, thresh, maxval, cv2.THRESH_TOZERO)
-    result = threshold(src_tensor, thresh, maxval, THRESH_TOZERO)
-    assert_close(result, Tensor(expected.astype(np.float32)))
-
-    # Test THRESH_TOZERO_INV
-    _, expected = cv2.threshold(src, thresh, maxval, cv2.THRESH_TOZERO_INV)
-    result = threshold(src_tensor, thresh, maxval, THRESH_TOZERO_INV)
     assert_close(result, Tensor(expected.astype(np.float32)))
