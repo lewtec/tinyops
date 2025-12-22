@@ -41,7 +41,7 @@
 - [x] `np.histogram` → `tinyops.stats.hist`
 - [x] `np.histogram2d` → `tinyops.stats.hist2d`
 - [ ] `np.histogramdd` → `tinyops.stats.histdd`
-- [ ] `np.convolve` → `tinyops.signal.convolve`
+- [x] `np.convolve` → `tinyops.signal.convolve`
 - [ ] `np.correlate` → `tinyops.signal.correlate`
 - [x] `np.hanning` → `tinyops.signal.hanning`
 - [x] `np.hamming` → `tinyops.signal.hamming`
