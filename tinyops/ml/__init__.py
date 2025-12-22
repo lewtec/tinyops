@@ -2,6 +2,10 @@ from .decision_tree_classifier import decision_tree_classifier
 from .decision_tree_regressor import decision_tree_regressor
 from .random_forest_classifier import random_forest_classifier
 from .random_forest_regressor import random_forest_regressor
+from .logistic_regression import logistic_regression
+from .sgd_classifier import sgd_classifier
+from .sgd_regressor import sgd_regressor
+from .adaboost_classifier import adaboost_classifier
 from .normalizer import normalizer
 from .binarizer import binarizer
 from .onehot_encoder import onehot_encoder
