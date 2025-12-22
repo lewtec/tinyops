@@ -4,3 +4,4 @@ from .fftfreq import fftfreq
 from .hanning import hanning
 from .hamming import hamming
 from .blackman import blackman
+from .convolve import convolve
