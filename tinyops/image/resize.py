@@ -2,7 +2,7 @@ from enum import Enum
 from functools import partial
 from tinygrad import Tensor, dtypes
 
-def _resize_nearest(x, out_H, out_W, H, W, ty, tx) -> Tensor:
+def resize_nearest(x, out_H, out_W, H, W, ty, tx) -> Tensor:
     scale_y = H / out_H
     scale_x = W / out_W
     sy = ty.cast(dtypes.float32) * scale_y
@@ -11,7 +11,7 @@ def _resize_nearest(x, out_H, out_W, H, W, ty, tx) -> Tensor:
     ix = sx.floor().cast(dtypes.int32).clip(0, W - 1)
     return x[iy, ix]
 
-def _resize_linear(x, out_H, out_W, H, W, ty, tx) -> Tensor:
+def resize_linear(x, out_H, out_W, H, W, ty, tx) -> Tensor:
     scale_y = H / out_H
     scale_x = W / out_W
     sy = (ty.cast(dtypes.float32) + 0.5) * scale_y - 0.5
@@ -40,15 +40,15 @@ def _resize_linear(x, out_H, out_W, H, W, ty, tx) -> Tensor:
 
     return p11 * w11 + p12 * w12 + p21 * w21 + p22 * w22
 
-def _resize_not_implemented(*args, **kwargs):
+def resize_not_implemented(*args, **kwargs):
     raise NotImplementedError("This interpolation mode is not supported.")
 
 class Interpolation(Enum):
-    NEAREST = (partial(_resize_nearest),)
-    LINEAR = (partial(_resize_linear),)
-    CUBIC = (partial(_resize_not_implemented),)
-    AREA = (partial(_resize_not_implemented),)
-    LANCZOS4 = (partial(_resize_not_implemented),)
+    NEAREST = (partial(resize_nearest),)
+    LINEAR = (partial(resize_linear),)
+    CUBIC = (partial(resize_not_implemented),)
+    AREA = (partial(resize_not_implemented),)
+    LANCZOS4 = (partial(resize_not_implemented),)
 
     def __call__(self, *args, **kwargs):
         return self.value[0](*args, **kwargs)

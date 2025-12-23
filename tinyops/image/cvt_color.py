@@ -2,7 +2,7 @@ from enum import Enum
 from functools import partial
 from tinygrad import dtypes, Tensor
 
-def _cvt_bgr2gray(src: Tensor) -> Tensor:
+def cvt_bgr2gray(src: Tensor) -> Tensor:
   if src.shape[-1] != 3:
     raise ValueError("Input image must have 3 channels for BGR to Grayscale conversion.")
 
@@ -18,7 +18,7 @@ def _cvt_bgr2gray(src: Tensor) -> Tensor:
 
 class ColorConversion(Enum):
   # Wrap in tuple to avoid Enum treating partial as the member itself in some envs
-  BGR2GRAY = (partial(_cvt_bgr2gray),)
+  BGR2GRAY = (partial(cvt_bgr2gray),)
 
   def __call__(self, *args, **kwargs):
     return self.value[0](*args, **kwargs)

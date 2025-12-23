@@ -2,27 +2,27 @@ from enum import Enum
 from functools import partial
 from tinygrad import Tensor
 
-def _threshold_binary(src: Tensor, thresh: float, maxval: float) -> Tensor:
+def threshold_binary(src: Tensor, thresh: float, maxval: float) -> Tensor:
     return (src > thresh).where(maxval, 0)
 
-def _threshold_binary_inv(src: Tensor, thresh: float, maxval: float) -> Tensor:
+def threshold_binary_inv(src: Tensor, thresh: float, maxval: float) -> Tensor:
     return (src > thresh).where(0, maxval)
 
-def _threshold_trunc(src: Tensor, thresh: float, maxval: float) -> Tensor:
+def threshold_trunc(src: Tensor, thresh: float, maxval: float) -> Tensor:
     return (src > thresh).where(thresh, src)
 
-def _threshold_tozero(src: Tensor, thresh: float, maxval: float) -> Tensor:
+def threshold_tozero(src: Tensor, thresh: float, maxval: float) -> Tensor:
     return (src > thresh).where(src, 0)
 
-def _threshold_tozero_inv(src: Tensor, thresh: float, maxval: float) -> Tensor:
+def threshold_tozero_inv(src: Tensor, thresh: float, maxval: float) -> Tensor:
     return (src > thresh).where(0, src)
 
 class ThresholdType(Enum):
-    BINARY = (partial(_threshold_binary),)
-    BINARY_INV = (partial(_threshold_binary_inv),)
-    TRUNC = (partial(_threshold_trunc),)
-    TOZERO = (partial(_threshold_tozero),)
-    TOZERO_INV = (partial(_threshold_tozero_inv),)
+    BINARY = (partial(threshold_binary),)
+    BINARY_INV = (partial(threshold_binary_inv),)
+    TRUNC = (partial(threshold_trunc),)
+    TOZERO = (partial(threshold_tozero),)
+    TOZERO_INV = (partial(threshold_tozero_inv),)
 
     def __call__(self, *args, **kwargs):
         return self.value[0](*args, **kwargs)

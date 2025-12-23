@@ -2,7 +2,7 @@ from enum import Enum
 from functools import partial
 from tinygrad import Tensor
 
-def _pad_constant(x: Tensor, padding, fill) -> Tensor:
+def pad_constant(x: Tensor, padding, fill) -> Tensor:
   if isinstance(padding, int):
     p_left = p_right = p_top = p_bottom = padding
   elif isinstance(padding, tuple) and len(padding) == 2:
@@ -19,14 +19,14 @@ def _pad_constant(x: Tensor, padding, fill) -> Tensor:
 
   return x.pad(pad_widths, value=fill)
 
-def _pad_not_implemented(x: Tensor, padding, fill=None) -> Tensor:
+def pad_not_implemented(x: Tensor, padding, fill=None) -> Tensor:
   raise NotImplementedError("This padding mode is not yet implemented.")
 
 class PaddingMode(Enum):
-  CONSTANT = (partial(_pad_constant),)
-  REFLECT = (partial(_pad_not_implemented),)
-  REPLICATE = (partial(_pad_not_implemented),)
-  CIRCULAR = (partial(_pad_not_implemented),)
+  CONSTANT = (partial(pad_constant),)
+  REFLECT = (partial(pad_not_implemented),)
+  REPLICATE = (partial(pad_not_implemented),)
+  CIRCULAR = (partial(pad_not_implemented),)
 
   def __call__(self, *args, **kwargs):
     return self.value[0](*args, **kwargs)

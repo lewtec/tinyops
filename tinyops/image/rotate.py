@@ -2,7 +2,7 @@ from enum import Enum
 from functools import partial
 from tinygrad import Tensor
 
-def _rotate_90_clockwise(x: Tensor) -> Tensor:
+def rotate_90_clockwise(x: Tensor) -> Tensor:
   if x.ndim == 2:
     permute_order = (1, 0)
   elif x.ndim == 3:
@@ -11,10 +11,10 @@ def _rotate_90_clockwise(x: Tensor) -> Tensor:
     raise ValueError(f"Unsupported tensor rank: {x.ndim}")
   return x.permute(permute_order).flip(1)
 
-def _rotate_180(x: Tensor) -> Tensor:
+def rotate_180(x: Tensor) -> Tensor:
   return x.flip((0, 1))
 
-def _rotate_90_counterclockwise(x: Tensor) -> Tensor:
+def rotate_90_counterclockwise(x: Tensor) -> Tensor:
   if x.ndim == 2:
     permute_order = (1, 0)
   elif x.ndim == 3:
@@ -24,9 +24,9 @@ def _rotate_90_counterclockwise(x: Tensor) -> Tensor:
   return x.permute(permute_order).flip(0)
 
 class RotateCode(Enum):
-  CLOCKWISE_90 = (partial(_rotate_90_clockwise),)
-  ROTATE_180 = (partial(_rotate_180),)
-  COUNTERCLOCKWISE_90 = (partial(_rotate_90_counterclockwise),)
+  CLOCKWISE_90 = (partial(rotate_90_clockwise),)
+  ROTATE_180 = (partial(rotate_180),)
+  COUNTERCLOCKWISE_90 = (partial(rotate_90_counterclockwise),)
 
   def __call__(self, *args, **kwargs):
     return self.value[0](*args, **kwargs)
