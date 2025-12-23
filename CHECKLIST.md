@@ -166,8 +166,8 @@
 - [ ] `sklearn.manifold.TSNE` → `tinyops.ml.tsne`
 - [ ] `sklearn.mixture.GaussianMixture` → `tinyops.ml.gmm`
 - [ ] `sklearn.mixture.BayesianGaussianMixture` → `tinyops.ml.bayesian_gmm`
-- [ ] `sklearn.ensemble.RandomForestClassifier` → `tinyops.ml.random_forest_classifier`
-- [ ] `sklearn.ensemble.RandomForestRegressor` → `tinyops.ml.random_forest_regressor`
+- [x] `sklearn.ensemble.RandomForestClassifier` → `tinyops.ml.random_forest_classifier`
+- [x] `sklearn.ensemble.RandomForestRegressor` → `tinyops.ml.random_forest_regressor`
 - [x] `sklearn.ensemble.AdaBoostClassifier` → `tinyops.ml.adaboost_classifier`
 - [ ] `sklearn.ensemble.AdaBoostRegressor` → `tinyops.ml.adaboost_regressor` (skipped)
 - [ ] `sklearn.ensemble.GradientBoostingClassifier` → `tinyops.ml.gradient_boosting_classifier`
