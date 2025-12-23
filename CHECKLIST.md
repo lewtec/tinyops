@@ -121,10 +121,10 @@
 - [ ] `sklearn.preprocessing.OneHotEncoder` → `tinyops.ml.onehot_encoder`
 - [ ] `sklearn.preprocessing.LabelEncoder` → `tinyops.ml.label_encoder`
 - [ ] `sklearn.preprocessing.PolynomialFeatures` → `tinyops.ml.polynomial_features`
-- [ ] `sklearn.metrics.accuracy_score` → `tinyops.ml.accuracy`
-- [ ] `sklearn.metrics.precision_score` → `tinyops.ml.precision`
-- [ ] `sklearn.metrics.recall_score` → `tinyops.ml.recall`
-- [ ] `sklearn.metrics.f1_score` → `tinyops.ml.f1`
+- [x] `sklearn.metrics.accuracy_score` → `tinyops.ml.accuracy`
+- [x] `sklearn.metrics.precision_score` → `tinyops.ml.precision`
+- [x] `sklearn.metrics.recall_score` → `tinyops.ml.recall`
+- [x] `sklearn.metrics.f1_score` → `tinyops.ml.f1`
 - [ ] `sklearn.metrics.confusion_matrix` → `tinyops.ml.confusion_matrix`
 - [ ] `sklearn.metrics.roc_auc_score` → `tinyops.ml.roc_auc`
 - [ ] `sklearn.metrics.mean_squared_error` → `tinyops.ml.mse`
