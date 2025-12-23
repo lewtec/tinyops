@@ -1,13 +1,40 @@
+from enum import Enum
+from functools import partial
 from tinygrad import Tensor
 
-# Thresholding types
+def _threshold_binary(src: Tensor, thresh: float, maxval: float) -> Tensor:
+    return (src > thresh).where(maxval, 0)
+
+def _threshold_binary_inv(src: Tensor, thresh: float, maxval: float) -> Tensor:
+    return (src > thresh).where(0, maxval)
+
+def _threshold_trunc(src: Tensor, thresh: float, maxval: float) -> Tensor:
+    return (src > thresh).where(thresh, src)
+
+def _threshold_tozero(src: Tensor, thresh: float, maxval: float) -> Tensor:
+    return (src > thresh).where(src, 0)
+
+def _threshold_tozero_inv(src: Tensor, thresh: float, maxval: float) -> Tensor:
+    return (src > thresh).where(0, src)
+
+class ThresholdType(Enum):
+    BINARY = (partial(_threshold_binary),)
+    BINARY_INV = (partial(_threshold_binary_inv),)
+    TRUNC = (partial(_threshold_trunc),)
+    TOZERO = (partial(_threshold_tozero),)
+    TOZERO_INV = (partial(_threshold_tozero_inv),)
+
+    def __call__(self, *args, **kwargs):
+        return self.value[0](*args, **kwargs)
+
+# Backward compatibility constants
 THRESH_BINARY = 0
 THRESH_BINARY_INV = 1
 THRESH_TRUNC = 2
 THRESH_TOZERO = 3
 THRESH_TOZERO_INV = 4
 
-def threshold(src: Tensor, thresh: float, maxval: float, type: int) -> Tensor:
+def threshold(src: Tensor, thresh: float, maxval: float, type: int | ThresholdType) -> Tensor:
     """
     Applies a fixed-level threshold to a single-channel array.
 
@@ -20,15 +47,21 @@ def threshold(src: Tensor, thresh: float, maxval: float, type: int) -> Tensor:
     Returns:
         The thresholded array.
     """
-    if type == THRESH_BINARY:
-        return (src > thresh).where(maxval, 0)
-    elif type == THRESH_BINARY_INV:
-        return (src > thresh).where(0, maxval)
-    elif type == THRESH_TRUNC:
-        return (src > thresh).where(thresh, src)
-    elif type == THRESH_TOZERO:
-        return (src > thresh).where(src, 0)
-    elif type == THRESH_TOZERO_INV:
-        return (src > thresh).where(0, src)
+    if isinstance(type, int):
+        mapping = {
+            THRESH_BINARY: ThresholdType.BINARY,
+            THRESH_BINARY_INV: ThresholdType.BINARY_INV,
+            THRESH_TRUNC: ThresholdType.TRUNC,
+            THRESH_TOZERO: ThresholdType.TOZERO,
+            THRESH_TOZERO_INV: ThresholdType.TOZERO_INV,
+        }
+        if type in mapping:
+            mode = mapping[type]
+        else:
+            raise ValueError(f"Unsupported thresholding type: {type}")
+    elif isinstance(type, ThresholdType):
+        mode = type
     else:
-        raise ValueError(f"Unsupported thresholding type: {type}")
+        raise TypeError(f"Invalid type for thresholding type: {type(type)}")
+
+    return mode(src, thresh, maxval)
