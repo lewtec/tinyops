@@ -134,9 +134,9 @@
 - [ ] `sklearn.neighbors.NearestNeighbors` → `tinyops.ml.nearest_neighbors`
 - [ ] `sklearn.neighbors.KNeighborsClassifier` → `tinyops.ml.knn_classifier`
 - [ ] `sklearn.neighbors.KNeighborsRegressor` → `tinyops.ml.knn_regressor`
-- [ ] `sklearn.naive_bayes.GaussianNB` → `tinyops.ml.gaussian_nb`
-- [ ] `sklearn.naive_bayes.MultinomialNB` → `tinyops.ml.multinomial_nb`
-- [ ] `sklearn.naive_bayes.BernoulliNB` → `tinyops.ml.bernoulli_nb`
+- [ ] `sklearn.naive_bayes.GaussianNB` → `tinyops.ml.gaussian_nb` (skipped)
+- [x] `sklearn.naive_bayes.MultinomialNB` → `tinyops.ml.multinomial_nb`
+- [x] `sklearn.naive_bayes.BernoulliNB` → `tinyops.ml.bernoulli_nb`
 - [ ] `sklearn.linear_model.LinearRegression` → `tinyops.ml.linear_regression`
 - [ ] `sklearn.linear_model.Ridge` → `tinyops.ml.ridge`
 - [ ] `sklearn.linear_model.Lasso` → `tinyops.ml.lasso`
