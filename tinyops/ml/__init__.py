@@ -8,6 +8,7 @@ from .logistic_regression import logistic_regression
 from .sgd_classifier import sgd_classifier
 from .sgd_regressor import sgd_regressor
 from .adaboost_classifier import adaboost_classifier
+from .nmf import nmf
 from .normalizer import normalizer
 from .binarizer import binarizer
 from .onehot_encoder import onehot_encoder

@@ -158,7 +158,7 @@
 - [ ] `sklearn.cluster.SpectralClustering` → `tinyops.ml.spectral_clustering`
 - [ ] `sklearn.decomposition.PCA` → `tinyops.ml.pca`
 - [ ] `sklearn.decomposition.TruncatedSVD` → `tinyops.ml.truncated_svd`
-- [ ] `sklearn.decomposition.NMF` → `tinyops.ml.nmf`
+- [x] `sklearn.decomposition.NMF` → `tinyops.ml.nmf`
 - [ ] `sklearn.decomposition.FastICA` → `tinyops.ml.fastica`
 - [ ] `sklearn.decomposition.FactorAnalysis` → `tinyops.ml.factor_analysis`
 - [ ] `sklearn.manifold.MDS` → `tinyops.ml.mds`
