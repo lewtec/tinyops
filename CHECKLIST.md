@@ -146,8 +146,8 @@
 - [x] `sklearn.linear_model.SGDRegressor` → `tinyops.ml.sgd_regressor`
 - [x] `sklearn.svm.LinearSVC` → `tinyops.ml.linear_svc`
 - [x] `sklearn.svm.LinearSVR` → `tinyops.ml.linear_svr`
-- [ ] `sklearn.svm.SVC` → `tinyops.ml.svc` (skipped)
-- [ ] `sklearn.svm.SVR` → `tinyops.ml.svr` (skipped)
+- [x] `sklearn.svm.SVC` → `tinyops.ml.svc`
+- [x] `sklearn.svm.SVR` → `tinyops.ml.svr`
 - [ ] `sklearn.tree.DecisionTreeClassifier` → `tinyops.ml.decision_tree_classifier`
 - [ ] `sklearn.tree.DecisionTreeRegressor` → `tinyops.ml.decision_tree_regressor`
 - [ ] `sklearn.cluster.KMeans` → `tinyops.ml.kmeans`
