@@ -146,8 +146,8 @@
 - [x] `sklearn.linear_model.SGDRegressor` → `tinyops.ml.sgd_regressor`
 - [x] `sklearn.svm.LinearSVC` → `tinyops.ml.linear_svc`
 - [x] `sklearn.svm.LinearSVR` → `tinyops.ml.linear_svr`
-- [ ] `sklearn.svm.SVC` → `tinyops.ml.svc` (skipped)
-- [ ] `sklearn.svm.SVR` → `tinyops.ml.svr` (skipped)
+- [x] `sklearn.svm.SVC` → `tinyops.ml.svc`
+- [x] `sklearn.svm.SVR` → `tinyops.ml.svr`
 - [x] `sklearn.tree.DecisionTreeClassifier` → `tinyops.ml.decision_tree_classifier`
 - [x] `sklearn.tree.DecisionTreeRegressor` → `tinyops.ml.decision_tree_regressor`
 - [ ] `sklearn.cluster.KMeans` → `tinyops.ml.kmeans`
@@ -158,7 +158,7 @@
 - [ ] `sklearn.cluster.SpectralClustering` → `tinyops.ml.spectral_clustering`
 - [ ] `sklearn.decomposition.PCA` → `tinyops.ml.pca`
 - [ ] `sklearn.decomposition.TruncatedSVD` → `tinyops.ml.truncated_svd`
-- [ ] `sklearn.decomposition.NMF` → `tinyops.ml.nmf`
+- [x] `sklearn.decomposition.NMF` → `tinyops.ml.nmf`
 - [ ] `sklearn.decomposition.FastICA` → `tinyops.ml.fastica`
 - [ ] `sklearn.decomposition.FactorAnalysis` → `tinyops.ml.factor_analysis`
 - [ ] `sklearn.manifold.MDS` → `tinyops.ml.mds`
