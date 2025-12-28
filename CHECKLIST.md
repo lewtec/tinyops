@@ -109,9 +109,9 @@
 - [ ] `rapidfuzz.distance.Levenshtein.distance` → `tinyops.text.levenshtein_distance`
 - [ ] `jellyfish.levenshtein_distance` → `tinyops.text.levenshtein_distance`
 - [ ] `jellyfish.jaro_winkler_similarity` → `tinyops.text.jaro_winkler_similarity`
-- [ ] `sklearn.metrics.pairwise_distances(metric='hamming')` → `tinyops.text.pairwise_hamming_distance`
-- [ ] `sklearn.feature_extraction.text.CountVectorizer` → `tinyops.text.count_vectorizer`
-- [ ] `sklearn.feature_extraction.text.TfidfVectorizer` → `tinyops.text.tfidf_vectorizer`
+- [x] `sklearn.metrics.pairwise_distances(metric='hamming')` → `tinyops.text.pairwise_hamming_distance`
+- [x] `sklearn.feature_extraction.text.CountVectorizer` → `tinyops.text.count_vectorizer`
+- [x] `sklearn.feature_extraction.text.TfidfVectorizer` → `tinyops.text.tfidf_vectorizer`
 - [x] `sklearn.preprocessing.StandardScaler` → `tinyops.ml.standard_scaler`
 - [x] `sklearn.preprocessing.MinMaxScaler` → `tinyops.ml.minmax_scaler`
 - [x] `sklearn.preprocessing.MaxAbsScaler` → `tinyops.ml.maxabs_scaler`
