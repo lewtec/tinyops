@@ -8,10 +8,16 @@ The restriction of using only tinygrad for implementations (with external libs o
 
 ## Setup
 ```bash
-# install mise if not present
-if ! command -v mise &> /dev/null; then
-    curl https://mise.run | sh
-fi
+# 🛡️ Sentinel: Install mise using a secure package manager.
+# The `curl | sh` method is insecure and can lead to RCE.
+#
+# macOS:
+# brew install mise
+#
+# Debian/Ubuntu:
+# sudo apt install -y mise
+#
+# For other platforms, see https://mise.jdx.dev/installing-mise.html
 
 # mise installs uv, uv installs deps
 mise install
