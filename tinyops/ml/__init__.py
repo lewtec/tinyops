@@ -17,6 +17,11 @@ from .standard_scaler import standard_scaler
 from .minmax_scaler import minmax_scaler
 from .maxabs_scaler import maxabs_scaler
 from .robust_scaler import robust_scaler
+from .r2 import r2
+from .mae import mae
+from .mse import mse
+from .confusion_matrix import confusion_matrix
+from .roc_auc import roc_auc
 from .nearest_neighbors import nearest_neighbors
 from .svc import svc
 from .svr import svr
