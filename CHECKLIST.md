@@ -102,6 +102,16 @@
 - [ ] `torchaudio.transforms.TimeStretch` → `tinyops.audio.time_stretch`
 - [x] `torchaudio.transforms.FrequencyMasking` → `tinyops.audio.freq_mask`
 - [x] `torchaudio.transforms.TimeMasking` → `tinyops.audio.time_mask`
+- [x] `scipy.spatial.distance.hamming` → `tinyops.text.hamming_distance`
+- [ ] `difflib.SequenceMatcher.ratio` → `tinyops.text.sequence_matcher_ratio` (skipped)
+- [ ] `Levenshtein.distance` → `tinyops.text.levenshtein_distance` (skipped)
+- [ ] `nltk.edit_distance` → `tinyops.text.edit_distance` (skipped)
+- [ ] `rapidfuzz.distance.Levenshtein.distance` → `tinyops.text.levenshtein_distance` (skipped)
+- [ ] `jellyfish.levenshtein_distance` → `tinyops.text.levenshtein_distance` (skipped)
+- [ ] `jellyfish.jaro_winkler_similarity` → `tinyops.text.jaro_winkler_similarity` (skipped)
+- [ ] `sklearn.metrics.pairwise_distances(metric='hamming')` → `tinyops.text.pairwise_hamming_distance`
+- [ ] `sklearn.feature_extraction.text.CountVectorizer` → `tinyops.text.count_vectorizer`
+- [ ] `sklearn.feature_extraction.text.TfidfVectorizer` → `tinyops.text.tfidf_vectorizer`
 - [ ] `scipy.spatial.distance.hamming` → `tinyops.text.hamming_distance`
 - [ ] `difflib.SequenceMatcher.ratio` → `tinyops.text.sequence_matcher_ratio`
 - [ ] `Levenshtein.distance` → `tinyops.text.levenshtein_distance`
