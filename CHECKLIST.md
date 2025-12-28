@@ -112,15 +112,25 @@
 - [ ] `sklearn.metrics.pairwise_distances(metric='hamming')` → `tinyops.text.pairwise_hamming_distance`
 - [ ] `sklearn.feature_extraction.text.CountVectorizer` → `tinyops.text.count_vectorizer`
 - [ ] `sklearn.feature_extraction.text.TfidfVectorizer` → `tinyops.text.tfidf_vectorizer`
+- [ ] `scipy.spatial.distance.hamming` → `tinyops.text.hamming_distance`
+- [ ] `difflib.SequenceMatcher.ratio` → `tinyops.text.sequence_matcher_ratio`
+- [ ] `Levenshtein.distance` → `tinyops.text.levenshtein_distance`
+- [ ] `nltk.edit_distance` → `tinyops.text.edit_distance`
+- [ ] `rapidfuzz.distance.Levenshtein.distance` → `tinyops.text.levenshtein_distance`
+- [ ] `jellyfish.levenshtein_distance` → `tinyops.text.levenshtein_distance`
+- [ ] `jellyfish.jaro_winkler_similarity` → `tinyops.text.jaro_winkler_similarity`
+- [x] `sklearn.metrics.pairwise_distances(metric='hamming')` → `tinyops.text.pairwise_hamming_distance`
+- [x] `sklearn.feature_extraction.text.CountVectorizer` → `tinyops.text.count_vectorizer`
+- [x] `sklearn.feature_extraction.text.TfidfVectorizer` → `tinyops.text.tfidf_vectorizer`
 - [x] `sklearn.preprocessing.StandardScaler` → `tinyops.ml.standard_scaler`
 - [x] `sklearn.preprocessing.MinMaxScaler` → `tinyops.ml.minmax_scaler`
 - [x] `sklearn.preprocessing.MaxAbsScaler` → `tinyops.ml.maxabs_scaler`
 - [x] `sklearn.preprocessing.RobustScaler` → `tinyops.ml.robust_scaler`
-- [ ] `sklearn.preprocessing.Normalizer` → `tinyops.ml.normalizer`
-- [ ] `sklearn.preprocessing.Binarizer` → `tinyops.ml.binarizer`
-- [ ] `sklearn.preprocessing.OneHotEncoder` → `tinyops.ml.onehot_encoder`
-- [ ] `sklearn.preprocessing.LabelEncoder` → `tinyops.ml.label_encoder`
-- [ ] `sklearn.preprocessing.PolynomialFeatures` → `tinyops.ml.polynomial_features`
+- [x] `sklearn.preprocessing.Normalizer` → `tinyops.ml.normalizer`
+- [x] `sklearn.preprocessing.Binarizer` → `tinyops.ml.binarizer`
+- [x] `sklearn.preprocessing.OneHotEncoder` → `tinyops.ml.onehot_encoder`
+- [x] `sklearn.preprocessing.LabelEncoder` → `tinyops.ml.label_encoder`
+- [x] `sklearn.preprocessing.PolynomialFeatures` → `tinyops.ml.polynomial_features`
 - [ ] `sklearn.metrics.accuracy_score` → `tinyops.ml.accuracy`
 - [ ] `sklearn.metrics.precision_score` → `tinyops.ml.precision`
 - [ ] `sklearn.metrics.recall_score` → `tinyops.ml.recall`
@@ -146,10 +156,10 @@
 - [x] `sklearn.linear_model.SGDRegressor` → `tinyops.ml.sgd_regressor`
 - [x] `sklearn.svm.LinearSVC` → `tinyops.ml.linear_svc`
 - [x] `sklearn.svm.LinearSVR` → `tinyops.ml.linear_svr`
-- [ ] `sklearn.svm.SVC` → `tinyops.ml.svc` (skipped)
-- [ ] `sklearn.svm.SVR` → `tinyops.ml.svr` (skipped)
-- [ ] `sklearn.tree.DecisionTreeClassifier` → `tinyops.ml.decision_tree_classifier`
-- [ ] `sklearn.tree.DecisionTreeRegressor` → `tinyops.ml.decision_tree_regressor`
+- [x] `sklearn.svm.SVC` → `tinyops.ml.svc`
+- [x] `sklearn.svm.SVR` → `tinyops.ml.svr`
+- [x] `sklearn.tree.DecisionTreeClassifier` → `tinyops.ml.decision_tree_classifier`
+- [x] `sklearn.tree.DecisionTreeRegressor` → `tinyops.ml.decision_tree_regressor`
 - [ ] `sklearn.cluster.KMeans` → `tinyops.ml.kmeans`
 - [ ] `sklearn.cluster.MiniBatchKMeans` → `tinyops.ml.minibatch_kmeans`
 - [ ] `sklearn.cluster.MeanShift` → `tinyops.ml.mean_shift`
@@ -158,7 +168,7 @@
 - [ ] `sklearn.cluster.SpectralClustering` → `tinyops.ml.spectral_clustering`
 - [ ] `sklearn.decomposition.PCA` → `tinyops.ml.pca`
 - [ ] `sklearn.decomposition.TruncatedSVD` → `tinyops.ml.truncated_svd`
-- [ ] `sklearn.decomposition.NMF` → `tinyops.ml.nmf`
+- [x] `sklearn.decomposition.NMF` → `tinyops.ml.nmf`
 - [ ] `sklearn.decomposition.FastICA` → `tinyops.ml.fastica`
 - [ ] `sklearn.decomposition.FactorAnalysis` → `tinyops.ml.factor_analysis`
 - [ ] `sklearn.manifold.MDS` → `tinyops.ml.mds`
@@ -166,8 +176,8 @@
 - [ ] `sklearn.manifold.TSNE` → `tinyops.ml.tsne`
 - [ ] `sklearn.mixture.GaussianMixture` → `tinyops.ml.gmm`
 - [ ] `sklearn.mixture.BayesianGaussianMixture` → `tinyops.ml.bayesian_gmm`
-- [ ] `sklearn.ensemble.RandomForestClassifier` → `tinyops.ml.random_forest_classifier`
-- [ ] `sklearn.ensemble.RandomForestRegressor` → `tinyops.ml.random_forest_regressor`
+- [x] `sklearn.ensemble.RandomForestClassifier` → `tinyops.ml.random_forest_classifier`
+- [x] `sklearn.ensemble.RandomForestRegressor` → `tinyops.ml.random_forest_regressor`
 - [x] `sklearn.ensemble.AdaBoostClassifier` → `tinyops.ml.adaboost_classifier`
 - [ ] `sklearn.ensemble.AdaBoostRegressor` → `tinyops.ml.adaboost_regressor` (skipped)
 - [ ] `sklearn.ensemble.GradientBoostingClassifier` → `tinyops.ml.gradient_boosting_classifier`
