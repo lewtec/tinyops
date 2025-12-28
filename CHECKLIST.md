@@ -116,6 +116,15 @@
 - [x] `sklearn.preprocessing.MinMaxScaler` → `tinyops.ml.minmax_scaler`
 - [x] `sklearn.preprocessing.MaxAbsScaler` → `tinyops.ml.maxabs_scaler`
 - [x] `sklearn.preprocessing.RobustScaler` → `tinyops.ml.robust_scaler`
+- [ ] `sklearn.preprocessing.Normalizer` → `tinyops.ml.normalizer`
+- [ ] `sklearn.preprocessing.Binarizer` → `tinyops.ml.binarizer`
+- [ ] `sklearn.preprocessing.OneHotEncoder` → `tinyops.ml.onehot_encoder`
+- [ ] `sklearn.preprocessing.LabelEncoder` → `tinyops.ml.label_encoder`
+- [ ] `sklearn.preprocessing.PolynomialFeatures` → `tinyops.ml.polynomial_features`
+- [x] `sklearn.metrics.accuracy_score` → `tinyops.ml.accuracy`
+- [x] `sklearn.metrics.precision_score` → `tinyops.ml.precision`
+- [x] `sklearn.metrics.recall_score` → `tinyops.ml.recall`
+- [x] `sklearn.metrics.f1_score` → `tinyops.ml.f1`
 - [x] `sklearn.preprocessing.Normalizer` → `tinyops.ml.normalizer`
 - [x] `sklearn.preprocessing.Binarizer` → `tinyops.ml.binarizer`
 - [x] `sklearn.preprocessing.OneHotEncoder` → `tinyops.ml.onehot_encoder`
