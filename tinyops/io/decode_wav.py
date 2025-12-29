@@ -4,6 +4,11 @@ import io
 import wave
 import struct
 
+# A reasonable limit to prevent DoS from malformed WAV headers.
+# This allows for very large files (e.g., hours of multi-channel audio)
+# while preventing absurdly large memory allocation requests.
+MAX_WAV_FRAMES = 500_000_000 # 500 million frames
+
 def decode_wav(wav_bytes: bytes) -> tuple[int, Tensor]:
   """
   Decodes WAV audio bytes into a tinygrad.Tensor.
@@ -22,6 +27,13 @@ def decode_wav(wav_bytes: bytes) -> tuple[int, Tensor]:
       sampwidth = wf.getsampwidth()
       framerate = wf.getframerate()
       n_frames = wf.getnframes()
+
+      # 🛡️ Sentinel: Add security check to prevent DoS attack.
+      # A malformed WAV header with a huge n_frames value could cause
+      # a massive memory allocation and crash the system.
+      if n_frames > MAX_WAV_FRAMES:
+        raise ValueError(f"WAV file frame count {n_frames} exceeds the security limit of {MAX_WAV_FRAMES}.")
+
       frames = wf.readframes(n_frames)
 
   # Determine numpy dtype from sample width

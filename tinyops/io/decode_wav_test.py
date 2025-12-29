@@ -112,3 +112,38 @@ def test_decode_wav_24bit(channels):
 
     assert rate_to == sample_rate
     assert_close(tensor_to, expected_data, atol=1e-5, rtol=1e-5)
+
+def test_decode_wav_dos_security():
+    # 🛡️ Sentinel: Test to verify the DoS mitigation.
+    # This test creates a fake WAV header with an extremely large n_frames
+    # value, which should be caught by the security check in decode_wav.
+    from tinyops.io.decode_wav import MAX_WAV_FRAMES
+
+    # Malicious parameters
+    malicious_n_frames = MAX_WAV_FRAMES + 1
+    num_channels = 1
+    sampwidth = 2 # 16-bit
+    sample_rate = 44100
+
+    # Calculate sizes for the header
+    subchunk2_size = malicious_n_frames * num_channels * sampwidth
+    chunk_size = 36 + subchunk2_size
+
+    # Create a minimal WAV header manually. This is enough for wave.open()
+    # to parse the malicious frame count without needing the actual data.
+    header = b'RIFF'
+    header += struct.pack('<I', chunk_size)
+    header += b'WAVE'
+    header += b'fmt '
+    header += struct.pack('<I', 16)
+    header += struct.pack('<H', 1)
+    header += struct.pack('<H', num_channels)
+    header += struct.pack('<I', sample_rate)
+    header += struct.pack('<I', sample_rate * num_channels * sampwidth)
+    header += struct.pack('<H', num_channels * sampwidth)
+    header += struct.pack('<H', sampwidth * 8)
+    header += b'data'
+    header += struct.pack('<I', subchunk2_size)
+
+    with pytest.raises(ValueError, match=f"exceeds the security limit"):
+        decode_wav(header)
