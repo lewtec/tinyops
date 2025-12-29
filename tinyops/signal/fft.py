@@ -7,8 +7,8 @@ def fft_cooley_tukey(x: Tensor) -> Tensor:
   if N <= 1:
     return x
 
-  even = _fft_cooley_tukey(x[0::2])
-  odd = _fft_cooley_tukey(x[1::2])
+  even = fft_cooley_tukey(x[0::2])
+  odd = fft_cooley_tukey(x[1::2])
 
   theta = Tensor.arange(N // 2) * -2 * np.pi / N
   T = Tensor.stack([theta.cos(), theta.sin()], dim=1)
@@ -33,6 +33,9 @@ def fft_cooley_tukey(x: Tensor) -> Tensor:
 
 def fft_bluestein(x: Tensor) -> Tensor:
   """Computes FFT using Bluestein's algorithm for non-power-of-two sizes."""
+  # Local import to avoid circular dependency
+  from tinyops.signal.ifft import ifft
+
   N = x.shape[0]
   M = 1 << (2 * N - 1).bit_length()
 
@@ -106,4 +109,3 @@ def fft(x: Tensor) -> Tensor:
     return fft_cooley_tukey(x)
   else:
     return fft_bluestein(x)
-
