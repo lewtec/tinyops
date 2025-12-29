@@ -109,16 +109,6 @@
 - [ ] `rapidfuzz.distance.Levenshtein.distance` → `tinyops.text.levenshtein_distance` (skipped)
 - [ ] `jellyfish.levenshtein_distance` → `tinyops.text.levenshtein_distance` (skipped)
 - [ ] `jellyfish.jaro_winkler_similarity` → `tinyops.text.jaro_winkler_similarity` (skipped)
-- [ ] `sklearn.metrics.pairwise_distances(metric='hamming')` → `tinyops.text.pairwise_hamming_distance`
-- [ ] `sklearn.feature_extraction.text.CountVectorizer` → `tinyops.text.count_vectorizer`
-- [ ] `sklearn.feature_extraction.text.TfidfVectorizer` → `tinyops.text.tfidf_vectorizer`
-- [ ] `scipy.spatial.distance.hamming` → `tinyops.text.hamming_distance`
-- [ ] `difflib.SequenceMatcher.ratio` → `tinyops.text.sequence_matcher_ratio`
-- [ ] `Levenshtein.distance` → `tinyops.text.levenshtein_distance`
-- [ ] `nltk.edit_distance` → `tinyops.text.edit_distance`
-- [ ] `rapidfuzz.distance.Levenshtein.distance` → `tinyops.text.levenshtein_distance`
-- [ ] `jellyfish.levenshtein_distance` → `tinyops.text.levenshtein_distance`
-- [ ] `jellyfish.jaro_winkler_similarity` → `tinyops.text.jaro_winkler_similarity`
 - [x] `sklearn.metrics.pairwise_distances(metric='hamming')` → `tinyops.text.pairwise_hamming_distance`
 - [x] `sklearn.feature_extraction.text.CountVectorizer` → `tinyops.text.count_vectorizer`
 - [x] `sklearn.feature_extraction.text.TfidfVectorizer` → `tinyops.text.tfidf_vectorizer`
@@ -126,24 +116,15 @@
 - [x] `sklearn.preprocessing.MinMaxScaler` → `tinyops.ml.minmax_scaler`
 - [x] `sklearn.preprocessing.MaxAbsScaler` → `tinyops.ml.maxabs_scaler`
 - [x] `sklearn.preprocessing.RobustScaler` → `tinyops.ml.robust_scaler`
-- [ ] `sklearn.preprocessing.Normalizer` → `tinyops.ml.normalizer`
-- [ ] `sklearn.preprocessing.Binarizer` → `tinyops.ml.binarizer`
-- [ ] `sklearn.preprocessing.OneHotEncoder` → `tinyops.ml.onehot_encoder`
-- [ ] `sklearn.preprocessing.LabelEncoder` → `tinyops.ml.label_encoder`
-- [ ] `sklearn.preprocessing.PolynomialFeatures` → `tinyops.ml.polynomial_features`
-- [x] `sklearn.metrics.accuracy_score` → `tinyops.ml.accuracy`
-- [x] `sklearn.metrics.precision_score` → `tinyops.ml.precision`
-- [x] `sklearn.metrics.recall_score` → `tinyops.ml.recall`
-- [x] `sklearn.metrics.f1_score` → `tinyops.ml.f1`
 - [x] `sklearn.preprocessing.Normalizer` → `tinyops.ml.normalizer`
 - [x] `sklearn.preprocessing.Binarizer` → `tinyops.ml.binarizer`
 - [x] `sklearn.preprocessing.OneHotEncoder` → `tinyops.ml.onehot_encoder`
 - [x] `sklearn.preprocessing.LabelEncoder` → `tinyops.ml.label_encoder`
 - [x] `sklearn.preprocessing.PolynomialFeatures` → `tinyops.ml.polynomial_features`
-- [ ] `sklearn.metrics.accuracy_score` → `tinyops.ml.accuracy`
-- [ ] `sklearn.metrics.precision_score` → `tinyops.ml.precision`
-- [ ] `sklearn.metrics.recall_score` → `tinyops.ml.recall`
-- [ ] `sklearn.metrics.f1_score` → `tinyops.ml.f1`
+- [x] `sklearn.metrics.accuracy_score` → `tinyops.ml.accuracy`
+- [x] `sklearn.metrics.precision_score` → `tinyops.ml.precision`
+- [x] `sklearn.metrics.recall_score` → `tinyops.ml.recall`
+- [x] `sklearn.metrics.f1_score` → `tinyops.ml.f1`
 - [ ] `sklearn.metrics.confusion_matrix` → `tinyops.ml.confusion_matrix`
 - [ ] `sklearn.metrics.roc_auc_score` → `tinyops.ml.roc_auc`
 - [ ] `sklearn.metrics.mean_squared_error` → `tinyops.ml.mse`
