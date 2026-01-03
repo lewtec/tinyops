@@ -10,7 +10,12 @@ The restriction of using only tinygrad for implementations (with external libs o
 ```bash
 # install mise if not present
 if ! command -v mise &> /dev/null; then
-    curl https://mise.run | sh
+    # For Debian/Ubuntu-based systems
+    sudo apt install -y gnupg
+    curl https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | sudo tee /usr/share/keyrings/mise-archive-keyring.gpg >/dev/null
+    echo "deb [signed-by=/usr/share/keyrings/mise-archive-keyring.gpg arch=amd64] https://mise.jdx.dev/deb stable main" | sudo tee /etc/apt/sources.list.d/mise.list
+    sudo apt update
+    sudo apt install -y mise
 fi
 
 # mise installs uv, uv installs deps
