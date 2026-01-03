@@ -1,5 +1,5 @@
 [tools]
-"github:lucasew/ci-status" = "0.0.4"
+"github:lucasew/ci-status" = "0.2.1"
 uv = "0.9.21"
 "vfox:clang" = "18.1.8"
 
