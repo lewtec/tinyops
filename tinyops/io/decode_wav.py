@@ -36,6 +36,16 @@ def decode_wav(wav_bytes: bytes) -> tuple[int, Tensor]:
 
       frames = wf.readframes(n_frames)
 
+  # 🛡️ Sentinel: Add security check to prevent DoS from truncated data chunk.
+  # If the header's frame count is correct but the data chunk is smaller,
+  # the processing loop could read out of bounds, causing a crash.
+  expected_data_size = n_frames * n_channels * sampwidth
+  if len(frames) < expected_data_size:
+    raise ValueError(
+        f"WAV data chunk is smaller than expected. "
+        f"Header specifies {expected_data_size} bytes, but data is {len(frames)} bytes."
+    )
+
   # Determine numpy dtype from sample width
   if sampwidth == 1:
     dtype = np.uint8
