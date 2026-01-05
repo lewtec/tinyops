@@ -2,6 +2,13 @@ from tinygrad import Tensor
 import itertools
 
 def polynomial_features(X: Tensor, degree: int = 2, interaction_only: bool = False, include_bias: bool = True) -> Tensor:
+    # 🛡️ Sentinel: Mitigate DoS by limiting the degree to a reasonable value.
+    # High degrees can lead to a combinatorial explosion in the number of features,
+    # causing excessive memory allocation.
+    MAX_DEGREE = 10
+    if degree > MAX_DEGREE:
+        raise ValueError(f"Degree is limited to {MAX_DEGREE} to prevent resource exhaustion.")
+
     n_samples, n_features = X.shape
 
     if degree == 0:
