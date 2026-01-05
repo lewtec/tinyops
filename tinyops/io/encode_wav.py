@@ -20,6 +20,12 @@ def encode_wav(tensor: Tensor, sample_rate: int, sampwidth: int = 2) -> bytes:
   if not (tensor.dtype.name == 'float32' or tensor.dtype.name == 'float'):
     raise TypeError(f"Input tensor must be float32, but got {tensor.dtype}")
 
+  # 🛡️ Sentinel: Mitigate DoS by limiting the input tensor size.
+  # An excessively large tensor can cause memory exhaustion during numpy conversion.
+  total_samples = tensor.shape[0] * tensor.shape[1]
+  if total_samples > 20_000_000:
+    raise ValueError(f"Input tensor is too large. Max samples: 20,000,000, got: {total_samples}")
+
   float_array = tensor.numpy()
   n_frames, n_channels = float_array.shape
 

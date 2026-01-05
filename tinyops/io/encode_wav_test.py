@@ -81,3 +81,12 @@ def test_encode_wav_24bit(channels):
 
     assert rate_decoded == sample_rate
     assert_close(tensor, tensor_decoded, atol=1e-5, rtol=1e-5)
+
+def test_encode_wav_dos_protection():
+    # 🛡️ Sentinel: Verify DoS protection for large inputs.
+    sample_rate = 44100
+    n_frames = 20_000_001  # Exceeds the 20M sample limit
+    channels = 1
+    tensor = Tensor.zeros(n_frames, channels, dtype=dtypes.float32)
+    with pytest.raises(ValueError, match="Input tensor is too large"):
+        encode_wav(tensor, sample_rate)
