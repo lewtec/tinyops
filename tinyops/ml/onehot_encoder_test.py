@@ -3,7 +3,7 @@ import pytest
 from sklearn.preprocessing import OneHotEncoder as SklearnOneHotEncoder
 from tinygrad import Tensor
 from tinyops._core import assert_close
-from tinyops.ml.onehot_encoder import onehot_encoder as tinyops_onehot_encoder
+from tinyops.ml.onehot_encoder import onehot_encoder as tinyops_onehot_encoder, MAX_CATEGORIES
 
 def test_onehot_encoder_2d():
     X_np = np.array([[0, 1, 2], [2, 0, 1]], dtype=np.int32)
@@ -16,6 +16,14 @@ def test_onehot_encoder_2d():
     tinyops_result = tinyops_onehot_encoder(X_tiny)
 
     assert_close(tinyops_result, sklearn_result)
+
+def test_onehot_encoder_raises_on_too_many_categories():
+    # Create an input with more unique categories than the limit
+    X_np = np.arange(MAX_CATEGORIES + 1, dtype=np.int32)
+    X_tiny = Tensor(X_np)
+
+    with pytest.raises(ValueError, match="exceeds the security limit"):
+        tinyops_onehot_encoder(X_tiny)
 
 def test_onehot_encoder_1d():
     X_np = np.array([0, 1, 2, 1, 0], dtype=np.int32)

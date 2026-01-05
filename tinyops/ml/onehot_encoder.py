@@ -1,6 +1,11 @@
 from tinygrad import Tensor, dtypes
 import numpy as np
 
+# A reasonable limit for the number of unique categories to prevent DoS.
+# One-hot encoding a feature with millions of categories would cause
+# massive memory allocation.
+MAX_CATEGORIES = 1_000_000
+
 def onehot_encoder(X: Tensor) -> Tensor:
     if X.ndim == 1:
         X = X.unsqueeze(1)
@@ -11,6 +16,16 @@ def onehot_encoder(X: Tensor) -> Tensor:
         # "fit" step: find unique categories. This is analogous to sklearn's fit method.
         # Using numpy here is a pragmatic choice as a pure-tensor unique is complex.
         categories_np = np.unique(col.numpy())
+
+        # 🛡️ Sentinel: Add security check to prevent DoS attack.
+        # A feature with an extremely high number of unique values could cause
+        # a massive memory allocation during one-hot encoding.
+        if len(categories_np) > MAX_CATEGORIES:
+            raise ValueError(
+                f"Feature at index {i} has {len(categories_np)} unique categories, "
+                f"which exceeds the security limit of {MAX_CATEGORIES}."
+            )
+
         categories = Tensor(categories_np, requires_grad=False, device=X.device)
 
         # "transform" step: create one-hot encoding based on discovered categories.
