@@ -11,13 +11,11 @@ def cov(m: Tensor, y: Optional[Tensor] = None, rowvar: bool = True, ddof: int = 
     if not rowvar and m.shape[0] != 1:
         m = m.permute(1, 0)
 
-    # TODO: This is not yet supported in tinygrad's Tensor.
-    # if m.shape[0] == 0:
-    #     return Tensor([])
+    if m.shape[0] == 0:
+        return Tensor([])
 
-    # TODO: This is not yet supported in tinygrad's Tensor.
-    # if m.ndim > 2:
-    #     raise ValueError("m has more than 2 dimensions")
+    if m.ndim > 2:
+        raise ValueError("m has more than 2 dimensions")
 
     X = m
     X_mean = X.mean(axis=1, keepdim=True)
