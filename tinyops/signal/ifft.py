@@ -4,10 +4,8 @@ from tinyops.signal.fft import fft
 def ifft(x: Tensor) -> Tensor:
   """
   Computes the one-dimensional inverse discrete Fourier Transform.
-
   Args:
     x: The input tensor.
-
   Returns:
     The inverse FFT of the input tensor.
   """
