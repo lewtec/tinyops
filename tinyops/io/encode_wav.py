@@ -4,6 +4,10 @@ import io
 import wave
 import struct
 
+# A reasonable limit to prevent DoS from oversized tensors.
+# This mirrors the check in decode_wav.py.
+MAX_WAV_FRAMES = 500_000_000 # 500 million frames
+
 def encode_wav(tensor: Tensor, sample_rate: int, sampwidth: int = 2) -> bytes:
   """
   Encodes a tinygrad.Tensor into WAV audio bytes.
@@ -22,6 +26,12 @@ def encode_wav(tensor: Tensor, sample_rate: int, sampwidth: int = 2) -> bytes:
 
   float_array = tensor.numpy()
   n_frames, n_channels = float_array.shape
+
+  # 🛡️ Sentinel: Add security check to prevent DoS attack.
+  # An oversized tensor can cause a massive memory allocation
+  # and crash the system during the conversion process.
+  if n_frames > MAX_WAV_FRAMES:
+    raise ValueError(f"Input tensor frame count {n_frames} exceeds the security limit of {MAX_WAV_FRAMES}.")
 
   if sampwidth == 1: # uint8
     norm_factor = 128.0

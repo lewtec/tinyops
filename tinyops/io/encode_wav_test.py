@@ -81,3 +81,19 @@ def test_encode_wav_24bit(channels):
 
     assert rate_decoded == sample_rate
     assert_close(tensor, tensor_decoded, atol=1e-5, rtol=1e-5)
+
+def test_encode_wav_dos_limit(monkeypatch):
+  """
+  🛡️ Sentinel Test: Verify encode_wav raises ValueError for oversized tensors
+  to prevent Denial of Service attacks.
+  """
+  # Import the module directly to avoid namespace issues with __init__.py
+  import tinyops.io.encode_wav as encode_wav_module
+
+  test_limit = 100
+  monkeypatch.setattr(encode_wav_module, "MAX_WAV_FRAMES", test_limit)
+
+  oversized_tensor = Tensor.zeros(test_limit + 1, 1, dtype=dtypes.float32).realize()
+
+  with pytest.raises(ValueError, match=f"Input tensor frame count {test_limit + 1} exceeds the security limit of {test_limit}."):
+    encode_wav(oversized_tensor, sample_rate=44100)
