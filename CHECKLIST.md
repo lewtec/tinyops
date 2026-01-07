@@ -45,13 +45,13 @@
 - [x] `np.hamming` → `tinyops.signal.hamming`
 - [x] `np.blackman` → `tinyops.signal.blackman`
 - [ ] `np.kaiser` → `tinyops.signal.kaiser`
-- [ ] `np.fft.fft` → `tinyops.signal.fft` (skipped: timeout)
-- [ ] `np.fft.ifft` → `tinyops.signal.ifft` (skipped: timeout)
+- [x] `np.fft.fft` → `tinyops.signal.fft`
+- [x] `np.fft.ifft` → `tinyops.signal.ifft`
 - [ ] `np.fft.fft2` → `tinyops.signal.fft2`
 - [ ] `np.fft.ifft2` → `tinyops.signal.ifft2`
 - [ ] `np.fft.rfft` → `tinyops.signal.rfft`
 - [ ] `np.fft.irfft` → `tinyops.signal.irfft`
-- [ ] `np.fft.fftfreq` → `tinyops.signal.fftfreq`
+- [x] `np.fft.fftfreq` → `tinyops.signal.fftfreq`
 - [x] `filterpy.kalman.MerweScaledSigmaPoints` → `tinyops.filter.sigma_points`
 - [x] `filterpy.common.Q_discrete_white_noise` → `tinyops.filter.noise_cov`
 - [ ] `filterpy.kalman.KalmanFilter` → `tinyops.filter.kalman`
