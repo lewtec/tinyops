@@ -23,10 +23,6 @@ def decision_tree_classifier(X: Tensor, tree: dict) -> Tensor:
         thresholds = tree['threshold'].gather(0, node_indices)
         is_leaf = features < 0
 
-        # Optimization: if all samples have reached a leaf, we can exit early.
-        if is_leaf.all().item():
-            break
-
         feature_indices_for_gather = Tensor.where(is_leaf, 0, features).cast(dtypes.int32).unsqueeze(1)
         sample_feature_values = X.gather(1, feature_indices_for_gather).squeeze(1)
 
