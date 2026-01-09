@@ -2,6 +2,7 @@ import numpy as np
 import pytest
 from tinygrad import Tensor, dtypes
 from tinyops._core import assert_close
+from tinyops.io.decode_wav import MAX_WAV_FRAMES
 from tinyops.io.encode_wav import encode_wav
 from tinyops.test_utils import assert_one_kernel
 import io
@@ -81,3 +82,26 @@ def test_encode_wav_24bit(channels):
 
     assert rate_decoded == sample_rate
     assert_close(tensor, tensor_decoded, atol=1e-5, rtol=1e-5)
+
+def test_encode_wav_frame_limit():
+    # Use a mock tensor to avoid allocating a huge amount of memory
+    class MockTensor:
+        def __init__(self, shape, dtype):
+            self._shape = shape
+            self.dtype = dtype
+
+        @property
+        def shape(self):
+            return self._shape
+
+        def numpy(self):
+            # Return a mock object that has a shape attribute
+            mock_numpy_array = type("MockNumpyArray", (), {"shape": self.shape})
+            return mock_numpy_array
+
+    # Create a tensor with a frame count just over the limit
+    invalid_frames = MAX_WAV_FRAMES + 1
+    mock_tensor = MockTensor(shape=(invalid_frames, 1), dtype=dtypes.float32)
+
+    with pytest.raises(ValueError, match=f"Input tensor frame count {invalid_frames} exceeds the security limit of {MAX_WAV_FRAMES}"):
+        encode_wav(mock_tensor, sample_rate=44100)
