@@ -4,6 +4,9 @@ import io
 import wave
 import struct
 
+# Import the security limit from the decode module
+from .decode_wav import MAX_WAV_FRAMES
+
 def encode_wav(tensor: Tensor, sample_rate: int, sampwidth: int = 2) -> bytes:
   """
   Encodes a tinygrad.Tensor into WAV audio bytes.
@@ -22,6 +25,12 @@ def encode_wav(tensor: Tensor, sample_rate: int, sampwidth: int = 2) -> bytes:
 
   float_array = tensor.numpy()
   n_frames, n_channels = float_array.shape
+
+  # 🛡️ Sentinel: Add security check to prevent DoS attack.
+  # A malformed WAV header with a huge n_frames value could cause
+  # a massive memory allocation and crash the system.
+  if n_frames > MAX_WAV_FRAMES:
+    raise ValueError(f"Input tensor frame count {n_frames} exceeds the security limit of {MAX_WAV_FRAMES}.")
 
   if sampwidth == 1: # uint8
     norm_factor = 128.0
