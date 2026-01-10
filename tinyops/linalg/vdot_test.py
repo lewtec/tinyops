@@ -1,7 +1,7 @@
 import numpy as np
 from tinygrad import Tensor
 from tinyops.linalg.vdot import vdot
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 from tinyops._core import assert_close
 import pytest
 

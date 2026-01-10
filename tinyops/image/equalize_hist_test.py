@@ -4,7 +4,7 @@ import pytest
 from tinygrad import dtypes, Tensor
 from tinyops._core import assert_close
 from tinyops.image.equalize_hist import equalize_hist
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 def _get_input():
     gray_image = np.random.randint(0, 256, size=(100, 200), dtype=np.uint8)

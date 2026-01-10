@@ -4,7 +4,7 @@ import pytest
 from tinygrad import Tensor
 from tinyops._core import assert_close
 from tinyops.image.gaussian_blur import gaussian_blur
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 def _get_input_color():
     img = np.random.rand(10, 12, 3).astype(np.float32)

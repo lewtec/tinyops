@@ -3,7 +3,7 @@ import numpy as np
 from tinygrad import Tensor
 from tinyops.text.hamming_distance import hamming_distance
 from tinyops._core import assert_close
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 from scipy.spatial.distance import hamming
 
 @pytest.mark.parametrize("a_np, b_np", [

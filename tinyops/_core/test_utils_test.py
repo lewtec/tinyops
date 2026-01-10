@@ -1,6 +1,6 @@
 import pytest
 from tinygrad import Tensor
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 # Helper to ensure realization happens before test
 def get_realized_tensors():

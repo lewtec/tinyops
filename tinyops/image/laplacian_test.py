@@ -4,7 +4,7 @@ import pytest
 from tinygrad import Tensor, dtypes
 from tinyops._core import assert_close
 from tinyops.image.laplacian import laplacian
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 def _get_input(shape):
     img = np.random.rand(*shape).astype(np.float32) * 255

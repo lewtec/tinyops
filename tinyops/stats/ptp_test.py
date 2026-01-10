@@ -1,7 +1,7 @@
 import numpy as np
 from tinygrad import Tensor
 from tinyops.stats.ptp import ptp
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 from tinyops._core import assert_close
 
 @assert_one_kernel

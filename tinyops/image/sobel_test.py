@@ -5,7 +5,7 @@ from tinygrad import Tensor, dtypes
 
 from tinyops._core import assert_close
 from tinyops.image.sobel import sobel
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 def _get_input_grayscale(h, w):
     img = (np.random.rand(h, w) * 255).astype(np.uint8)

@@ -4,7 +4,7 @@ import pytest
 from tinygrad import dtypes, Tensor
 from tinyops._core import assert_close
 from tinyops.image.normalize import normalize, NORM_MINMAX
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 def _get_input(input_dtype, output_dtype):
     if input_dtype == np.uint8:

@@ -3,7 +3,7 @@ import numpy as np
 from tinygrad import Tensor
 from tinyops._core import assert_close
 from tinyops.audio.freq_mask import freq_mask
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 # Fixtures para criar tensors fora do bloco medido
 @pytest.fixture(scope="module")

@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from tinygrad import Tensor, dtypes
 from tinyops.stats.cov import cov
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 from tinyops._core import assert_close
 
 @assert_one_kernel

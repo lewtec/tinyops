@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from tinygrad import Tensor
 from tinyops.linalg.matrix_power import matrix_power
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 from tinyops._core import assert_close
 
 @assert_one_kernel

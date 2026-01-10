@@ -3,7 +3,7 @@ import pytest
 from tinygrad import dtypes
 from tinyops._core import assert_close
 from tinyops.io.decode_wav import decode_wav
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 import io
 import wave
 import struct

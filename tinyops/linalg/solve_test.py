@@ -2,7 +2,7 @@ import numpy as np
 from tinygrad import Tensor
 from tinyops.linalg.solve import solve
 from tinyops._core import assert_close
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 @assert_one_kernel
 def test_solve():

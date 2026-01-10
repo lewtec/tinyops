@@ -4,7 +4,7 @@ from tinygrad import Tensor
 from tinyops.filter.noise_cov import noise_cov
 from tinyops._core import assert_close
 from filterpy.common import Q_discrete_white_noise
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 TEST_PARAMS = [
     (2, 0.1, 1.0, 1, None),

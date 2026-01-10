@@ -2,7 +2,7 @@ import numpy as np
 from tinygrad import Tensor
 from tinyops.ml.standard_scaler import standard_scaler
 from tinyops._core import assert_close
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 from sklearn.preprocessing import StandardScaler
 import pytest
 

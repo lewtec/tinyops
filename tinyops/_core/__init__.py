@@ -9,3 +9,5 @@ def assert_close(x: Tensor | np.ndarray, y: Tensor | np.ndarray, atol: float = 1
     y_np = y.numpy() if isinstance(y, Tensor) else y
 
     np.testing.assert_allclose(x_np, y_np, atol=atol, rtol=rtol)
+
+from .test_utils import assert_one_kernel
