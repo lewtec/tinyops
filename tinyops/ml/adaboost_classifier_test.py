@@ -3,7 +3,6 @@ import numpy as np
 from tinygrad import Tensor
 from tinyops._core import assert_close
 from tinyops.ml.adaboost_classifier import adaboost_classifier
-# from tinyops.test_utils import assert_one_kernel
 
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -41,8 +40,6 @@ def test_adaboost_classifier_samme():
     # Get the expected prediction from sklearn
     expected_pred = model.predict(X).astype(np.float32)
 
-    # @assert_one_kernel is disabled for now, as it requires more complex setup
-    # @assert_one_kernel
     def run_adaboost():
         result = adaboost_classifier(
             estimators_predictions_tg,
