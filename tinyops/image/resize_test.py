@@ -4,7 +4,7 @@ import pytest
 from tinygrad import Tensor
 from tinyops.image.resize import resize, INTER_NEAREST, INTER_LINEAR
 from tinyops._core import assert_close
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 def _get_input_2d():
     data = np.random.randn(10, 20).astype(np.float32)

@@ -4,7 +4,7 @@ import pytest
 from tinygrad import Tensor
 from tinyops.audio.mu_law_encode import mu_law_encode
 from tinyops._core import assert_close
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 def _get_input():
     data = torch.linspace(-1, 1, steps=100, dtype=torch.float32)

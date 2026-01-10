@@ -4,7 +4,7 @@ import pytest
 from tinygrad import Tensor
 from tinyops.image.flip import flip
 from tinyops._core import assert_close
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 def _get_input(shape):
     data = np.random.randn(*shape).astype(np.float32)

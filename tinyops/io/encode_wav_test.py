@@ -3,7 +3,7 @@ import pytest
 from tinygrad import Tensor, dtypes
 from tinyops._core import assert_close
 from tinyops.io.encode_wav import encode_wav
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 import io
 
 # SciPy is a test-only dependency

@@ -4,7 +4,7 @@ import pytest
 from tinygrad import Tensor
 from tinyops._core import assert_close
 from tinyops.image.center_crop import center_crop
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 def _get_input(shape):
     return Tensor.rand(*shape).realize()

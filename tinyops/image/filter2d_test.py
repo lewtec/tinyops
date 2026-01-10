@@ -4,7 +4,7 @@ import pytest
 from tinygrad import Tensor
 from tinyops.image.filter2d import filter2d
 from tinyops._core import assert_close
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 IMG_GRAYSCALE = np.array([
     [10, 20, 30, 40, 50],

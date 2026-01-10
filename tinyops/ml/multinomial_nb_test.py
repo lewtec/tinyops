@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from tinygrad import Tensor
 from tinyops._core import assert_close
 from tinyops.ml.multinomial_nb import multinomial_nb
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 @pytest.mark.parametrize("n_samples, n_features, n_classes, alpha", [
     (150, 20, 4, 1.0),

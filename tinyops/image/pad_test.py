@@ -4,7 +4,7 @@ import pytest
 from tinygrad import Tensor
 from tinyops._core import assert_close
 from tinyops.image.pad import pad
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 def _get_input_color():
     img_torch = torch.randn(10, 12, 3)

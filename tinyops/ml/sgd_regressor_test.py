@@ -3,7 +3,7 @@ import numpy as np
 from tinygrad import Tensor
 from tinyops.ml.sgd_regressor import sgd_regressor
 from tinyops._core import assert_close
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 from sklearn.linear_model import SGDRegressor
 
 def test_sgd_regressor_step():

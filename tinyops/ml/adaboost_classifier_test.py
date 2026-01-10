@@ -3,7 +3,7 @@ import numpy as np
 from tinygrad import Tensor
 from tinyops._core import assert_close
 from tinyops.ml.adaboost_classifier import adaboost_classifier
-# from tinyops.test_utils import assert_one_kernel
+# from tinyops._core import assert_one_kernel
 
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.tree import DecisionTreeClassifier

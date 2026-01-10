@@ -1,7 +1,7 @@
 from tinygrad import Tensor
 import scipy.signal.windows as windows
 from tinyops.signal.blackman import blackman
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 from tinyops._core import assert_close
 
 @assert_one_kernel

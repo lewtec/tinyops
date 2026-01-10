@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 from tinygrad import Tensor
 from tinyops.signal.fft import fft
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 from tinyops._core import assert_close
 
 # Reduced test sizes to avoid timeouts for now, while proving correctness

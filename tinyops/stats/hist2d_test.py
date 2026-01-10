@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from tinygrad import Tensor
 from tinyops.stats.hist2d import hist2d
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 from tinyops._core import assert_close
 
 @assert_one_kernel

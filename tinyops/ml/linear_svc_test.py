@@ -3,7 +3,7 @@ import numpy as np
 from tinygrad import Tensor
 from tinyops._core import assert_close
 from tinyops.ml.linear_svc import linear_svc
-from tinyops.test_utils import assert_one_kernel
+from tinyops._core import assert_one_kernel
 
 from sklearn.svm import LinearSVC
 from sklearn.datasets import make_classification
