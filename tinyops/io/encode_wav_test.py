@@ -81,3 +81,17 @@ def test_encode_wav_24bit(channels):
 
     assert rate_decoded == sample_rate
     assert_close(tensor, tensor_decoded, atol=1e-5, rtol=1e-5)
+
+import pytest
+from tinyops.io.decode_wav import MAX_WAV_FRAMES
+
+def test_encode_wav_dos_limit():
+  """Tests that encode_wav raises a ValueError if the input tensor is too large."""
+  # Use a mock object with .shape and .dtype to avoid allocating a large tensor.
+  # The validation happens on tensor.shape before tensor.numpy() is called.
+  class MockTensor:
+      shape = (MAX_WAV_FRAMES + 1, 1)
+      dtype = dtypes.float32
+
+  with pytest.raises(ValueError, match="exceeds the security limit"):
+      encode_wav(MockTensor(), sample_rate=44100)

@@ -4,6 +4,9 @@ import io
 import wave
 import struct
 
+from tinyops.io.decode_wav import MAX_WAV_FRAMES
+
+
 def encode_wav(tensor: Tensor, sample_rate: int, sampwidth: int = 2) -> bytes:
   """
   Encodes a tinygrad.Tensor into WAV audio bytes.
@@ -20,8 +23,14 @@ def encode_wav(tensor: Tensor, sample_rate: int, sampwidth: int = 2) -> bytes:
   if not (tensor.dtype.name == 'float32' or tensor.dtype.name == 'float'):
     raise TypeError(f"Input tensor must be float32, but got {tensor.dtype}")
 
+  # 🛡️ Sentinel: Add symmetric security check to prevent DoS attack.
+  # This prevents a user from passing a massive tensor and exhausting
+  # memory when creating the WAV file.
+  n_frames, n_channels = tensor.shape
+  if n_frames > MAX_WAV_FRAMES:
+    raise ValueError(f"Input tensor frame count {n_frames} exceeds the security limit of {MAX_WAV_FRAMES}.")
+
   float_array = tensor.numpy()
-  n_frames, n_channels = float_array.shape
 
   if sampwidth == 1: # uint8
     norm_factor = 128.0
