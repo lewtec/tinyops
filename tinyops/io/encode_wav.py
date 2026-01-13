@@ -3,6 +3,7 @@ import numpy as np
 import io
 import wave
 import struct
+from .decode_wav import MAX_WAV_FRAMES
 
 def encode_wav(tensor: Tensor, sample_rate: int, sampwidth: int = 2) -> bytes:
   """
@@ -22,6 +23,9 @@ def encode_wav(tensor: Tensor, sample_rate: int, sampwidth: int = 2) -> bytes:
 
   float_array = tensor.numpy()
   n_frames, n_channels = float_array.shape
+
+  if n_frames > MAX_WAV_FRAMES:
+    raise ValueError(f"Input tensor frame count {n_frames} exceeds the security limit of {MAX_WAV_FRAMES}.")
 
   if sampwidth == 1: # uint8
     norm_factor = 128.0
