@@ -1,3 +1,9 @@
+## 2024-07-26 - Simplify test by inlining function
+**Issue:** The test function `test_adaboost_classifier_samme` in `tinyops/ml/adaboost_classifier_test.py` contained a nested function `run_adaboost` that was defined and immediately called only once, adding a needless layer of abstraction.
+**Root Cause:** This was likely a remnant of a previous debugging session or an artifact of an earlier implementation style that was not simplified later.
+**Solution:** I removed the `run_adaboost` function and inlined its single call. This makes the test flow more direct and easier to read from top to bottom.
+**Pattern:** Single-use nested functions within tests should be avoided. Prefer a direct, linear sequence of operations for clarity unless a helper is genuinely reused or encapsulates complex, repeated setup logic.
+
 ## 2024-07-25 - Disabled Kernel Fusion Check (`assert_one_kernel`)
 **Issue:** The `assert_one_kernel` decorator was present in the codebase but its logic was entirely commented out, making it misleading dead code.
 **Root Cause:** The team has a directive to temporarily disable the single-kernel fusion check, but the implementation was left as commented-out code instead of being cleanly refactored.
