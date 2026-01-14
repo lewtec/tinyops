@@ -40,18 +40,14 @@ def test_adaboost_classifier_samme():
     # Get the expected prediction from sklearn
     expected_pred = model.predict(X).astype(np.float32)
 
-    def run_adaboost():
-        result = adaboost_classifier(
-            estimators_predictions_tg,
-            estimator_weights_tg,
-            classes_tg,
-            learning_rate,
-        )
-        result.realize()
-        return result
-
     # Get the prediction from the tinyops implementation
-    result_tg = run_adaboost()
+    result_tg = adaboost_classifier(
+        estimators_predictions_tg,
+        estimator_weights_tg,
+        classes_tg,
+        learning_rate,
+    )
+    result_tg.realize()
 
     # Compare the results
     assert_close(result_tg, expected_pred, atol=1e-6, rtol=1e-6)
