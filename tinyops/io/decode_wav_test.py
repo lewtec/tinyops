@@ -147,3 +147,48 @@ def test_decode_wav_dos_security():
 
     with pytest.raises(ValueError, match=f"exceeds the security limit"):
         decode_wav(header)
+
+
+@pytest.mark.parametrize("malicious_param, param_name", [
+    ("n_channels", "channel count"),
+    ("framerate", "framerate")
+])
+def test_decode_wav_dos_security_header_params(malicious_param, param_name):
+    # 🛡️ Sentinel: Test to verify DoS mitigation for channel count and framerate.
+    from tinyops.io.decode_wav import MAX_WAV_CHANNELS, MAX_WAV_FRAMERATE
+
+    # Set up sane defaults and inject the malicious parameter
+    params = {
+        "n_frames": 100,
+        "n_channels": 1,
+        "sampwidth": 2,
+        "framerate": 44100,
+    }
+
+    if malicious_param == "n_channels":
+        params[malicious_param] = MAX_WAV_CHANNELS + 1
+    elif malicious_param == "framerate":
+        params[malicious_param] = MAX_WAV_FRAMERATE + 1
+
+    n_frames, n_channels, sampwidth, framerate = params.values()
+
+    # Create a minimal WAV header with the malicious value
+    subchunk2_size = n_frames * n_channels * sampwidth
+    chunk_size = 36 + subchunk2_size
+
+    header = b'RIFF'
+    header += struct.pack('<I', chunk_size)
+    header += b'WAVE'
+    header += b'fmt '
+    header += struct.pack('<I', 16)
+    header += struct.pack('<H', 1)
+    header += struct.pack('<H', n_channels)
+    header += struct.pack('<I', framerate)
+    header += struct.pack('<I', framerate * n_channels * sampwidth)
+    header += struct.pack('<H', n_channels * sampwidth)
+    header += struct.pack('<H', sampwidth * 8)
+    header += b'data'
+    header += struct.pack('<I', subchunk2_size)
+
+    with pytest.raises(ValueError, match=f"WAV file {param_name} .* exceeds the security limit"):
+        decode_wav(header)

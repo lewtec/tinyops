@@ -7,7 +7,10 @@ import struct
 # A reasonable limit to prevent DoS from malformed WAV headers.
 # This allows for very large files (e.g., hours of multi-channel audio)
 # while preventing absurdly large memory allocation requests.
-MAX_WAV_FRAMES = 500_000_000 # 500 million frames
+MAX_WAV_FRAMES = 500_000_000  # 500 million frames
+MAX_WAV_CHANNELS = 256
+MAX_WAV_FRAMERATE = 1_000_000
+
 
 def decode_wav(wav_bytes: bytes) -> tuple[int, Tensor]:
   """
@@ -33,6 +36,10 @@ def decode_wav(wav_bytes: bytes) -> tuple[int, Tensor]:
       # a massive memory allocation and crash the system.
       if n_frames > MAX_WAV_FRAMES:
         raise ValueError(f"WAV file frame count {n_frames} exceeds the security limit of {MAX_WAV_FRAMES}.")
+      if n_channels > MAX_WAV_CHANNELS:
+        raise ValueError(f"WAV file channel count {n_channels} exceeds the security limit of {MAX_WAV_CHANNELS}.")
+      if framerate > MAX_WAV_FRAMERATE:
+        raise ValueError(f"WAV file framerate {framerate} exceeds the security limit of {MAX_WAV_FRAMERATE}.")
 
       frames = wf.readframes(n_frames)
 
