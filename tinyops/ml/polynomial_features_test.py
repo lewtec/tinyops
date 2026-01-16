@@ -41,3 +41,10 @@ def test_polynomial_features_degree_1():
     tinyops_result = tinyops_polynomial_features(X_tiny, degree=1)
 
     assert_close(tinyops_result, sklearn_result)
+
+def test_polynomial_features_invalid_degree():
+    X_tiny = Tensor(np.array([[1, 2], [3, 4]], dtype=np.float32))
+    with pytest.raises(ValueError, match="degree must be between 0 and 10"):
+        tinyops_polynomial_features(X_tiny, degree=-1)
+    with pytest.raises(ValueError, match="degree must be between 0 and 10"):
+        tinyops_polynomial_features(X_tiny, degree=11)
