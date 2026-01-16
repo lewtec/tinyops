@@ -62,13 +62,6 @@ def fft(x: Tensor) -> Tensor:
     W_real = angle.cos()
     W_imag = angle.sin()
 
-    # x is (N, 2) -> (N, 1, 2) for broadcasting?
-    # No, simple matmul if we handle complex correctly.
-    # (a + jb) * (C + jD) = (aC - bD) + j(aD + bC)
-    # We want W @ x
-    # W_real @ x_real - W_imag @ x_imag
-    # W_real @ x_imag + W_imag @ x_real
-
     x_real = x[:, 0]
     x_imag = x[:, 1]
 

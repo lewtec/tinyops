@@ -1,3 +1,9 @@
+## 2024-07-29 - Remove redundant comments in fft.py
+**Issue:** The `fft` function in `tinyops/signal/fft.py` contained a large block of commented-out code explaining the logic behind a complex matrix multiplication.
+**Root Cause:** The comments were likely added during initial implementation to clarify a complex operation. However, the resulting code is idiomatic and self-explanatory for anyone familiar with the algorithm, making the comments redundant.
+**Solution:** I removed the block of explanatory comments. The code now stands on its own, is more concise, and less cluttered.
+**Pattern:** Code should be self-documenting where possible. Redundant comments that simply restate what the code is doing should be removed to improve the signal-to-noise ratio.
+
 ## 2024-07-26 - Simplify test by inlining function
 **Issue:** The test function `test_adaboost_classifier_samme` in `tinyops/ml/adaboost_classifier_test.py` contained a nested function `run_adaboost` that was defined and immediately called only once, adding a needless layer of abstraction.
 **Root Cause:** This was likely a remnant of a previous debugging session or an artifact of an earlier implementation style that was not simplified later.
