@@ -4,6 +4,9 @@ import itertools
 def polynomial_features(X: Tensor, degree: int = 2, interaction_only: bool = False, include_bias: bool = True) -> Tensor:
     n_samples, n_features = X.shape
 
+    if not 0 <= degree <= 10:
+        raise ValueError("degree must be between 0 and 10")
+
     if degree == 0:
         return Tensor.ones(n_samples, 1, dtype=X.dtype) if include_bias else Tensor.zeros(n_samples, 0, dtype=X.dtype)
 
