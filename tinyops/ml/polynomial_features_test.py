@@ -41,3 +41,10 @@ def test_polynomial_features_degree_1():
     tinyops_result = tinyops_polynomial_features(X_tiny, degree=1)
 
     assert_close(tinyops_result, sklearn_result)
+
+def test_polynomial_features_dos_protection():
+    # Attempt to create a feature expansion that exceeds the limit
+    # n_features=100, degree=5 -> ~96 million features
+    X = Tensor.zeros(1, 100)
+    with pytest.raises(ValueError, match="exceeds the maximum allowed"):
+        tinyops_polynomial_features(X, degree=5)
