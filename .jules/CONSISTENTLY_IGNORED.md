@@ -17,3 +17,11 @@ This file lists patterns of changes that have been consistently rejected by huma
 **- Pattern:** Do not add validation to the `tinyops/io/decode_wav.py` file to address Denial of Service (DoS) vulnerabilities.
 **- Justification:** A pull request (e.g., #142) attempting to fix a DoS vulnerability by adding header validation to the WAV decoder was rejected. This indicates a consistent pattern of rejecting any changes, including security fixes, to the WAV I/O modules.
 **- Files Affected:** `tinyops/io/decode_wav.py`
+
+---
+
+## IGNORE: Adding HSTS Security Header
+
+**- Pattern:** Do not add the `Strict-Transport-Security` (HSTS) header.
+**- Justification:** This change has been proposed multiple times and rejected. It is considered an operational risk because it can break subdomains that do not support HTTPS. This is a classic example of a security enhancement that, while good in theory, is a breaking change in this specific context.
+**- Files Affected:** `src/hooks.server.ts`
