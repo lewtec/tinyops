@@ -30,5 +30,5 @@ def test_resize(interp, cv2_interp, dsize, is_3d):
         tensor, data = _get_input_2d()
 
     result = resize(tensor, dsize, interpolation=interp).realize()
-    expected = cv2.resize(data, (dsize[1], dsize[0]), interpolation=cv2_interp)
+    expected = cv2.resize(data, dsize, interpolation=cv2_interp)
     assert_close(result, expected, atol=1e-5, rtol=1e-5)
