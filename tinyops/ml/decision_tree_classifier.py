@@ -1,4 +1,5 @@
 from tinygrad import Tensor, dtypes
+from tinyops.ml._tree_utils import _traverse_tree
 
 def decision_tree_classifier(X: Tensor, tree: dict) -> Tensor:
     """
@@ -13,25 +14,11 @@ def decision_tree_classifier(X: Tensor, tree: dict) -> Tensor:
     Returns:
         A Tensor of shape (n_samples,) with the predicted class labels.
     """
-    node_indices = Tensor.zeros(X.shape[0], dtype=dtypes.int32)
-
     # Pre-calculate the predicted class for every node. This simplifies the final gather.
     node_predictions = tree['value'].argmax(axis=1).cast(dtypes.int32)
 
-    for _ in range(tree['max_depth']):
-        features = tree['feature'].gather(0, node_indices)
-        thresholds = tree['threshold'].gather(0, node_indices)
-        is_leaf = features < 0
-
-        feature_indices_for_gather = Tensor.where(is_leaf, 0, features).cast(dtypes.int32).unsqueeze(1)
-        sample_feature_values = X.gather(1, feature_indices_for_gather).squeeze(1)
-
-        go_left = sample_feature_values <= thresholds
-        children_left = tree['children_left'].gather(0, node_indices)
-        children_right = tree['children_right'].gather(0, node_indices)
-        next_nodes = Tensor.where(go_left, children_left, children_right)
-
-        node_indices = Tensor.where(is_leaf, node_indices, next_nodes).cast(dtypes.int32)
+    # Traverse the tree to find the leaf node index for each sample.
+    node_indices = _traverse_tree(X, tree)
 
     # Gather the final predictions from the pre-calculated leaf node predictions.
     return node_predictions.gather(0, node_indices)
