@@ -41,3 +41,17 @@ def test_polynomial_features_degree_1():
     tinyops_result = tinyops_polynomial_features(X_tiny, degree=1)
 
     assert_close(tinyops_result, sklearn_result)
+
+def test_polynomial_features_invalid_degree():
+    X_tiny = Tensor.zeros(2, 2)
+    with pytest.raises(ValueError, match="Degree must be non-negative"):
+        tinyops_polynomial_features(X_tiny, degree=-1)
+
+def test_polynomial_features_dos_prevention():
+    # n_features=10, degree=15 => C(24, 15) = 1,307,504 combinations
+    # This exceeds the limit of 100,000
+    n_features = 10
+    X_tiny = Tensor.zeros(1, n_features)
+
+    with pytest.raises(ValueError, match="exceeds the limit"):
+        tinyops_polynomial_features(X_tiny, degree=15)
