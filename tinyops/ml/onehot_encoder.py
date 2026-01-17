@@ -6,11 +6,14 @@ def onehot_encoder(X: Tensor) -> Tensor:
         X = X.unsqueeze(1)
 
     encoded_cols = []
+    # Fetch data to CPU once to avoid synchronization overhead in the loop
+    X_np = X.numpy()
+
     for i in range(X.shape[1]):
         col = X[:, i]
         # "fit" step: find unique categories. This is analogous to sklearn's fit method.
         # Using numpy here is a pragmatic choice as a pure-tensor unique is complex.
-        categories_np = np.unique(col.numpy())
+        categories_np = np.unique(X_np[:, i])
         categories = Tensor(categories_np, requires_grad=False, device=X.device)
 
         # "transform" step: create one-hot encoding based on discovered categories.

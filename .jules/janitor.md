@@ -21,3 +21,9 @@
 **Root Cause:** The project structure had evolved, but some older files were not moved to their more logical, centralized locations. This resulted in an inconsistent and slightly disorganized structure.
 **Solution:** I moved `test_utils.py` and its corresponding test file, `test_utils_test.py`, into the `tinyops/_core/` directory. I then updated `tinyops/_core/__init__.py` to export the utility, ensuring no breaking changes to files that import it.
 **Pattern:** All shared, internal utilities, whether for testing or runtime, should be consolidated within the `tinyops/_core/` module to maintain a clean and predictable project structure.
+
+## 2026-01-17 - Optimize synchronization in onehot_encoder
+**Issue:** The `onehot_encoder` function in `tinyops/ml/onehot_encoder.py` was calling `.numpy()` on each column inside a loop, causing excessive device-to-host synchronization overhead (e.g., ~6.5s for 1000 samples/50 features).
+**Root Cause:** The implementation aimed to use `numpy.unique` for each column but failed to hoist the data transfer out of the loop.
+**Solution:** I modified the function to fetch the entire input tensor to the CPU once (`X.numpy()`) before the loop. The loop now slices the pre-fetched numpy array, reducing synchronization overhead to a single call (new time: ~0.12s).
+**Pattern:** When interacting with host-side libraries (like numpy) for iterative operations on tensor data, fetch the data to the host in a single batch rather than incrementally inside the loop to minimize synchronization costs.
