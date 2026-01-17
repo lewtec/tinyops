@@ -1,5 +1,5 @@
 from tinygrad import Tensor
-import numpy as np
+import math
 
 def hamming(M: int, sym: bool = True) -> Tensor:
     if M < 1:
@@ -10,6 +10,6 @@ def hamming(M: int, sym: bool = True) -> Tensor:
     denominator = M - 1 if sym else M
     n = Tensor.arange(M)
 
-    w = 0.54 - 0.46 * (2 * np.pi * n / denominator).cos()
+    w = 0.54 - 0.46 * (2 * math.pi * n / denominator).cos()
 
     return w
