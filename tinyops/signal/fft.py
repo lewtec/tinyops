@@ -1,4 +1,4 @@
-import numpy as np
+import math
 from tinygrad import Tensor, dtypes
 
 def fft_cooley_tukey(x: Tensor) -> Tensor:
@@ -15,7 +15,7 @@ def fft_cooley_tukey(x: Tensor) -> Tensor:
   # We can compute these once and reuse if we wanted to optimize further,
   # but for now let's just make it correct.
   k = Tensor.arange(N // 2, dtype=dtypes.float32)
-  angle = -2 * np.pi * k / N
+  angle = -2 * math.pi * k / N
 
   # complex exponential: cos(angle) + j*sin(angle)
   # x is (N, 2) where last dim is (real, imag)
@@ -56,7 +56,7 @@ def fft(x: Tensor) -> Tensor:
     # Construct DFT matrix
     k = Tensor.arange(N, dtype=dtypes.float32).unsqueeze(1)
     n = Tensor.arange(N, dtype=dtypes.float32).unsqueeze(0)
-    angle = -2 * np.pi * k * n / N
+    angle = -2 * math.pi * k * n / N
 
     # W matrix (N, N, 2)
     W_real = angle.cos()

@@ -21,3 +21,9 @@
 **Root Cause:** The project structure had evolved, but some older files were not moved to their more logical, centralized locations. This resulted in an inconsistent and slightly disorganized structure.
 **Solution:** I moved `test_utils.py` and its corresponding test file, `test_utils_test.py`, into the `tinyops/_core/` directory. I then updated `tinyops/_core/__init__.py` to export the utility, ensuring no breaking changes to files that import it.
 **Pattern:** All shared, internal utilities, whether for testing or runtime, should be consolidated within the `tinyops/_core/` module to maintain a clean and predictable project structure.
+
+## 2026-01-16 - Replace numpy dependency with math in signal modules
+**Issue:** The signal processing modules (`hanning.py`, `hamming.py`, `blackman.py`, `fft.py`) imported `numpy` solely for the constant `np.pi`.
+**Root Cause:** These constants were likely used out of habit or convenience during initial porting from other libraries, but `tinygrad` handles standard python floats correctly.
+**Solution:** I replaced `import numpy as np` with `import math` and used `math.pi` instead.
+**Pattern:** Avoid importing heavy libraries like `numpy` in runtime code if standard library alternatives (like `math`) suffice. This keeps the dependency footprint small and cleaner.
