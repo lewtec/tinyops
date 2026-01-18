@@ -1,11 +1,23 @@
 from tinygrad import Tensor
 import itertools
+import math
 
 def polynomial_features(X: Tensor, degree: int = 2, interaction_only: bool = False, include_bias: bool = True) -> Tensor:
     n_samples, n_features = X.shape
 
     if degree == 0:
         return Tensor.ones(n_samples, 1, dtype=X.dtype) if include_bias else Tensor.zeros(n_samples, 0, dtype=X.dtype)
+
+    # Validate output size to prevent DoS
+    n_output_features = 1 if include_bias else 0
+    for d in range(1, degree + 1):
+        if interaction_only:
+            n_output_features += math.comb(n_features, d)
+        else:
+            n_output_features += math.comb(n_features + d - 1, d)
+
+    if n_output_features > 100000:
+        raise ValueError(f"Too many output features: {n_output_features}. limit is 100000")
 
     feature_indices = range(n_features)
 
