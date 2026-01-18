@@ -1,11 +1,23 @@
 from tinygrad import Tensor
 import itertools
+import math
 
 def polynomial_features(X: Tensor, degree: int = 2, interaction_only: bool = False, include_bias: bool = True) -> Tensor:
     n_samples, n_features = X.shape
 
     if degree == 0:
         return Tensor.ones(n_samples, 1, dtype=X.dtype) if include_bias else Tensor.zeros(n_samples, 0, dtype=X.dtype)
+
+    # 🛡️ Sentinel: Validate output size to prevent DoS
+    expected_features = 1 if include_bias else 0
+    for d in range(1, degree + 1):
+        if interaction_only:
+            expected_features += math.comb(n_features, d)
+        else:
+            expected_features += math.comb(n_features + d - 1, d)
+
+    if expected_features > 100_000:
+        raise ValueError(f"Polynomial features {expected_features} exceeds the security limit of 100,000.")
 
     feature_indices = range(n_features)
 
