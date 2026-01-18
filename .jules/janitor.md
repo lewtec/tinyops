@@ -21,3 +21,10 @@
 **Root Cause:** The project structure had evolved, but some older files were not moved to their more logical, centralized locations. This resulted in an inconsistent and slightly disorganized structure.
 **Solution:** I moved `test_utils.py` and its corresponding test file, `test_utils_test.py`, into the `tinyops/_core/` directory. I then updated `tinyops/_core/__init__.py` to export the utility, ensuring no breaking changes to files that import it.
 **Pattern:** All shared, internal utilities, whether for testing or runtime, should be consolidated within the `tinyops/_core/` module to maintain a clean and predictable project structure.
+
+## 2026-01-10 - Simplify Interpolation Enum in resize.py
+
+**Issue:** The `Interpolation` Enum in `tinyops/image/resize.py` wrapped `partial` objects in single-element tuples (e.g., `(partial(...),)`), and the `resize` function recreated a mapping dictionary on every call.
+**Root Cause:** The tuple wrapping was likely a workaround for a perceived issue with assigning callables to Enum members, but `partial` objects do not bind as methods, so it was unnecessary. The local dictionary was just an unoptimized implementation detail.
+**Solution:** I removed the tuple wrappers, simplifying the Enum definition and its `__call__` method. I also moved the integer-to-enum mapping to a module-level constant `_INT_TO_INTERPOLATION` to avoid redundant allocation.
+**Pattern:** `functools.partial` objects can be assigned directly to Enum members without wrapping. Static mapping dictionaries should be defined at the module level, not inside hot functions.
