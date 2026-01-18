@@ -41,3 +41,15 @@ def test_polynomial_features_degree_1():
     tinyops_result = tinyops_polynomial_features(X_tiny, degree=1)
 
     assert_close(tinyops_result, sklearn_result)
+
+def test_polynomial_features_dos_protection():
+    class MockTensor:
+        def __init__(self, shape, dtype):
+            self.shape = shape
+            self.dtype = dtype
+
+    # 50 features, degree 10 -> ~75 billion features
+    X_mock = MockTensor((10, 50), dtype=np.float32)
+
+    with pytest.raises(ValueError, match="PolynomialFeatures output too large"):
+        tinyops_polynomial_features(X_mock, degree=10)
