@@ -44,14 +44,14 @@ def resize_not_implemented(*args, **kwargs):
     raise NotImplementedError("This interpolation mode is not supported.")
 
 class Interpolation(Enum):
-    NEAREST = (partial(resize_nearest),)
-    LINEAR = (partial(resize_linear),)
-    CUBIC = (partial(resize_not_implemented),)
-    AREA = (partial(resize_not_implemented),)
-    LANCZOS4 = (partial(resize_not_implemented),)
+    NEAREST = partial(resize_nearest)
+    LINEAR = partial(resize_linear)
+    CUBIC = partial(resize_not_implemented)
+    AREA = partial(resize_not_implemented)
+    LANCZOS4 = partial(resize_not_implemented)
 
     def __call__(self, *args, **kwargs):
-        return self.value[0](*args, **kwargs)
+        return self.value(*args, **kwargs)
 
 # Backward compatibility constants
 INTER_NEAREST = 0
@@ -59,6 +59,14 @@ INTER_LINEAR = 1
 INTER_CUBIC = 2
 INTER_AREA = 3
 INTER_LANCZOS4 = 4
+
+_INT_TO_INTERPOLATION = {
+    INTER_NEAREST: Interpolation.NEAREST,
+    INTER_LINEAR: Interpolation.LINEAR,
+    INTER_CUBIC: Interpolation.CUBIC,
+    INTER_AREA: Interpolation.AREA,
+    INTER_LANCZOS4: Interpolation.LANCZOS4
+}
 
 def resize(x: Tensor, dsize: tuple[int, int], interpolation: int | Interpolation = INTER_LINEAR) -> Tensor:
     """
@@ -84,15 +92,8 @@ def resize(x: Tensor, dsize: tuple[int, int], interpolation: int | Interpolation
     ty, tx = Tensor.meshgrid(Tensor.arange(out_H), Tensor.arange(out_W), indexing='ij')
 
     if isinstance(interpolation, int):
-        mapping = {
-            INTER_NEAREST: Interpolation.NEAREST,
-            INTER_LINEAR: Interpolation.LINEAR,
-            INTER_CUBIC: Interpolation.CUBIC,
-            INTER_AREA: Interpolation.AREA,
-            INTER_LANCZOS4: Interpolation.LANCZOS4
-        }
-        if interpolation in mapping:
-            interp_enum = mapping[interpolation]
+        if interpolation in _INT_TO_INTERPOLATION:
+            interp_enum = _INT_TO_INTERPOLATION[interpolation]
         else:
             raise NotImplementedError(f"Interpolation mode {interpolation} is not supported.")
     elif isinstance(interpolation, Interpolation):
