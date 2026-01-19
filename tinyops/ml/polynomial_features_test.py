@@ -41,3 +41,14 @@ def test_polynomial_features_degree_1():
     tinyops_result = tinyops_polynomial_features(X_tiny, degree=1)
 
     assert_close(tinyops_result, sklearn_result)
+
+def test_polynomial_features_dos():
+    # n_features = 100, degree = 5 -> comb(104, 5) = 96,560,646 > 100,000
+    n_features = 100
+    degree = 5
+    # Use a mock-like tensor to avoid memory allocation if possible,
+    # but Tensor.zeros(1, 100) is very small.
+    X = Tensor.zeros(1, n_features)
+
+    with pytest.raises(ValueError, match="Number of output features .* exceeds limit"):
+        tinyops_polynomial_features(X, degree=degree, interaction_only=False)
