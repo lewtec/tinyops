@@ -24,17 +24,23 @@ def rotate_90_counterclockwise(x: Tensor) -> Tensor:
   return x.permute(permute_order).flip(0)
 
 class RotateCode(Enum):
-  CLOCKWISE_90 = (partial(rotate_90_clockwise),)
-  ROTATE_180 = (partial(rotate_180),)
-  COUNTERCLOCKWISE_90 = (partial(rotate_90_counterclockwise),)
+  CLOCKWISE_90 = partial(rotate_90_clockwise)
+  ROTATE_180 = partial(rotate_180)
+  COUNTERCLOCKWISE_90 = partial(rotate_90_counterclockwise)
 
   def __call__(self, *args, **kwargs):
-    return self.value[0](*args, **kwargs)
+    return self.value(*args, **kwargs)
 
 # Backward compatibility constants
 ROTATE_90_CLOCKWISE = 0
 ROTATE_180 = 1
 ROTATE_90_COUNTERCLOCKWISE = 2
+
+_INT_TO_ROTATE_CODE = {
+    ROTATE_90_CLOCKWISE: RotateCode.CLOCKWISE_90,
+    ROTATE_180: RotateCode.ROTATE_180,
+    ROTATE_90_COUNTERCLOCKWISE: RotateCode.COUNTERCLOCKWISE_90
+}
 
 def rotate(x: Tensor, rotate_code: int | RotateCode) -> Tensor:
   """
@@ -51,13 +57,8 @@ def rotate(x: Tensor, rotate_code: int | RotateCode) -> Tensor:
     A new tensor with the rotated image.
   """
   if isinstance(rotate_code, int):
-    mapping = {
-        ROTATE_90_CLOCKWISE: RotateCode.CLOCKWISE_90,
-        ROTATE_180: RotateCode.ROTATE_180,
-        ROTATE_90_COUNTERCLOCKWISE: RotateCode.COUNTERCLOCKWISE_90
-    }
-    if rotate_code in mapping:
-        code = mapping[rotate_code]
+    if rotate_code in _INT_TO_ROTATE_CODE:
+        code = _INT_TO_ROTATE_CODE[rotate_code]
     else:
         raise ValueError("Invalid rotate_code")
   elif isinstance(rotate_code, RotateCode):

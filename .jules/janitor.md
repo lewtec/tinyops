@@ -21,3 +21,9 @@
 **Root Cause:** The project structure had evolved, but some older files were not moved to their more logical, centralized locations. This resulted in an inconsistent and slightly disorganized structure.
 **Solution:** I moved `test_utils.py` and its corresponding test file, `test_utils_test.py`, into the `tinyops/_core/` directory. I then updated `tinyops/_core/__init__.py` to export the utility, ensuring no breaking changes to files that import it.
 **Pattern:** All shared, internal utilities, whether for testing or runtime, should be consolidated within the `tinyops/_core/` module to maintain a clean and predictable project structure.
+
+## 2026-01-20 - Optimize Enum Usage in Rotate
+**Issue:** The `rotate` function in `tinyops/image/rotate.py` was recreating a mapping dictionary on every call, and the `RotateCode` Enum definition used unnecessary tuple wrapping for `partial` functions.
+**Root Cause:** The mapping dictionary was defined inside the function scope instead of as a module-level constant. The Enum definition likely followed an older or misunderstood pattern for storing callables.
+**Solution:** I moved the mapping dictionary to a module-level constant `_INT_TO_ROTATE_CODE` and simplified the `RotateCode` Enum to store `partial` functions directly.
+**Pattern:** Static mapping dictionaries (e.g., integer-to-enum conversions) should be defined as module-level constants to improve performance and readability. `Enum` members can store `partial` callables directly without tuple wrapping.
