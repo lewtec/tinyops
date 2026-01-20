@@ -41,3 +41,14 @@ def test_polynomial_features_degree_1():
     tinyops_result = tinyops_polynomial_features(X_tiny, degree=1)
 
     assert_close(tinyops_result, sklearn_result)
+
+def test_polynomial_features_dos_protection():
+    # n_features=50, degree=4 results in ~316k features
+    # This exceeds the security limit of 100k
+    n_features = 50
+    n_samples = 1
+    X = Tensor.zeros(n_samples, n_features)
+
+    # This should raise a ValueError due to excessive output size
+    with pytest.raises(ValueError, match="exceeds the security limit"):
+        tinyops_polynomial_features(X, degree=4)
