@@ -21,3 +21,9 @@
 **Root Cause:** The project structure had evolved, but some older files were not moved to their more logical, centralized locations. This resulted in an inconsistent and slightly disorganized structure.
 **Solution:** I moved `test_utils.py` and its corresponding test file, `test_utils_test.py`, into the `tinyops/_core/` directory. I then updated `tinyops/_core/__init__.py` to export the utility, ensuring no breaking changes to files that import it.
 **Pattern:** All shared, internal utilities, whether for testing or runtime, should be consolidated within the `tinyops/_core/` module to maintain a clean and predictable project structure.
+
+## 2026-01-20 - Simplify diagonal.py logic
+**Issue:** The `diagonal` function in `tinyops/linalg/diagonal.py` contained verbose `if/else` logic for calculating indices and redundant comments.
+**Root Cause:** The initial implementation handled edge cases with explicit branching and explanatory comments that became unnecessary clutter once the logic was understood.
+**Solution:** I refactored the index calculation to use `max(0, length)` and removed the verbose `if/else` block. I also simplified the `reshape` argument construction using tuple concatenation.
+**Pattern:** Mathematical logic involving bounds (like slicing indices) can often be simplified using `min`/`max` functions instead of explicit branching, improving readability and reducing code lines.

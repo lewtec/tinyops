@@ -30,25 +30,13 @@ def diagonal(a: Tensor, offset: int = 0, axis1: int = 0, axis2: int = 1) -> Tens
         start = -offset * M
         length = min(N + offset, M)
 
-    if length <= 0:
-         # Handle empty result if possible, or let slice handle it
-         # If length <= 0, slice start:start:... should be empty
-         # Ensure end is not smaller than start if we rely on loop logic, but slice handles it.
-         end = start
-    else:
-         step = M + 1
-         end = start + length * step
+    step = M + 1
+    length = max(0, length)
+    end = start + length * step
 
     # Flatten last two dimensions
-    # Note: reshape requires tuple
-    new_shape = list(a_perm.shape[:-2]) + [N * M]
-    a_flat = a_perm.reshape(tuple(new_shape))
+    new_shape = a_perm.shape[:-2] + (N * M,)
+    a_flat = a_perm.reshape(new_shape)
 
-    step = M + 1
-
-    # Slice
-    # We use python slicing syntax.
-    # We need to construct the slice tuple to handle arbitrary dimensions + ellipsis
-    # But Tensor.__getitem__ supports ellipsis.
-
+    # Slice with stride M + 1 to pick diagonal elements
     return a_flat[..., start:end:step]
