@@ -66,7 +66,7 @@ def resize(x: Tensor, dsize: tuple[int, int], interpolation: int | Interpolation
 
     Args:
         x: Input tensor, shape (H, W) or (H, W, C).
-        dsize: Desired output size (out_H, out_W).
+        dsize: Desired output size (width, height).
         interpolation: Interpolation method. Only INTER_NEAREST and INTER_LINEAR are supported.
 
     Returns:
@@ -79,7 +79,7 @@ def resize(x: Tensor, dsize: tuple[int, int], interpolation: int | Interpolation
         is_hw = False
 
     H, W, C = x.shape
-    out_H, out_W = dsize
+    out_W, out_H = dsize
 
     ty, tx = Tensor.meshgrid(Tensor.arange(out_H), Tensor.arange(out_W), indexing='ij')
 
