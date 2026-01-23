@@ -41,3 +41,13 @@ def test_polynomial_features_degree_1():
     tinyops_result = tinyops_polynomial_features(X_tiny, degree=1)
 
     assert_close(tinyops_result, sklearn_result)
+
+def test_polynomial_features_exceeds_limit():
+    # n_features = 30, degree = 6 generates > 1M features
+    # math.comb(30 + 6 - 1, 6) = 1,623,160
+    n_samples = 1
+    n_features = 30
+    X = Tensor.zeros(n_samples, n_features)
+
+    with pytest.raises(ValueError, match="Output features .* exceeds limit"):
+        tinyops_polynomial_features(X, degree=6, interaction_only=False)

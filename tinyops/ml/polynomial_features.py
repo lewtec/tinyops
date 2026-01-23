@@ -1,5 +1,8 @@
 from tinygrad import Tensor
 import itertools
+import math
+
+MAX_OUTPUT_FEATURES = 1_000_000
 
 def polynomial_features(X: Tensor, degree: int = 2, interaction_only: bool = False, include_bias: bool = True) -> Tensor:
     n_samples, n_features = X.shape
@@ -8,6 +11,18 @@ def polynomial_features(X: Tensor, degree: int = 2, interaction_only: bool = Fal
         return Tensor.ones(n_samples, 1, dtype=X.dtype) if include_bias else Tensor.zeros(n_samples, 0, dtype=X.dtype)
 
     feature_indices = range(n_features)
+
+    # Calculate expected number of features to prevent DoS
+    current_features = 1 if include_bias else 0
+    for d in range(1, degree + 1):
+        if interaction_only:
+            n_d = math.comb(n_features, d)
+        else:
+            n_d = math.comb(n_features + d - 1, d)
+
+        current_features += n_d
+        if current_features > MAX_OUTPUT_FEATURES:
+            raise ValueError(f"Output features {current_features} exceeds limit of {MAX_OUTPUT_FEATURES}")
 
     # Generate combinations of feature indices. This part is orchestration and runs on the CPU.
     combs = []
