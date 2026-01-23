@@ -1,7 +1,8 @@
-## 2024-07-25 - User Override on `curl | sh` Installation
 
-**Vulnerability:** Initially identified the `curl | sh` installation method for the `mise` tool in `AGENTS.md` as a critical remote code execution (RCE) vulnerability.
+## 2026-01-17 - Prevent DoS in Polynomial Features
 
-**Learning:** The user explicitly stated that this installation method is **intentional and considered safe** for the project's specific agent environment. This indicates that project-specific context can override general security best practices. The environment is assumed to have controls that mitigate this risk.
+**Vulnerability:** The `polynomial_features` function lacked input validation for the resulting feature space size. A malicious or accidental input with high `degree` and `n_features` (e.g., 50 features, degree 8) could trigger a combinatorial explosion (1.9 billion features), leading to memory exhaustion and Denial of Service.
 
-**Prevention:** Before flagging common vulnerabilities, consider that the project might have specific, unstated environmental contexts. However, continue to flag them and allow the user to make the final determination. Always document such decisions in the journal to retain context for future sessions.
+**Learning:** Combinatorial algorithms must always validate the magnitude of their output before execution, especially in shared environments. `itertools` makes it easy to create massive iterators lazily, but consuming them or their consequences (like `Tensor.cat` on the result) is dangerous.
+
+**Prevention:** Added a pre-computation check using `math.comb` to verify the total number of output features does not exceed a safety limit (100,000) before proceeding with generation.
