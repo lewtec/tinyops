@@ -41,3 +41,11 @@ def test_polynomial_features_degree_1():
     tinyops_result = tinyops_polynomial_features(X_tiny, degree=1)
 
     assert_close(tinyops_result, sklearn_result)
+
+def test_polynomial_features_limit():
+    # Construct a case that exceeds the limit (MAX_OUTPUT_FEATURES = 100000)
+    # n_features=100, degree=10 leads to > 46 trillion features
+    # Using a fake tensor with shape (1, 100) avoids large allocation for the input itself.
+    X = Tensor.zeros(1, 100)
+    with pytest.raises(ValueError, match="Output features limit exceeded"):
+        tinyops_polynomial_features(X, degree=10)
