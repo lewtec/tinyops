@@ -2,6 +2,29 @@ from tinygrad import Tensor
 import itertools
 
 def polynomial_features(X: Tensor, degree: int = 2, interaction_only: bool = False, include_bias: bool = True) -> Tensor:
+    """
+    Generate polynomial and interaction features.
+
+    Generate a new feature matrix consisting of all polynomial combinations of the features
+    with degree less than or equal to the specified degree. For example, if an input sample is
+    two dimensional and of the form [a, b], the degree-2 polynomial features are [1, a, b, a^2, ab, b^2].
+
+    Args:
+        X: Input tensor of shape (n_samples, n_features).
+        degree: The degree of the polynomial features. Default = 2.
+        interaction_only: If true, only interaction features are produced: features that are
+            products of at most ``degree`` *distinct* input features (so not ``x[1] ** 2``,
+            ``x[0] * x[2] ** 3``, etc.).
+        include_bias: If True (default), then include a bias column, the feature in which
+            all polynomial powers are zero (i.e. a column of ones - acts as an intercept term in a linear model).
+
+    Returns:
+        The new feature matrix, shape (n_samples, n_output_features).
+
+    Warning:
+        Be aware that the number of output features scales exponentially with `degree` and `n_features`.
+        High values can lead to massive memory consumption and Denial of Service (DoS).
+    """
     n_samples, n_features = X.shape
 
     if degree == 0:
