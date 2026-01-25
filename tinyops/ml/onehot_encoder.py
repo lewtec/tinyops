@@ -1,7 +1,8 @@
+from typing import Optional
 from tinygrad import Tensor, dtypes
 import numpy as np
 
-def onehot_encoder(X: Tensor) -> Tensor:
+def onehot_encoder(X: Tensor, max_categories: Optional[int] = 5000) -> Tensor:
     if X.ndim == 1:
         X = X.unsqueeze(1)
 
@@ -11,6 +12,10 @@ def onehot_encoder(X: Tensor) -> Tensor:
         # "fit" step: find unique categories. This is analogous to sklearn's fit method.
         # Using numpy here is a pragmatic choice as a pure-tensor unique is complex.
         categories_np = np.unique(col.numpy())
+
+        if max_categories is not None and len(categories_np) > max_categories:
+            raise ValueError(f"Feature {i} has {len(categories_np)} categories, exceeding the limit of {max_categories}.")
+
         categories = Tensor(categories_np, requires_grad=False, device=X.device)
 
         # "transform" step: create one-hot encoding based on discovered categories.
