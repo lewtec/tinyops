@@ -1,19 +1,20 @@
-from typing import List
+from typing import List, Optional
 from tinygrad import Tensor
 from tinyops.text.count_vectorizer import count_vectorizer
 import math
 
-def tfidf_vectorizer(corpus: List[str]) -> Tensor:
+def tfidf_vectorizer(corpus: List[str], max_features: Optional[int] = None) -> Tensor:
     """
     Convert a collection of text documents to a matrix of TF-IDF features.
 
     Args:
         corpus: A list of strings (documents).
+        max_features: If not None, build a vocabulary that only consider the top max_features ordered by term frequency across the corpus.
 
     Returns:
         A tinygrad Tensor representing the TF-IDF matrix.
     """
-    counts_tensor = count_vectorizer(corpus)
+    counts_tensor = count_vectorizer(corpus, max_features=max_features)
     counts = counts_tensor.numpy().tolist()
     vocab_len = counts_tensor.shape[1]
 
