@@ -3,6 +3,11 @@ from functools import partial
 from tinygrad import Tensor
 
 def rotate_90_clockwise(x: Tensor) -> Tensor:
+  """
+  Rotates the tensor 90 degrees clockwise.
+
+  Implemented via permutation (transpose) followed by a flip along the horizontal axis.
+  """
   if x.ndim == 2:
     permute_order = (1, 0)
   elif x.ndim == 3:
@@ -12,9 +17,19 @@ def rotate_90_clockwise(x: Tensor) -> Tensor:
   return x.permute(permute_order).flip(1)
 
 def rotate_180(x: Tensor) -> Tensor:
+  """
+  Rotates the tensor 180 degrees.
+
+  Implemented by flipping along both vertical and horizontal axes.
+  """
   return x.flip((0, 1))
 
 def rotate_90_counterclockwise(x: Tensor) -> Tensor:
+  """
+  Rotates the tensor 90 degrees counter-clockwise.
+
+  Implemented via permutation (transpose) followed by a flip along the vertical axis.
+  """
   if x.ndim == 2:
     permute_order = (1, 0)
   elif x.ndim == 3:

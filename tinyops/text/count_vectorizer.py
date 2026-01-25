@@ -6,11 +6,23 @@ def count_vectorizer(corpus: List[str]) -> Tensor:
     """
     Convert a collection of text documents to a matrix of token counts.
 
+    It produces a sparse representation of the counts using a dense tensor.
+
     Args:
         corpus: A list of strings (documents).
 
     Returns:
-        A tinygrad Tensor representing the document-term matrix.
+        A tinygrad Tensor representing the document-term matrix of shape (n_samples, n_features).
+
+    Note:
+        The tokenization uses the regex ``r'(?u)\\b\\w\\w+\\b'``. This means it:
+        - Converts to lowercase.
+        - Selects tokens of 2 or more alphanumeric characters.
+        - **Ignores single-character tokens** like "a" and "I".
+
+    Warning:
+        This implementation creates a dense matrix (Tensor). For large vocabularies or corpora,
+        this can consume significant memory.
     """
     # Tokenize
     tokens = [re.findall(r'(?u)\b\w\w+\b', doc.lower()) for doc in corpus]
