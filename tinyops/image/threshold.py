@@ -18,14 +18,14 @@ def threshold_tozero_inv(src: Tensor, thresh: float, maxval: float) -> Tensor:
     return (src > thresh).where(0, src)
 
 class ThresholdType(Enum):
-    BINARY = (partial(threshold_binary),)
-    BINARY_INV = (partial(threshold_binary_inv),)
-    TRUNC = (partial(threshold_trunc),)
-    TOZERO = (partial(threshold_tozero),)
-    TOZERO_INV = (partial(threshold_tozero_inv),)
+    BINARY = partial(threshold_binary)
+    BINARY_INV = partial(threshold_binary_inv)
+    TRUNC = partial(threshold_trunc)
+    TOZERO = partial(threshold_tozero)
+    TOZERO_INV = partial(threshold_tozero_inv)
 
     def __call__(self, *args, **kwargs):
-        return self.value[0](*args, **kwargs)
+        return self.value(*args, **kwargs)
 
 # Backward compatibility constants
 THRESH_BINARY = 0
@@ -33,6 +33,14 @@ THRESH_BINARY_INV = 1
 THRESH_TRUNC = 2
 THRESH_TOZERO = 3
 THRESH_TOZERO_INV = 4
+
+_INT_TO_THRESHOLD_TYPE = {
+    THRESH_BINARY: ThresholdType.BINARY,
+    THRESH_BINARY_INV: ThresholdType.BINARY_INV,
+    THRESH_TRUNC: ThresholdType.TRUNC,
+    THRESH_TOZERO: ThresholdType.TOZERO,
+    THRESH_TOZERO_INV: ThresholdType.TOZERO_INV,
+}
 
 def threshold(src: Tensor, thresh: float, maxval: float, type: int | ThresholdType) -> Tensor:
     """
@@ -48,15 +56,8 @@ def threshold(src: Tensor, thresh: float, maxval: float, type: int | ThresholdTy
         The thresholded array.
     """
     if isinstance(type, int):
-        mapping = {
-            THRESH_BINARY: ThresholdType.BINARY,
-            THRESH_BINARY_INV: ThresholdType.BINARY_INV,
-            THRESH_TRUNC: ThresholdType.TRUNC,
-            THRESH_TOZERO: ThresholdType.TOZERO,
-            THRESH_TOZERO_INV: ThresholdType.TOZERO_INV,
-        }
-        if type in mapping:
-            mode = mapping[type]
+        if type in _INT_TO_THRESHOLD_TYPE:
+            mode = _INT_TO_THRESHOLD_TYPE[type]
         else:
             raise ValueError(f"Unsupported thresholding type: {type}")
     elif isinstance(type, ThresholdType):
