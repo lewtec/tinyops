@@ -28,6 +28,11 @@
 **Solution:** I moved the mapping dictionary to a module-level constant `_INT_TO_ROTATE_CODE` and simplified the `RotateCode` Enum to store `partial` functions directly.
 **Pattern:** Static mapping dictionaries (e.g., integer-to-enum conversions) should be defined as module-level constants to improve performance and readability. `Enum` members can store `partial` callables directly without tuple wrapping.
 
+## 2026-01-23 - Optimize Enum Usage in Resize
+**Issue:** The `resize` function in `tinyops/image/resize.py` was recreating a mapping dictionary on every call, and the `Interpolation` Enum definition used unnecessary tuple wrapping for `partial` functions.
+**Root Cause:** The mapping dictionary was defined inside the function scope instead of as a module-level constant. The Enum definition followed the same older pattern seen in `rotate.py` before its refactor.
+**Solution:** I moved the mapping dictionary to a module-level constant `_INT_TO_INTERPOLATION` and simplified the `Interpolation` Enum to store `partial` functions directly.
+**Pattern:** Static mapping dictionaries should be defined as module-level constants. Enum members can store `partial` callables directly without tuple wrapping.
 ## 2026-01-20 - Optimize Enum Usage in Threshold
 **Issue:** The `threshold` function in `tinyops/image/threshold.py` was recreating a mapping dictionary on every call, and the `ThresholdType` Enum definition used unnecessary tuple wrapping for `partial` functions.
 **Root Cause:** The mapping dictionary was defined inside the function scope instead of as a module-level constant, mirroring the inefficient pattern found in `rotate.py`.
