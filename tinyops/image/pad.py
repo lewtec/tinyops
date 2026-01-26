@@ -2,16 +2,18 @@ from enum import Enum
 from functools import partial
 from tinygrad import Tensor
 
-def pad_constant(x: Tensor, padding, fill) -> Tensor:
+def _parse_padding(padding):
   if isinstance(padding, int):
-    p_left = p_right = p_top = p_bottom = padding
+    return padding, padding, padding, padding
   elif isinstance(padding, tuple) and len(padding) == 2:
-    p_left = p_right = padding[0]
-    p_top = p_bottom = padding[1]
+    return padding[0], padding[1], padding[0], padding[1]
   elif isinstance(padding, tuple) and len(padding) == 4:
-    p_left, p_top, p_right, p_bottom = padding
+    return padding
   else:
     raise ValueError("Padding must be an int or a tuple of length 2 or 4.")
+
+def pad_constant(x: Tensor, padding, fill) -> Tensor:
+  p_left, p_top, p_right, p_bottom = _parse_padding(padding)
 
   pad_widths = ((p_top, p_bottom), (p_left, p_right))
   if x.ndim == 3:
@@ -19,12 +21,36 @@ def pad_constant(x: Tensor, padding, fill) -> Tensor:
 
   return x.pad(pad_widths, value=fill)
 
+def pad_reflect(x: Tensor, padding, fill=None) -> Tensor:
+  p_left, p_top, p_right, p_bottom = _parse_padding(padding)
+
+  # Check if padding is > 0
+  if p_left == 0 and p_right == 0 and p_top == 0 and p_bottom == 0:
+    return x
+
+  # Padding Logic mimicking OpenCV BORDER_REFLECT_101
+  # and matching tinyops/image/_utils.py implementation but adapted for HWC/HW layout
+
+  # Width padding (dim 1 for HW and HWC)
+  if p_left > 0:
+      x = x[:, 1:p_left+1, ...].flip(1).cat(x, dim=1)
+  if p_right > 0:
+      x = x.cat(x[:, -p_right-1:-1, ...].flip(1), dim=1)
+
+  # Height padding (dim 0 for HW and HWC)
+  if p_top > 0:
+      x = x[1:p_top+1, ...].flip(0).cat(x, dim=0)
+  if p_bottom > 0:
+      x = x.cat(x[-p_bottom-1:-1, ...].flip(0), dim=0)
+
+  return x
+
 def pad_not_implemented(x: Tensor, padding, fill=None) -> Tensor:
   raise NotImplementedError("This padding mode is not yet implemented.")
 
 class PaddingMode(Enum):
   CONSTANT = (partial(pad_constant),)
-  REFLECT = (partial(pad_not_implemented),)
+  REFLECT = (partial(pad_reflect),)
   REPLICATE = (partial(pad_not_implemented),)
   CIRCULAR = (partial(pad_not_implemented),)
 

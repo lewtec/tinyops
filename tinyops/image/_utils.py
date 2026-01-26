@@ -1,63 +1,93 @@
 from tinygrad import Tensor, dtypes
 
-def _pad_reflect_101(x: Tensor, padding: tuple[int, int, int, int]) -> Tensor:
-    l, r, t, b = padding
-    x = x[..., :, 1:l+1].flip(-1).cat(x, dim=-1)
-    x = x.cat(x[..., :, -r-1:-1].flip(-1), dim=-1)
-    x = x[..., 1:t+1, :].flip(-2).cat(x, dim=-2)
-    x = x.cat(x[..., -b-1:-1, :].flip(-2), dim=-2)
-    return x
-
-def _apply_filter_iterative(x: Tensor, kernel: Tensor, scale: float, delta: float, padding_mode: str = 'reflect') -> Tensor:
+def apply_filter(x: Tensor, kernel: Tensor, scale: float = 1.0, delta: float = 0.0, padding_mode: str = 'reflect', padding=None) -> Tensor:
     input_dtype = x.dtype
     if input_dtype == dtypes.uint8:
         x = x.cast(dtypes.float32)
 
-    ksize = kernel.shape[0]
-    orig_shape = x.shape
-    padding_val = ksize // 2
+    kH, kW = kernel.shape
 
-    def pad_func(t):
-        if padding_mode == 'reflect':
-            return _pad_reflect_101(t, (padding_val, padding_val, padding_val, padding_val))
-        elif padding_mode == 'constant':
-            return t.pad(((0,0), (0,0), (padding_val, padding_val), (padding_val, padding_val)))
+    # Determine Padding (L, R, T, B)
+    if padding is None:
+        ph, pw = kH // 2, kW // 2
+        padding_val = (pw, pw, ph, ph)
+    else:
+        # Normalize padding to (L, R, T, B)
+        if isinstance(padding, int):
+            padding_val = (padding, padding, padding, padding)
+        elif len(padding) == 2:
+            padding_val = (padding[0], padding[0], padding[1], padding[1])
+        elif len(padding) == 4:
+            padding_val = padding
         else:
-            raise ValueError(f"Unsupported padding mode: {padding_mode}")
+             raise ValueError("Padding must be int, tuple(2), or tuple(4)")
 
-    if len(orig_shape) == 2: # Grayscale (H, W)
+    # Reshape logic to NCHW
+    orig_shape = x.shape
+    ndim = len(orig_shape)
+
+    if ndim == 2: # (H, W)
         H, W = orig_shape
-        x_reshaped = x.reshape(1, 1, H, W)
-        x_padded = pad_func(x_reshaped)
-        y = x_padded.conv2d(kernel.reshape(1,1,ksize,ksize))
-        y = y.reshape(H, W)
-
-    elif len(orig_shape) == 3: # Color (H, W, C)
+        C = 1
+        x = x.unsqueeze(0).unsqueeze(0) # (1, 1, H, W)
+        groups = 1
+    elif ndim == 3: # (H, W, C)
         H, W, C = orig_shape
-        channels = []
-        for i in range(C):
-            channel = x[..., i].reshape(1, 1, H, W)
-            channel_padded = pad_func(channel)
-            y_channel = channel_padded.conv2d(kernel.reshape(1,1,ksize,ksize))
-            channels.append(y_channel.reshape(H, W))
-        y = Tensor.stack(channels).permute(1, 2, 0)
-
-    elif len(orig_shape) == 4: # Batch (N, H, W, C)
+        x = x.permute(2, 0, 1).unsqueeze(0) # (1, C, H, W)
+        groups = C
+    elif ndim == 4: # (N, H, W, C)
         N, H, W, C = orig_shape
-        results = []
-        for i in range(N):
-            img_tensor = x[i]
-            channels = []
-            for j in range(C):
-                channel = img_tensor[..., j].reshape(1, 1, H, W)
-                channel_padded = pad_func(channel)
-                y_channel = channel_padded.conv2d(kernel.reshape(1,1,ksize,ksize))
-                channels.append(y_channel.reshape(H, W))
-            img_result = Tensor.stack(channels).permute(1, 2, 0)
-            results.append(img_result)
-        y = Tensor.stack(results)
+        x = x.permute(0, 3, 1, 2) # (N, C, H, W)
+        groups = C
+    else:
+        raise ValueError(f"Unsupported input shape: {orig_shape}")
+
+    # Prepare kernel
+    # Kernel is (kH, kW). For grouped conv: (C, 1, kH, kW)
+    kernel_reshaped = kernel.reshape(1, 1, kH, kW).repeat(groups, 1, 1, 1)
+
+    # Convolve
+    if padding_mode == 'constant':
+         # Use efficient conv2d padding
+         # padding_val is (L, R, T, B)
+         # conv2d padding arg expects (L, R, T, B) usually in tinygrad/onnx?
+         # Tinygrad conv2d signature: padding.
+         # If tuple(4), it is ((top, bottom), (left, right)) or (L, R, T, B)?
+         # Checking box_filter.py: padding = (pad_left, pad_right, pad_top, pad_bottom).
+         # It calls conv2d(..., padding=padding).
+         # So we pass (L, R, T, B).
+         y = x.conv2d(kernel_reshaped, padding=padding_val, groups=groups)
+
+    elif padding_mode == 'reflect':
+         # Manual reflect padding on NCHW
+         L, R, T, B = padding_val
+
+         # Pad W (dim 3)
+         if L > 0:
+            x = x[..., 1:L+1].flip(-1).cat(x, dim=-1)
+         if R > 0:
+            x = x.cat(x[..., -R-1:-1].flip(-1), dim=-1)
+
+         # Pad H (dim 2)
+         if T > 0:
+            x = x[..., 1:T+1, :].flip(-2).cat(x, dim=-2)
+         if B > 0:
+            x = x.cat(x[..., -B-1:-1, :].flip(-2), dim=-2)
+
+         y = x.conv2d(kernel_reshaped, groups=groups)
 
     else:
-      raise ValueError(f"Unsupported input shape: {orig_shape}")
+         raise ValueError(f"Unsupported padding mode: {padding_mode}")
+
+    # Reshape back to original layout
+    if ndim == 2:
+        y = y.squeeze(0).squeeze(0) # (H, W)
+    elif ndim == 3:
+        y = y.squeeze(0).permute(1, 2, 0) # (H, W, C)
+    elif ndim == 4:
+        y = y.permute(0, 2, 3, 1) # (N, H, W, C)
 
     return y * scale + delta
+
+# Alias for backward compatibility if needed, but we will refactor all callers.
+_apply_filter_iterative = apply_filter
