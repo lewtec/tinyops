@@ -1,6 +1,5 @@
 from tinygrad import Tensor, dtypes
-
-from tinyops.image._utils import _apply_filter_iterative
+from tinyops.image._utils import apply_filter
 
 
 def get_sobel_kernel(dx: int, dy: int, ksize: int, dtype) -> Tensor:
@@ -24,4 +23,4 @@ def sobel(x: Tensor, dx: int, dy: int, ksize: int = 3, scale: float = 1.0, delta
     dtype = dtypes.float32 if input_dtype == dtypes.uint8 else input_dtype
 
     kernel = get_sobel_kernel(dx, dy, ksize, dtype)
-    return _apply_filter_iterative(x, kernel, scale, delta, padding_mode="constant")
+    return apply_filter(x, kernel, scale, delta, padding_mode='constant')

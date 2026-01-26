@@ -1,6 +1,5 @@
 from tinygrad import Tensor, dtypes
-
-from tinyops.image._utils import _apply_filter_iterative
+from tinyops.image._utils import apply_filter
 
 
 def get_scharr_kernel(dx: int, dy: int, dtype) -> Tensor:
@@ -19,4 +18,4 @@ def scharr(x: Tensor, dx: int, dy: int, scale: float = 1.0, delta: float = 0.0) 
     dtype = dtypes.float32 if input_dtype == dtypes.uint8 else input_dtype
 
     kernel = get_scharr_kernel(dx, dy, dtype)
-    return _apply_filter_iterative(x, kernel, scale, delta)
+    return apply_filter(x, kernel, scale, delta)
