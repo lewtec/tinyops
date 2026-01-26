@@ -1,6 +1,7 @@
 import numpy as np
 from tinygrad import Tensor, dtypes
 
+
 def fftfreq(n: int, d: float = 1.0) -> Tensor:
     """
     Return the Discrete Fourier Transform sample frequencies.

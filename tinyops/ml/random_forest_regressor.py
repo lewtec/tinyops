@@ -1,5 +1,7 @@
 from tinygrad import Tensor
+
 from tinyops.ml.decision_tree_regressor import decision_tree_regressor
+
 
 def random_forest_regressor(X: Tensor, trees: list[dict]) -> Tensor:
     """

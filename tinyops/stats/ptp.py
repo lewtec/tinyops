@@ -1,7 +1,7 @@
 from tinygrad import Tensor
-from typing import Optional, Union, Tuple
 
-def ptp(a: Tensor, axis: Optional[Union[int, Tuple[int, ...]]] = None, keepdims: bool = False) -> Tensor:
+
+def ptp(a: Tensor, axis: int | tuple[int, ...] | None = None, keepdims: bool = False) -> Tensor:
     """
     Range of values (maximum - minimum) along an axis.
     """

@@ -1,23 +1,27 @@
-import pytest
 import numpy as np
-from sklearn.ensemble import GradientBoostingRegressor
+import pytest
 from sklearn.datasets import make_regression
+from sklearn.ensemble import GradientBoostingRegressor
 from tinygrad import Tensor, dtypes
-from tinyops.ml.gradient_boosting_regressor import gradient_boosting_regressor
-from tinyops.ml.decision_tree_regressor_test import _convert_tree_to_tensor_dict
-from tinyops._core import assert_close
 
-@pytest.mark.parametrize("n_samples, n_features, n_estimators, max_depth, learning_rate, random_state", [
-    (100, 10, 10, 3, 0.1, 42),
-    (200, 5, 50, 5, 0.05, 123),
-])
-def test_gradient_boosting_regressor_parity(n_samples, n_features, n_estimators, max_depth, learning_rate, random_state):
+from tinyops._core import assert_close
+from tinyops.ml.decision_tree_regressor_test import _convert_tree_to_tensor_dict
+from tinyops.ml.gradient_boosting_regressor import gradient_boosting_regressor
+
+
+@pytest.mark.parametrize(
+    "n_samples, n_features, n_estimators, max_depth, learning_rate, random_state",
+    [
+        (100, 10, 10, 3, 0.1, 42),
+        (200, 5, 50, 5, 0.05, 123),
+    ],
+)
+def test_gradient_boosting_regressor_parity(
+    n_samples, n_features, n_estimators, max_depth, learning_rate, random_state
+):
     # 1. Generate data and train a scikit-learn model
     X_np, y_np = make_regression(
-        n_samples=n_samples,
-        n_features=n_features,
-        n_informative=n_features // 2,
-        random_state=random_state
+        n_samples=n_samples, n_features=n_features, n_informative=n_features // 2, random_state=random_state
     )
     X_np = X_np.astype(np.float32)
     y_np = y_np.astype(np.float32)

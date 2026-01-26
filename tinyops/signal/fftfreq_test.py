@@ -1,8 +1,8 @@
 import numpy as np
-import pytest
-from tinygrad import Tensor
+
 from tinyops._core import assert_close
 from tinyops.signal.fftfreq import fftfreq
+
 
 def test_fftfreq():
     n = 10

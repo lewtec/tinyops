@@ -1,9 +1,10 @@
-import pytest
 import numpy as np
+import pytest
 from tinygrad import Tensor
-from tinyops._core import assert_close
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.audio.time_mask import time_mask
-from tinyops._core import assert_one_kernel
+
 
 @assert_one_kernel
 def test_time_mask_basic(monkeypatch):
@@ -15,6 +16,7 @@ def test_time_mask_basic(monkeypatch):
     masked = time_mask(spectrogram, time_mask_param=5, mask_value=0.0)
     assert masked.shape == (1, 10, 20)
     assert masked.sum().item() < spectrogram.sum().item()
+
 
 @assert_one_kernel
 def test_time_mask_deterministic(monkeypatch):
@@ -37,6 +39,7 @@ def test_time_mask_deterministic(monkeypatch):
 
     assert_close(masked, expected)
 
+
 @assert_one_kernel
 def test_time_mask_iid(monkeypatch):
     spectrogram = Tensor.ones(2, 5, 10).realize()
@@ -57,6 +60,7 @@ def test_time_mask_iid(monkeypatch):
 
     assert_close(masked, expected)
 
+
 @assert_one_kernel
 def test_time_mask_param_full(monkeypatch):
     spectrogram = Tensor.ones(1, 5, 10).realize()
@@ -65,11 +69,13 @@ def test_time_mask_param_full(monkeypatch):
     masked = time_mask(spectrogram, time_mask_param=10, mask_value=0.0).realize()
     assert masked.sum().item() == 5.0
 
+
 @assert_one_kernel
 def test_time_mask_param_zero():
     spectrogram = Tensor.ones(1, 5, 10).realize()
     masked = time_mask(spectrogram, time_mask_param=0, mask_value=0.0).realize()
     assert_close(masked, spectrogram)
+
 
 def test_invalid_param():
     spectrogram = Tensor.ones(1, 5, 10)

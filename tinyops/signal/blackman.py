@@ -1,5 +1,6 @@
-from tinygrad import Tensor
 import numpy as np
+from tinygrad import Tensor
+
 
 def blackman(M: int, sym: bool = True) -> Tensor:
     if M < 1:

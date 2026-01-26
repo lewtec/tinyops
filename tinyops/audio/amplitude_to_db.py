@@ -1,5 +1,7 @@
-from tinygrad import Tensor
 import math
+
+from tinygrad import Tensor
+
 
 def amplitude_to_db(
     x: Tensor,

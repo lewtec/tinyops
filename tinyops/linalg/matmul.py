@@ -1,5 +1,6 @@
 from tinygrad import Tensor
 
+
 def matmul(x1: Tensor, x2: Tensor) -> Tensor:
     """
     Matrix product of two arrays.

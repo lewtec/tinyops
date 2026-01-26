@@ -1,6 +1,8 @@
 from tinygrad import Tensor
+
 from .inv import inv
 from .norm import norm
+
 
 def cond(x: Tensor, p=None) -> Tensor:
     """

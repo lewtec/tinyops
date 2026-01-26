@@ -1,5 +1,6 @@
 from tinygrad import Tensor
 
+
 def normalizer(X: Tensor, norm: str = "l2", axis: int = 1) -> Tensor:
     if norm not in ("l1", "l2", "max"):
         raise ValueError(f"Unsupported norm: {norm}")

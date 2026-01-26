@@ -1,9 +1,10 @@
 import numpy as np
-from tinygrad import Tensor
-from tinyops.linalg.matmul import matmul
-from tinyops._core import assert_one_kernel
-from tinyops._core import assert_close
 import pytest
+from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.linalg.matmul import matmul
+
 
 @assert_one_kernel
 def test_matmul_2d():
@@ -11,11 +12,13 @@ def test_matmul_2d():
     b = np.random.randn(4, 5).astype(np.float32)
     assert_close(matmul(Tensor(a), Tensor(b)), np.matmul(a, b))
 
+
 @assert_one_kernel
 def test_matmul_1d_1d():
     a = np.random.randn(3).astype(np.float32)
     b = np.random.randn(3).astype(np.float32)
     assert_close(matmul(Tensor(a), Tensor(b)), np.matmul(a, b))
+
 
 @assert_one_kernel
 def test_matmul_1d_2d():
@@ -23,11 +26,13 @@ def test_matmul_1d_2d():
     b = np.random.randn(3, 4).astype(np.float32)
     assert_close(matmul(Tensor(a), Tensor(b)), np.matmul(a, b))
 
+
 @assert_one_kernel
 def test_matmul_2d_1d():
     a = np.random.randn(4, 3).astype(np.float32)
     b = np.random.randn(3).astype(np.float32)
     assert_close(matmul(Tensor(a), Tensor(b)), np.matmul(a, b))
+
 
 @assert_one_kernel
 def test_matmul_broadcast():
@@ -39,11 +44,13 @@ def test_matmul_broadcast():
     b = np.random.randn(2, 4, 5).astype(np.float32)
     assert_close(matmul(Tensor(a), Tensor(b)), np.matmul(a, b))
 
+
 @assert_one_kernel
 def test_matmul_broadcast_complex():
     a = np.random.randn(1, 3, 4).astype(np.float32)
     b = np.random.randn(2, 4, 5).astype(np.float32)
     assert_close(matmul(Tensor(a), Tensor(b)), np.matmul(a, b))
+
 
 @assert_one_kernel
 def test_matmul_scalar_raises():

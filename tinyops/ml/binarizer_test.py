@@ -2,8 +2,10 @@ import numpy as np
 import pytest
 from sklearn.preprocessing import Binarizer
 from tinygrad import Tensor
+
 from tinyops._core import assert_close
 from tinyops.ml.binarizer import binarizer as tinyops_binarizer
+
 
 @pytest.mark.parametrize("threshold", [0.0, 0.5, -0.5])
 def test_binarizer(threshold):

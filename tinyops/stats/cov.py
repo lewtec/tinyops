@@ -1,7 +1,7 @@
 from tinygrad import Tensor
-from typing import Optional
 
-def cov(m: Tensor, y: Optional[Tensor] = None, rowvar: bool = True, ddof: int = 1) -> Tensor:
+
+def cov(m: Tensor, y: Tensor | None = None, rowvar: bool = True, ddof: int = 1) -> Tensor:
     """
     Estimate a covariance matrix, given data and weights.
     """
@@ -34,9 +34,8 @@ def cov(m: Tensor, y: Optional[Tensor] = None, rowvar: bool = True, ddof: int = 
         divisor = N - ddof
 
     if divisor == 0:
-      # in numpy this returns nan, let's just return a tensor full of nans
-      return Tensor.full(X.shape[0], X.shape[0], float("nan"))
-
+        # in numpy this returns nan, let's just return a tensor full of nans
+        return Tensor.full(X.shape[0], X.shape[0], float("nan"))
 
     C = (X_centered @ X_centered.T) / divisor
 

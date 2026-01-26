@@ -1,5 +1,6 @@
 from tinygrad import Tensor
 
+
 def gaussian_blur(x: Tensor, ksize: tuple[int, int], sigmaX: float, sigmaY: float = 0.0) -> Tensor:
     """
     Blurs an image using a Gaussian filter.
@@ -21,17 +22,19 @@ def gaussian_blur(x: Tensor, ksize: tuple[int, int], sigmaX: float, sigmaY: floa
     kx = ksize[0]
     ky = ksize[1]
 
-    if kx % 2 == 0 or kx <= 0: raise ValueError("ksize width must be a positive odd number")
-    if ky % 2 == 0 or ky <= 0: raise ValueError("ksize height must be a positive odd number")
+    if kx % 2 == 0 or kx <= 0:
+        raise ValueError("ksize width must be a positive odd number")
+    if ky % 2 == 0 or ky <= 0:
+        raise ValueError("ksize height must be a positive odd number")
 
     # Create horizontal kernel
     ax = Tensor.arange(kx) - (kx - 1) / 2
-    g_x = (-ax**2 / (2 * sigmaX**2)).exp()
+    g_x = (-(ax**2) / (2 * sigmaX**2)).exp()
     g_x = g_x / g_x.sum()
 
     # Create vertical kernel
     ay = Tensor.arange(ky) - (ky - 1) / 2
-    g_y = (-ay**2 / (2 * sigmaY**2)).exp()
+    g_y = (-(ay**2) / (2 * sigmaY**2)).exp()
     g_y = g_y / g_y.sum()
 
     # Apply separable convolution
@@ -39,7 +42,7 @@ def gaussian_blur(x: Tensor, ksize: tuple[int, int], sigmaX: float, sigmaY: floa
     # Reshape input tensor for convolution from (H, W, C) to (1, C, H, W)
     input_shape_len = len(x.shape)
     if input_shape_len == 2:
-        x = x.unsqueeze(2) # Add channel dimension
+        x = x.unsqueeze(2)  # Add channel dimension
 
     in_channels = x.shape[2]
     x_reshaped = x.permute(2, 0, 1).unsqueeze(0)

@@ -1,6 +1,8 @@
 from enum import Enum
 from functools import partial
+
 from tinygrad import Tensor, dtypes
+
 
 def resize_nearest(x, out_H, out_W, H, W, ty, tx) -> Tensor:
     """
@@ -15,6 +17,7 @@ def resize_nearest(x, out_H, out_W, H, W, ty, tx) -> Tensor:
     iy = sy.floor().cast(dtypes.int32).clip(0, H - 1)
     ix = sx.floor().cast(dtypes.int32).clip(0, W - 1)
     return x[iy, ix]
+
 
 def resize_linear(x, out_H, out_W, H, W, ty, tx) -> Tensor:
     """
@@ -51,8 +54,10 @@ def resize_linear(x, out_H, out_W, H, W, ty, tx) -> Tensor:
 
     return p11 * w11 + p12 * w12 + p21 * w21 + p22 * w22
 
+
 def resize_not_implemented(*args, **kwargs):
     raise NotImplementedError("This interpolation mode is not supported.")
+
 
 class Interpolation(Enum):
     """
@@ -63,6 +68,7 @@ class Interpolation(Enum):
     - LINEAR: Bilinear interpolation.
     - CUBIC, AREA, LANCZOS4: Not yet implemented.
     """
+
     NEAREST = (partial(resize_nearest),)
     LINEAR = (partial(resize_linear),)
     CUBIC = (partial(resize_not_implemented),)
@@ -72,12 +78,14 @@ class Interpolation(Enum):
     def __call__(self, *args, **kwargs):
         return self.value[0](*args, **kwargs)
 
+
 # Backward compatibility constants
 INTER_NEAREST = 0
 INTER_LINEAR = 1
 INTER_CUBIC = 2
 INTER_AREA = 3
 INTER_LANCZOS4 = 4
+
 
 def resize(x: Tensor, dsize: tuple[int, int], interpolation: int | Interpolation = INTER_LINEAR) -> Tensor:
     """
@@ -104,7 +112,7 @@ def resize(x: Tensor, dsize: tuple[int, int], interpolation: int | Interpolation
     H, W, C = x.shape
     out_H, out_W = dsize
 
-    ty, tx = Tensor.meshgrid(Tensor.arange(out_H), Tensor.arange(out_W), indexing='ij')
+    ty, tx = Tensor.meshgrid(Tensor.arange(out_H), Tensor.arange(out_W), indexing="ij")
 
     if isinstance(interpolation, int):
         mapping = {
@@ -112,7 +120,7 @@ def resize(x: Tensor, dsize: tuple[int, int], interpolation: int | Interpolation
             INTER_LINEAR: Interpolation.LINEAR,
             INTER_CUBIC: Interpolation.CUBIC,
             INTER_AREA: Interpolation.AREA,
-            INTER_LANCZOS4: Interpolation.LANCZOS4
+            INTER_LANCZOS4: Interpolation.LANCZOS4,
         }
         if interpolation in mapping:
             interp_enum = mapping[interpolation]

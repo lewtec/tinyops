@@ -1,8 +1,9 @@
 import numpy as np
 from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.linalg.diagonal import diagonal
-from tinyops._core import assert_one_kernel
-from tinyops._core import assert_close
+
 
 @assert_one_kernel
 def test_diagonal_2d():
@@ -24,6 +25,7 @@ def test_diagonal_2d():
     expected = np.diagonal(a_np, -1)
     assert_close(res, expected)
 
+
 @assert_one_kernel
 def test_diagonal_3d():
     a_np = np.arange(24).reshape(2, 3, 4).astype(np.float32)
@@ -39,6 +41,7 @@ def test_diagonal_3d():
     expected = np.diagonal(a_np, 0, 1, 2)
     assert_close(res, expected)
 
+
 @assert_one_kernel
 def test_diagonal_large_offset():
     a_np = np.eye(3, dtype=np.float32)
@@ -49,6 +52,7 @@ def test_diagonal_large_offset():
     # This might return empty tensor
     # assert_close might fail if shapes mismatch or if numpy returns (0,) and we return (0,)
     assert_close(res, expected)
+
 
 @assert_one_kernel
 def test_diagonal_negative_axes():

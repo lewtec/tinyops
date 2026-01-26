@@ -1,5 +1,6 @@
 from tinygrad import Tensor
 
+
 def outer(a: Tensor, b: Tensor) -> Tensor:
     """
     Compute the outer product of two vectors.

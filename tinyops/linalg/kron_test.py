@@ -1,8 +1,9 @@
 import numpy as np
 from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.linalg.kron import kron
-from tinyops._core import assert_one_kernel
-from tinyops._core import assert_close
+
 
 @assert_one_kernel
 def test_kron_1d():
@@ -15,6 +16,7 @@ def test_kron_1d():
     expected = np.kron(a_np, b_np)
     assert_close(res, expected)
 
+
 @assert_one_kernel
 def test_kron_2d():
     a_np = np.eye(2, dtype=np.float32)
@@ -26,6 +28,7 @@ def test_kron_2d():
     expected = np.kron(a_np, b_np)
     assert_close(res, expected)
 
+
 @assert_one_kernel
 def test_kron_diff_dims():
     a_np = np.eye(2, dtype=np.float32)
@@ -36,6 +39,7 @@ def test_kron_diff_dims():
     res = kron(a, b).realize()
     expected = np.kron(a_np, b_np)
     assert_close(res, expected)
+
 
 @assert_one_kernel
 def test_kron_diff_dims_2():

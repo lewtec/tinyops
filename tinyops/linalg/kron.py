@@ -1,5 +1,6 @@
 from tinygrad import Tensor
 
+
 def kron(a: Tensor, b: Tensor) -> Tensor:
     """
     Kronecker product of two arrays.

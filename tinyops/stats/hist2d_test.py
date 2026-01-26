@@ -1,9 +1,9 @@
 import numpy as np
-import pytest
 from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.stats.hist2d import hist2d
-from tinyops._core import assert_one_kernel
-from tinyops._core import assert_close
+
 
 @assert_one_kernel
 def test_simple_hist2d():
@@ -18,6 +18,7 @@ def test_simple_hist2d():
 
     assert_close(h_tg, Tensor(h_np))
 
+
 @assert_one_kernel
 def test_random_hist2d():
     x_np = np.random.rand(100)
@@ -31,6 +32,7 @@ def test_random_hist2d():
 
     assert_close(h_tg, Tensor(h_np))
 
+
 @assert_one_kernel
 def test_bins_list():
     x_np = np.random.rand(100)
@@ -43,6 +45,7 @@ def test_bins_list():
     h_tg = h_tg.realize()
 
     assert_close(h_tg, Tensor(h_np))
+
 
 @assert_one_kernel
 def test_range():
@@ -58,6 +61,7 @@ def test_range():
     h_tg = h_tg.realize()
 
     assert_close(h_tg, Tensor(h_np))
+
 
 @assert_one_kernel
 def test_density():

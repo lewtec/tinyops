@@ -1,8 +1,9 @@
 from tinygrad import Tensor
-from typing import Optional
+
 from tinyops.stats.cov import cov
 
-def corrcoef(x: Tensor, y: Optional[Tensor] = None, rowvar: bool = True) -> Tensor:
+
+def corrcoef(x: Tensor, y: Tensor | None = None, rowvar: bool = True) -> Tensor:
     """
     Return Pearson product-moment correlation coefficients.
     """

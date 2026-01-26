@@ -1,10 +1,11 @@
+import io
+
 import numpy as np
 import pytest
 from tinygrad import Tensor, dtypes
-from tinyops._core import assert_close
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.io.encode_wav import encode_wav
-from tinyops._core import assert_one_kernel
-import io
 
 # SciPy is a test-only dependency
 try:
@@ -12,13 +13,17 @@ try:
 except ImportError:
     wavfile = None
 
+
 @pytest.mark.skipif(wavfile is None, reason="scipy is not installed")
 @pytest.mark.parametrize("channels", [1, 2])
-@pytest.mark.parametrize("sampwidth, dtype", [
-    (1, np.uint8),
-    (2, np.int16),
-    (4, np.int32),
-])
+@pytest.mark.parametrize(
+    "sampwidth, dtype",
+    [
+        (1, np.uint8),
+        (2, np.int16),
+        (4, np.int32),
+    ],
+)
 @assert_one_kernel
 def test_encode_wav_scipy_comparable(channels, sampwidth, dtype):
     sample_rate = 44100
@@ -40,20 +45,21 @@ def test_encode_wav_scipy_comparable(channels, sampwidth, dtype):
 
     # Convert original float data to the target integer type for comparison
     if sampwidth == 1:
-      expected_data = (original_data * 128.0 + 128.0).clip(0, 255).astype(dtype)
+        expected_data = (original_data * 128.0 + 128.0).clip(0, 255).astype(dtype)
     else:
-      if sampwidth == 2:
-        norm_factor = 32767.0
-      else:
-        norm_factor = 2**(sampwidth * 8 - 1) -1
-      max_val = 2**(sampwidth * 8 - 1) - 1
-      expected_data = (original_data * norm_factor).clip(-max_val, max_val).astype(dtype)
+        if sampwidth == 2:
+            norm_factor = 32767.0
+        else:
+            norm_factor = 2 ** (sampwidth * 8 - 1) - 1
+        max_val = 2 ** (sampwidth * 8 - 1) - 1
+        expected_data = (original_data * norm_factor).clip(-max_val, max_val).astype(dtype)
 
     # Scipy might read single-channel data as 1D, so reshape for consistency
     if channels == 1 and len(data_sp.shape) == 1:
         data_sp = data_sp.reshape(-1, 1)
 
     np.testing.assert_allclose(data_sp, expected_data, atol=1)
+
 
 @pytest.mark.skipif(wavfile is None, reason="scipy is not installed")
 @pytest.mark.parametrize("channels", [1, 2])

@@ -1,6 +1,14 @@
 from tinygrad import Tensor
 
-def freq_mask(spectrogram: Tensor, freq_mask_param: int, mask_value: float = 0.0, iid_masks: bool = False, _rand_values: tuple = None, _freq_indices: Tensor = None) -> Tensor:
+
+def freq_mask(
+    spectrogram: Tensor,
+    freq_mask_param: int,
+    mask_value: float = 0.0,
+    iid_masks: bool = False,
+    _rand_values: tuple = None,
+    _freq_indices: Tensor = None,
+) -> Tensor:
     """
     Apply masking to a spectrogram in the frequency domain.
     Reference: torchaudio.transforms.FrequencyMasking
