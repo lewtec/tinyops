@@ -3,14 +3,17 @@
 uv = "0.9.21"
 "vfox:clang" = "18.1.8"
 
-[tasks.install]
+[tasks."install:uv"]
 run = "uv sync"
+
+[tasks.install]
+depends = ["install:*"]
 
 [tasks."lint:ruff"]
 run = "uv run ruff check ."
 
 [tasks.lint]
-depends = ["lint:ruff"]
+depends = ["lint:*"]
 
 [tasks.test]
 run = "ci-status run test -- uv run pytest"
