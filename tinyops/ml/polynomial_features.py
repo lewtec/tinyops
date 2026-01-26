@@ -1,7 +1,11 @@
-from tinygrad import Tensor
 import itertools
 
-def polynomial_features(X: Tensor, degree: int = 2, interaction_only: bool = False, include_bias: bool = True) -> Tensor:
+from tinygrad import Tensor
+
+
+def polynomial_features(
+    X: Tensor, degree: int = 2, interaction_only: bool = False, include_bias: bool = True
+) -> Tensor:
     """
     Generate polynomial and interaction features.
 

@@ -1,5 +1,6 @@
-from tinygrad import Tensor, dtypes
 import numpy as np
+from tinygrad import Tensor, dtypes
+
 
 def onehot_encoder(X: Tensor) -> Tensor:
     if X.ndim == 1:
@@ -15,7 +16,7 @@ def onehot_encoder(X: Tensor) -> Tensor:
 
         # "transform" step: create one-hot encoding based on discovered categories.
         # This uses broadcasting: (N, 1) == (1, C) -> (N, C)
-        one_hot_col = (col.unsqueeze(1) == categories.unsqueeze(0))
+        one_hot_col = col.unsqueeze(1) == categories.unsqueeze(0)
         encoded_cols.append(one_hot_col)
 
     if not encoded_cols:

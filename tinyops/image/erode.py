@@ -1,5 +1,6 @@
 from tinygrad import Tensor
 
+
 def erode(x: Tensor, kernel: Tensor) -> Tensor:
     """
     Erodes an image by using a specific structuring element.
@@ -17,15 +18,15 @@ def erode(x: Tensor, kernel: Tensor) -> Tensor:
     else:
         raise NotImplementedError(f"erode not implemented for ndim={x.ndim}")
 
-    x_padded = x.pad(padding, value=float('inf'))
+    x_padded = x.pad(padding, value=float("inf"))
 
     views = []
     for i in range(h_k):
         for j in range(w_k):
             if x.ndim == 2:
-                view = x_padded[i:i + h_orig, j:j + w_orig]
+                view = x_padded[i : i + h_orig, j : j + w_orig]
             else:
-                view = x_padded[i:i + h_orig, j:j + w_orig, :]
+                view = x_padded[i : i + h_orig, j : j + w_orig, :]
             views.append(view.unsqueeze(0))
 
     stacked_views = Tensor.cat(*views, dim=0)
@@ -33,7 +34,7 @@ def erode(x: Tensor, kernel: Tensor) -> Tensor:
     mask_shape = (h_k * w_k,) + (1,) * x.ndim
     kernel_mask = kernel.flatten().reshape(mask_shape) > 0
 
-    masked_views = Tensor.where(kernel_mask, stacked_views, float('inf'))
+    masked_views = Tensor.where(kernel_mask, stacked_views, float("inf"))
 
     eroded = masked_views.min(axis=0)
 

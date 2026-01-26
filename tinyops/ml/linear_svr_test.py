@@ -1,12 +1,11 @@
-import pytest
 import numpy as np
-from tinygrad import Tensor
-from tinyops._core import assert_close
-from tinyops.ml.linear_svr import linear_svr
-from tinyops._core import assert_one_kernel
-
-from sklearn.svm import LinearSVR
 from sklearn.datasets import make_regression
+from sklearn.svm import LinearSVR
+from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.ml.linear_svr import linear_svr
+
 
 def test_linear_svr():
     # 1. Train a model in scikit-learn
@@ -17,7 +16,7 @@ def test_linear_svr():
     model.fit(X_np, y_np)
 
     # 2. Extract parameters and test data
-    coef_np = model.coef_.astype(np.float32).reshape(1, -1) # Ensure 2D
+    coef_np = model.coef_.astype(np.float32).reshape(1, -1)  # Ensure 2D
     intercept_np = model.intercept_.astype(np.float32)
 
     # 3. Convert to tinygrad tensors

@@ -1,7 +1,11 @@
 from tinygrad import Tensor
+
 from tinyops.ml.decision_tree_regressor import decision_tree_regressor
 
-def gradient_boosting_regressor(X: Tensor, estimators: list[dict], learning_rate: float, init_prediction: Tensor) -> Tensor:
+
+def gradient_boosting_regressor(
+    X: Tensor, estimators: list[dict], learning_rate: float, init_prediction: Tensor
+) -> Tensor:
     """
     Predicts regression target for X using a pre-trained gradient boosting model.
 

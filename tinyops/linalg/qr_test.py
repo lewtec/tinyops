@@ -1,8 +1,8 @@
 import numpy as np
 from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.linalg.qr import qr
-from tinyops._core import assert_one_kernel
-from tinyops._core import assert_close
 
 
 def is_upper_triangular(matrix: Tensor, atol=1e-5) -> bool:

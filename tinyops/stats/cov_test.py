@@ -1,9 +1,10 @@
 import numpy as np
 import pytest
 from tinygrad import Tensor, dtypes
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.stats.cov import cov
-from tinyops._core import assert_one_kernel
-from tinyops._core import assert_close
+
 
 @assert_one_kernel
 def test_cov_basic():
@@ -11,6 +12,7 @@ def test_cov_basic():
     result = cov(Tensor(data)).realize()
     expected = np.cov(data)
     assert_close(result, expected)
+
 
 @assert_one_kernel
 def test_cov_y():
@@ -20,12 +22,14 @@ def test_cov_y():
     expected = np.cov(x, y)
     assert_close(result, expected)
 
+
 @assert_one_kernel
 def test_cov_rowvar_false():
     data = np.array([[1, 4], [2, 5], [3, 6]]).astype(np.float32)
     result = cov(Tensor(data), rowvar=False).realize()
     expected = np.cov(data, rowvar=False)
     assert_close(result, expected)
+
 
 @assert_one_kernel
 def test_cov_ddof():
@@ -34,10 +38,12 @@ def test_cov_ddof():
     expected = np.cov(data, ddof=0)
     assert_close(result, expected)
 
+
 def test_cov_empty():
     data = Tensor([], dtype=dtypes.float32).reshape(0, 2)
     result = cov(data)
     assert result.shape == (0,)
+
 
 def test_cov_ndim():
     data = Tensor(np.zeros((2, 3, 4), dtype=np.float32))

@@ -1,15 +1,20 @@
 import numpy as np
 import pytest
-from tinygrad import Tensor
-from tinyops.ml.nearest_neighbors import nearest_neighbors
-from sklearn.neighbors import NearestNeighbors as SklearnNearestNeighbors
 from numpy.testing import assert_array_equal
+from sklearn.neighbors import NearestNeighbors as SklearnNearestNeighbors
+from tinygrad import Tensor
 
-@pytest.mark.parametrize("shape, n_neighbors", [
-    ((10, 3), 3),
-    ((50, 5), 5),
-    ((100, 2), 10),
-])
+from tinyops.ml.nearest_neighbors import nearest_neighbors
+
+
+@pytest.mark.parametrize(
+    "shape, n_neighbors",
+    [
+        ((10, 3), 3),
+        ((50, 5), 5),
+        ((100, 2), 10),
+    ],
+)
 def test_nearest_neighbors(shape, n_neighbors):
     X_np = np.random.rand(*shape).astype(np.float32)
     X = Tensor(X_np).realize()

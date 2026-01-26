@@ -1,13 +1,15 @@
+import pytest
 import torch
 import torchvision.transforms as T
-import pytest
 from tinygrad import Tensor
-from tinyops._core import assert_close
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.image.center_crop import center_crop
-from tinyops._core import assert_one_kernel
+
 
 def _get_input(shape):
     return Tensor.rand(*shape).realize()
+
 
 @pytest.mark.parametrize("size", [128])
 @assert_one_kernel
@@ -21,6 +23,7 @@ def test_center_crop_smaller(size):
 
     assert_close(tinyops_result, torch_result.numpy())
 
+
 @pytest.mark.parametrize("size", [256])
 @assert_one_kernel
 def test_center_crop_larger(size):
@@ -33,6 +36,7 @@ def test_center_crop_larger(size):
 
     assert_close(tinyops_result, torch_result.numpy())
 
+
 @pytest.mark.parametrize("size", [(100, 150)])
 @assert_one_kernel
 def test_center_crop_tuple(size):
@@ -44,6 +48,7 @@ def test_center_crop_tuple(size):
     torch_result = torch_transform(torch.from_numpy(img_tensor.numpy()))
 
     assert_close(tinyops_result, torch_result.numpy())
+
 
 @pytest.mark.parametrize("size", [128])
 @assert_one_kernel

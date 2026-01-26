@@ -1,18 +1,22 @@
-import numpy as np
-from tinygrad import Tensor, dtypes
-from tinyops.text.tfidf_vectorizer import tfidf_vectorizer
-from tinyops._core import assert_close
-from sklearn.feature_extraction.text import TfidfVectorizer
 import pytest
+from sklearn.feature_extraction.text import TfidfVectorizer
+from tinygrad import Tensor, dtypes
 
-@pytest.mark.parametrize("corpus", [
+from tinyops._core import assert_close
+from tinyops.text.tfidf_vectorizer import tfidf_vectorizer
+
+
+@pytest.mark.parametrize(
+    "corpus",
     [
-        'This is the first document.',
-        'This document is the second document.',
-        'And this is the third one.',
-        'Is this the first document?',
-    ]
-])
+        [
+            "This is the first document.",
+            "This document is the second document.",
+            "And this is the third one.",
+            "Is this the first document?",
+        ]
+    ],
+)
 def test_tfidf_vectorizer(corpus):
     # sklearn implementation
     vectorizer = TfidfVectorizer()

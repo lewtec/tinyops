@@ -1,6 +1,7 @@
 import numpy as np
 from tinygrad import Tensor
 
+
 def roc_auc(y_true: Tensor, y_score: Tensor) -> Tensor:
     """
     Compute Area Under the Receiver Operating Characteristic Curve (ROC AUC) from prediction scores.
@@ -14,8 +15,8 @@ def roc_auc(y_true: Tensor, y_score: Tensor) -> Tensor:
         raise ValueError("Only one class present in y_true. ROC AUC score is not defined in that case.")
 
     # Main computation using tinygrad broadcasting
-    pos_mask = (y_true == 1)
-    neg_mask = (y_true == 0)
+    pos_mask = y_true == 1
+    neg_mask = y_true == 0
 
     n_pos = pos_mask.sum()
     n_neg = neg_mask.sum()

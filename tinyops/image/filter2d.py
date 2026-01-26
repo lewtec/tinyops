@@ -1,5 +1,6 @@
 from tinygrad import Tensor
 
+
 def filter2d(x: Tensor, kernel: Tensor) -> Tensor:
     """
     Applies a 2D filter to an image, matching cv2.filter2D with default BORDER_REFLECT_101.
@@ -15,13 +16,13 @@ def filter2d(x: Tensor, kernel: Tensor) -> Tensor:
     # Manual padding: BORDER_REFLECT_101
     x_padded = x
     if ph > 0:
-        top = x_padded[1:ph+1, :, :].flip(0)
-        bottom = x_padded[-ph-1:-1, :, :].flip(0)
+        top = x_padded[1 : ph + 1, :, :].flip(0)
+        bottom = x_padded[-ph - 1 : -1, :, :].flip(0)
         x_padded = Tensor.cat(top, x_padded, bottom, dim=0)
 
     if pw > 0:
-        left = x_padded[:, 1:pw+1, :].flip(1)
-        right = x_padded[:, -pw-1:-1, :].flip(1)
+        left = x_padded[:, 1 : pw + 1, :].flip(1)
+        right = x_padded[:, -pw - 1 : -1, :].flip(1)
         x_padded = Tensor.cat(left, x_padded, right, dim=1)
 
     # Convolution

@@ -1,7 +1,7 @@
 from tinygrad import Tensor
-from typing import Optional
 
-def bincount(x: Tensor, weights: Optional[Tensor] = None, minlength: int = 0) -> Tensor:
+
+def bincount(x: Tensor, weights: Tensor | None = None, minlength: int = 0) -> Tensor:
     """
     Count occurrence of each value in array of non-negative integers.
     """

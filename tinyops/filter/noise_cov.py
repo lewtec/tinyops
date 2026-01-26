@@ -1,7 +1,11 @@
 from tinygrad import Tensor
+
 from tinyops.linalg import kron
 
-def noise_cov(dim: int, dt: float | Tensor = 1.0, var: float | Tensor = 1.0, block_size: int = 1, order_by_dim: bool = True) -> Tensor:
+
+def noise_cov(
+    dim: int, dt: float | Tensor = 1.0, var: float | Tensor = 1.0, block_size: int = 1, order_by_dim: bool = True
+) -> Tensor:
     """
     Returns the Q matrix for the Discrete Constant White Noise Model.
 
@@ -31,19 +35,19 @@ def noise_cov(dim: int, dt: float | Tensor = 1.0, var: float | Tensor = 1.0, blo
     d6 = dt_t**6
 
     if dim == 2:
-        row0 = Tensor.stack([d4/4, d3/2])
-        row1 = Tensor.stack([d3/2, d2])
+        row0 = Tensor.stack([d4 / 4, d3 / 2])
+        row1 = Tensor.stack([d3 / 2, d2])
         Q_t = Tensor.stack([row0, row1])
     elif dim == 3:
-        row0 = Tensor.stack([d4/4, d3/2, d2/2])
-        row1 = Tensor.stack([d3/2, d2, dt_t])
-        row2 = Tensor.stack([d2/2, dt_t, one])
+        row0 = Tensor.stack([d4 / 4, d3 / 2, d2 / 2])
+        row1 = Tensor.stack([d3 / 2, d2, dt_t])
+        row2 = Tensor.stack([d2 / 2, dt_t, one])
         Q_t = Tensor.stack([row0, row1, row2])
-    else: # dim=4
-        row0 = Tensor.stack([d6/36, d5/12, d4/6, d3/6])
-        row1 = Tensor.stack([d5/12, d4/4, d3/2, d2/2])
-        row2 = Tensor.stack([d4/6, d3/2, d2, dt_t])
-        row3 = Tensor.stack([d3/6, d2/2, dt_t, one])
+    else:  # dim=4
+        row0 = Tensor.stack([d6 / 36, d5 / 12, d4 / 6, d3 / 6])
+        row1 = Tensor.stack([d5 / 12, d4 / 4, d3 / 2, d2 / 2])
+        row2 = Tensor.stack([d4 / 6, d3 / 2, d2, dt_t])
+        row3 = Tensor.stack([d3 / 6, d2 / 2, dt_t, one])
         Q_t = Tensor.stack([row0, row1, row2, row3])
 
     if block_size == 1:

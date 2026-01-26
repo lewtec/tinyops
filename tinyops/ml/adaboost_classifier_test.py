@@ -1,18 +1,15 @@
-import pytest
 import numpy as np
+from sklearn.datasets import make_classification
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.tree import DecisionTreeClassifier
 from tinygrad import Tensor
+
 from tinyops._core import assert_close
 from tinyops.ml.adaboost_classifier import adaboost_classifier
 
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.datasets import make_classification
-
 
 def test_adaboost_classifier_samme():
-    X, y = make_classification(
-        n_samples=50, n_features=5, n_informative=3, n_redundant=0, n_classes=3, random_state=42
-    )
+    X, y = make_classification(n_samples=50, n_features=5, n_informative=3, n_redundant=0, n_classes=3, random_state=42)
 
     # Train a scikit-learn AdaBoostClassifier
     base_estimator = DecisionTreeClassifier(max_depth=1)

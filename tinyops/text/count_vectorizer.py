@@ -1,8 +1,9 @@
-from typing import List
-from tinygrad import Tensor
 import re
 
-def count_vectorizer(corpus: List[str]) -> Tensor:
+from tinygrad import Tensor
+
+
+def count_vectorizer(corpus: list[str]) -> Tensor:
     """
     Convert a collection of text documents to a matrix of token counts.
 
@@ -25,7 +26,7 @@ def count_vectorizer(corpus: List[str]) -> Tensor:
         this can consume significant memory.
     """
     # Tokenize
-    tokens = [re.findall(r'(?u)\b\w\w+\b', doc.lower()) for doc in corpus]
+    tokens = [re.findall(r"(?u)\b\w\w+\b", doc.lower()) for doc in corpus]
 
     # Build vocabulary
     vocab = sorted(list(set(word for doc_tokens in tokens for word in doc_tokens)))

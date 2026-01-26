@@ -1,7 +1,7 @@
 from tinygrad import Tensor
-from typing import Optional, Union, Tuple
 
-def median(a: Tensor, axis: Optional[int] = None, keepdims: bool = False) -> Tensor:
+
+def median(a: Tensor, axis: int | None = None, keepdims: bool = False) -> Tensor:
     """
     Compute the median along the specified axis.
     """
@@ -14,7 +14,7 @@ def median(a: Tensor, axis: Optional[int] = None, keepdims: bool = False) -> Ten
         axis += ndim
 
     if axis < 0 or axis >= ndim:
-         raise ValueError(f"Axis {axis} out of bounds for array of dimension {ndim}")
+        raise ValueError(f"Axis {axis} out of bounds for array of dimension {ndim}")
 
     # Move axis to last dimension
     if axis != ndim - 1:
@@ -30,12 +30,12 @@ def median(a: Tensor, axis: Optional[int] = None, keepdims: bool = False) -> Ten
 
     if k % 2 == 1:
         mid = (k - 1) // 2
-        res = sorted_a[..., mid:mid+1]
+        res = sorted_a[..., mid : mid + 1]
     else:
         mid1 = k // 2 - 1
         mid2 = k // 2
-        v1 = sorted_a[..., mid1:mid1+1]
-        v2 = sorted_a[..., mid2:mid2+1]
+        v1 = sorted_a[..., mid1 : mid1 + 1]
+        v2 = sorted_a[..., mid2 : mid2 + 1]
         res = (v1 + v2) / 2
 
     if keepdims:

@@ -1,10 +1,10 @@
-import pytest
 import numpy as np
-from tinygrad import Tensor
-from tinyops.ml.sgd_regressor import sgd_regressor
-from tinyops._core import assert_close
-from tinyops._core import assert_one_kernel
 from sklearn.linear_model import SGDRegressor
+from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.ml.sgd_regressor import sgd_regressor
+
 
 def test_sgd_regressor_step():
     n_features = 10
@@ -22,13 +22,7 @@ def test_sgd_regressor_step():
 
     # Scikit-learn reference for a single sample update
     reg = SGDRegressor(
-        loss='squared_error',
-        penalty=None,
-        learning_rate='constant',
-        eta0=0.01,
-        max_iter=1,
-        tol=None,
-        shuffle=False
+        loss="squared_error", penalty=None, learning_rate="constant", eta0=0.01, max_iter=1, tol=None, shuffle=False
     )
     reg.coef_ = weights_np
     reg.intercept_ = bias_np

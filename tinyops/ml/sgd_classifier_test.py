@@ -1,10 +1,10 @@
-import pytest
 import numpy as np
-from tinygrad import Tensor
-from tinyops.ml.sgd_classifier import sgd_classifier
-from tinyops._core import assert_close
-from tinyops._core import assert_one_kernel
 from sklearn.linear_model import SGDClassifier
+from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.ml.sgd_classifier import sgd_classifier
+
 
 def test_sgd_classifier_step_hinge():
     n_features = 10
@@ -23,17 +23,11 @@ def test_sgd_classifier_step_hinge():
 
     # Scikit-learn reference for a single sample update
     clf = SGDClassifier(
-        loss='hinge',
-        penalty=None,
-        learning_rate='constant',
-        eta0=0.01,
-        max_iter=1,
-        tol=None,
-        shuffle=False
+        loss="hinge", penalty=None, learning_rate="constant", eta0=0.01, max_iter=1, tol=None, shuffle=False
     )
     clf.coef_ = weights_np.reshape(1, -1)
     clf.intercept_ = np.array([bias_np])
-    clf.classes_ = np.array([-1., 1.])
+    clf.classes_ = np.array([-1.0, 1.0])
     clf.partial_fit(X_np.reshape(1, -1), y_sklearn)
 
     expected_weights = clf.coef_.flatten()

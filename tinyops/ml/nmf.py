@@ -1,7 +1,7 @@
-from typing import Tuple
 from tinygrad import Tensor
 
-def nmf(X: Tensor, n_components: int, max_iter: int = 200, tol: float = 1e-4) -> Tuple[Tensor, Tensor]:
+
+def nmf(X: Tensor, n_components: int, max_iter: int = 200, tol: float = 1e-4) -> tuple[Tensor, Tensor]:
     """
     Non-Negative Matrix Factorization (NMF).
 
@@ -27,7 +27,7 @@ def nmf(X: Tensor, n_components: int, max_iter: int = 200, tol: float = 1e-4) ->
 
     # Small constant to avoid division by zero
     epsilon = 1e-7
-    prev_error = float('inf')
+    prev_error = float("inf")
 
     for _ in range(max_iter):
         # Update H

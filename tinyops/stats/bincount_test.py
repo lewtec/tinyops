@@ -1,9 +1,10 @@
 import numpy as np
-from tinygrad import Tensor
-from tinyops.stats.bincount import bincount
-from tinyops._core import assert_one_kernel
-from tinyops._core import assert_close
 import pytest
+from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.stats.bincount import bincount
+
 
 @assert_one_kernel
 def test_bincount_basic():
@@ -12,6 +13,7 @@ def test_bincount_basic():
     res = bincount(x).realize()
     expected = np.bincount(x_np)
     assert_close(res, expected)
+
 
 @assert_one_kernel
 def test_bincount_weights():
@@ -23,6 +25,7 @@ def test_bincount_weights():
     expected = np.bincount(x_np, weights=w_np)
     assert_close(res, expected)
 
+
 @assert_one_kernel
 def test_bincount_minlength():
     x_np = np.array([0, 1, 1, 3])
@@ -30,6 +33,7 @@ def test_bincount_minlength():
     res = bincount(x, minlength=10).realize()
     expected = np.bincount(x_np, minlength=10)
     assert_close(res, expected)
+
 
 @assert_one_kernel
 def test_bincount_empty():
@@ -39,6 +43,7 @@ def test_bincount_empty():
     expected = np.bincount(x_np)
     assert_close(res, expected)
 
+
 @assert_one_kernel
 def test_bincount_empty_minlength():
     x_np = np.array([], dtype=int)
@@ -46,6 +51,7 @@ def test_bincount_empty_minlength():
     res = bincount(x, minlength=5).realize()
     expected = np.bincount(x_np, minlength=5)
     assert_close(res, expected)
+
 
 @assert_one_kernel
 def test_bincount_negative_raises():

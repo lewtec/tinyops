@@ -1,8 +1,9 @@
 from tinygrad import Tensor
-from typing import Optional, Union, Tuple
-import math
 
-def average(a: Tensor, axis: Optional[Union[int, Tuple[int, ...]]] = None, weights: Optional[Tensor] = None, returned: bool = False) -> Union[Tensor, Tuple[Tensor, Tensor]]:
+
+def average(
+    a: Tensor, axis: int | tuple[int, ...] | None = None, weights: Tensor | None = None, returned: bool = False
+) -> Tensor | tuple[Tensor, Tensor]:
     """
     Compute the weighted average along the specified axis.
     """
@@ -11,7 +12,8 @@ def average(a: Tensor, axis: Optional[Union[int, Tuple[int, ...]]] = None, weigh
         if returned:
             if axis is None:
                 cnt = 1
-                for s in a.shape: cnt *= s
+                for s in a.shape:
+                    cnt *= s
             elif isinstance(axis, int):
                 cnt = a.shape[axis]
             else:
@@ -30,21 +32,24 @@ def average(a: Tensor, axis: Optional[Union[int, Tuple[int, ...]]] = None, weigh
     # Handle broadcasting for 1D weights if axis is specified
     if axis is not None and len(wgt.shape) == 1:
         if isinstance(axis, int):
-             ax = axis
-             if ax < 0: ax += ndim
+            ax = axis
+            if ax < 0:
+                ax += ndim
 
-             if wgt.shape[0] != a.shape[ax]:
-                 raise ValueError(f"Length of weights ({wgt.shape[0]}) not compatible with specified axis ({a.shape[ax]})")
+            if wgt.shape[0] != a.shape[ax]:
+                raise ValueError(
+                    f"Length of weights ({wgt.shape[0]}) not compatible with specified axis ({a.shape[ax]})"
+                )
 
-             # Reshape wgt to broadcast
-             new_shape = [1] * ndim
-             new_shape[ax] = wgt.shape[0]
-             wgt = wgt.reshape(tuple(new_shape))
+            # Reshape wgt to broadcast
+            new_shape = [1] * ndim
+            new_shape[ax] = wgt.shape[0]
+            wgt = wgt.reshape(tuple(new_shape))
         else:
-             # Axis is tuple, wgt is 1D.
-             # Numpy behavior? Likely raises error unless broadcastable normally.
-             # We assume standard broadcasting if not simple axis case.
-             pass
+            # Axis is tuple, wgt is 1D.
+            # Numpy behavior? Likely raises error unless broadcastable normally.
+            # We assume standard broadcasting if not simple axis case.
+            pass
 
     scl = wgt.sum(axis=axis)
     # Note: sum(a*w) / sum(w)
