@@ -1,6 +1,14 @@
 from tinygrad import Tensor
 
-def time_mask(spectrogram: Tensor, time_mask_param: int, mask_value: float = 0.0, iid_masks: bool = False, _rand_values: tuple = None, _time_indices: Tensor = None) -> Tensor:
+
+def time_mask(
+    spectrogram: Tensor,
+    time_mask_param: int,
+    mask_value: float = 0.0,
+    iid_masks: bool = False,
+    _rand_values: tuple = None,
+    _time_indices: Tensor = None,
+) -> Tensor:
     """
     Apply masking to a spectrogram in the time domain.
     Reference: torchaudio.transforms.TimeMasking

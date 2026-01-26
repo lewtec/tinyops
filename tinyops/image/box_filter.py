@@ -1,6 +1,7 @@
 from tinygrad import Tensor
 from tinyops.image._utils import apply_filter
 
+
 def box_filter(x: Tensor, ksize: tuple[int, int]) -> Tensor:
   """
   Blurs an image using the box filter. This implementation uses zero-padding,

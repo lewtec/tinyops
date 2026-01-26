@@ -1,10 +1,11 @@
 import numpy as np
-from tinygrad import Tensor
-from tinyops.ml.maxabs_scaler import maxabs_scaler
-from tinyops._core import assert_close
-from tinyops._core import assert_one_kernel
-from sklearn.preprocessing import MaxAbsScaler
 import pytest
+from sklearn.preprocessing import MaxAbsScaler
+from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.ml.maxabs_scaler import maxabs_scaler
+
 
 @pytest.mark.parametrize("shape", [(100, 10)])
 def test_maxabs_scaler(shape):

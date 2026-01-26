@@ -1,5 +1,8 @@
 from tinygrad import Tensor
+
 from .inv import inv
+
+
 def solve(a: Tensor, b: Tensor) -> Tensor:
     """Solve linear system."""
     inv_a = inv(a)

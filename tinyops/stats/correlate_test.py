@@ -1,8 +1,9 @@
 import numpy as np
 from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.stats.correlate import correlate
-from tinyops._core import assert_one_kernel
-from tinyops._core import assert_close
+
 
 @assert_one_kernel
 def test_correlate_valid():
@@ -12,6 +13,7 @@ def test_correlate_valid():
     expected = np.correlate(a, v, mode="valid")
     assert_close(result, expected)
 
+
 @assert_one_kernel
 def test_correlate_same():
     a = np.array([1, 2, 3]).astype(np.float32)
@@ -19,6 +21,7 @@ def test_correlate_same():
     result = correlate(Tensor(a), Tensor(v), mode="same").realize()
     expected = np.correlate(a, v, mode="same")
     assert_close(result, expected)
+
 
 @assert_one_kernel
 def test_correlate_full():

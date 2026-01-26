@@ -1,7 +1,9 @@
 import numpy as np
 from tinygrad import Tensor
-from tinyops.linalg.matrix_rank import matrix_rank
+
 from tinyops._core import assert_one_kernel
+from tinyops.linalg.matrix_rank import matrix_rank
+
 
 @assert_one_kernel
 def test_matrix_rank():

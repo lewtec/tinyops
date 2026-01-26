@@ -1,18 +1,21 @@
+import pytest
 import torch
 import torchvision.transforms.functional as F
-import pytest
 from tinygrad import Tensor
-from tinyops._core import assert_close
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.image.pad import pad
-from tinyops._core import assert_one_kernel
+
 
 def _get_input_color():
     img_torch = torch.randn(10, 12, 3)
     return Tensor(img_torch.numpy()).realize(), img_torch
 
+
 def _get_input_grayscale():
     img_torch = torch.randn(10, 12)
     return Tensor(img_torch.numpy()).realize(), img_torch
+
 
 @pytest.mark.parametrize("padding", [1, (2, 3), (1, 2, 3, 4)])
 @assert_one_kernel
@@ -25,6 +28,7 @@ def test_pad_constant_color(padding):
     expected_torch = F.pad(img_torch.permute(2, 0, 1), padding, fill=0, padding_mode="constant").permute(1, 2, 0)
 
     assert_close(result, expected_torch.numpy())
+
 
 @pytest.mark.parametrize("padding", [1, (2, 3), (1, 2, 3, 4)])
 @assert_one_kernel

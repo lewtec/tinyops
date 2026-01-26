@@ -1,5 +1,6 @@
 from tinygrad import Tensor
 
+
 def qr(a: Tensor) -> tuple[Tensor, Tensor]:
     """
     Computes the QR decomposition of a matrix using the Gram-Schmidt process.
@@ -38,7 +39,7 @@ def qr(a: Tensor) -> tuple[Tensor, Tensor]:
     # To match numpy's convention, ensure diagonal elements of R are non-negative.
     # The QR decomposition is not unique; we can flip the signs of corresponding
     # columns in Q and rows in R.
-    diag_r = r.flatten()[::r.shape[1]+1][:k]
+    diag_r = r.flatten()[:: r.shape[1] + 1][:k]
     signs = (diag_r < 0).cast(a.dtype) * -2 + 1
     q = q * signs
     r = signs.reshape(-1, 1) * r

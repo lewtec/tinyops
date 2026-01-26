@@ -1,10 +1,11 @@
 import cv2
 import numpy as np
 import pytest
-from tinygrad import dtypes, Tensor
-from tinyops._core import assert_close
-from tinyops.image.cvt_color import cvt_color, COLOR_BGR2GRAY
-from tinyops._core import assert_one_kernel
+from tinygrad import Tensor, dtypes
+
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.image.cvt_color import COLOR_BGR2GRAY, cvt_color
+
 
 def _get_input(input_dtype, output_dtype):
     if input_dtype == np.uint8:
@@ -18,10 +19,8 @@ def _get_input(input_dtype, output_dtype):
 
     return bgr_tensor, bgr_image
 
-@pytest.mark.parametrize("input_dtype, output_dtype", [
-    (np.uint8, dtypes.uint8),
-    (np.float32, dtypes.float32)
-])
+
+@pytest.mark.parametrize("input_dtype, output_dtype", [(np.uint8, dtypes.uint8), (np.float32, dtypes.float32)])
 @assert_one_kernel
 def test_bgr2gray(input_dtype, output_dtype):
     bgr_tensor, bgr_image = _get_input(input_dtype, output_dtype)

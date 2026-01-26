@@ -1,5 +1,6 @@
 from tinygrad import Tensor
 
+
 def cholesky(a: Tensor) -> Tensor:
     """
     Computes the Cholesky decomposition of a symmetric positive-definite matrix.
@@ -25,8 +26,8 @@ def cholesky(a: Tensor) -> Tensor:
 
         # Calculate the rest of the column j
         if j < n - 1:
-            s2 = l_prev_cols[j + 1:, :] @ l_prev_cols[j, :]
-            col_j_rest = (a[j + 1:, j] - s2) / l_jj
+            s2 = l_prev_cols[j + 1 :, :] @ l_prev_cols[j, :]
+            col_j_rest = (a[j + 1 :, j] - s2) / l_jj
         else:
             col_j_rest = Tensor.zeros(0, dtype=a.dtype)
 

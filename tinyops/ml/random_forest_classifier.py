@@ -1,5 +1,7 @@
 from tinygrad import Tensor
+
 from tinyops.ml.decision_tree_classifier import decision_tree_classifier
+
 
 def random_forest_classifier(X: Tensor, trees: list[dict]) -> Tensor:
     """
@@ -18,14 +20,14 @@ def random_forest_classifier(X: Tensor, trees: list[dict]) -> Tensor:
     # Stack all predictions into a single tensor of shape (n_samples, n_trees).
     stacked_predictions = Tensor.stack(all_predictions, dim=1)
 
-    n_classes = trees[0]['n_classes']
+    n_classes = trees[0]["n_classes"]
 
     # Manually calculate vote counts for each class to avoid using one_hot.
     # This is a more robust way to compute the mode.
     vote_counts_list = []
     for i in range(n_classes):
         # Create a boolean mask where predictions match the current class `i`.
-        is_class_i = (stacked_predictions == i)
+        is_class_i = stacked_predictions == i
         # Sum the boolean mask (True=1, False=0) across the trees to get the vote count.
         counts_for_class_i = is_class_i.sum(axis=1).unsqueeze(1)
         vote_counts_list.append(counts_for_class_i)

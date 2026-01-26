@@ -1,5 +1,6 @@
 from tinygrad import Tensor
 
+
 def sgd_regressor(X: Tensor, y: Tensor, weights: Tensor, bias: Tensor, lr: float = 0.01) -> tuple[Tensor, Tensor]:
     """
     Performs a single stochastic gradient descent update for a linear regressor.

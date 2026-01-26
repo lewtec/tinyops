@@ -1,5 +1,7 @@
 from typing import Literal
+
 from tinygrad import Tensor
+
 
 def svc(
     X: Tensor,

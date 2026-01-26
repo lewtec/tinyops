@@ -1,5 +1,6 @@
 from tinygrad import Tensor
 
+
 def diagonal(a: Tensor, offset: int = 0, axis1: int = 0, axis2: int = 1) -> Tensor:
     """
     Return specified diagonals.
@@ -7,8 +8,10 @@ def diagonal(a: Tensor, offset: int = 0, axis1: int = 0, axis2: int = 1) -> Tens
     ndim = len(a.shape)
 
     # Normalize axes
-    if axis1 < 0: axis1 += ndim
-    if axis2 < 0: axis2 += ndim
+    if axis1 < 0:
+        axis1 += ndim
+    if axis2 < 0:
+        axis2 += ndim
 
     if axis1 == axis2:
         raise ValueError("axis1 and axis2 cannot be the same")
@@ -31,13 +34,13 @@ def diagonal(a: Tensor, offset: int = 0, axis1: int = 0, axis2: int = 1) -> Tens
         length = min(N + offset, M)
 
     if length <= 0:
-         # Handle empty result if possible, or let slice handle it
-         # If length <= 0, slice start:start:... should be empty
-         # Ensure end is not smaller than start if we rely on loop logic, but slice handles it.
-         end = start
+        # Handle empty result if possible, or let slice handle it
+        # If length <= 0, slice start:start:... should be empty
+        # Ensure end is not smaller than start if we rely on loop logic, but slice handles it.
+        end = start
     else:
-         step = M + 1
-         end = start + length * step
+        step = M + 1
+        end = start + length * step
 
     # Flatten last two dimensions
     # Note: reshape requires tuple

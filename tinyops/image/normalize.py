@@ -1,7 +1,8 @@
-from tinygrad import dtypes, Tensor
+from tinygrad import Tensor, dtypes
 
 # Normalization types from OpenCV
 NORM_MINMAX = 32
+
 
 def normalize(src: Tensor, alpha: float = 0, beta: float = 255, norm_type: int = NORM_MINMAX) -> Tensor:
     """

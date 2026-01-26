@@ -1,6 +1,8 @@
 import math
-from tinygrad.tensor import Tensor
+
 from tinygrad import dtypes
+from tinygrad.tensor import Tensor
+
 
 def _fade_in(waveform_length: int, fade_in_len: int, fade_shape: str) -> Tensor:
     if fade_in_len <= 0:

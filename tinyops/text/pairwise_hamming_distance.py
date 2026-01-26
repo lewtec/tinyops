@@ -1,5 +1,6 @@
 from tinygrad import Tensor
 
+
 def pairwise_hamming_distance(X: Tensor) -> Tensor:
     """
     Compute the pairwise Hamming distance between samples in X.

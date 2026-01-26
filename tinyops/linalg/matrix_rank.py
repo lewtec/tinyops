@@ -1,5 +1,7 @@
 from tinygrad import Tensor
+
 from tinyops.linalg.qr import qr
+
 
 def matrix_rank(a: Tensor, tol: float = 1e-5) -> Tensor:
     """
@@ -16,6 +18,6 @@ def matrix_rank(a: Tensor, tol: float = 1e-5) -> Tensor:
         return Tensor(0)
 
     _, r = qr(a)
-    diag = r.flatten()[::r.shape[1]+1]
+    diag = r.flatten()[:: r.shape[1] + 1]
     rank = (diag.abs() > tol).sum()
     return rank

@@ -1,10 +1,11 @@
 import numpy as np
-from tinygrad import Tensor
-from tinyops.ml.robust_scaler import robust_scaler
-from tinyops._core import assert_close
-from tinyops._core import assert_one_kernel
-from sklearn.preprocessing import RobustScaler
 import pytest
+from sklearn.preprocessing import RobustScaler
+from tinygrad import Tensor
+
+from tinyops._core import assert_close
+from tinyops.ml.robust_scaler import robust_scaler
+
 
 @pytest.mark.parametrize("shape", [(100, 10)])
 def test_robust_scaler(shape):

@@ -1,8 +1,9 @@
 import numpy as np
 from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.stats.percentile import percentile
-from tinyops._core import assert_one_kernel
-from tinyops._core import assert_close
+
 
 @assert_one_kernel
 def test_percentile_scalar():
@@ -13,6 +14,7 @@ def test_percentile_scalar():
     expected = np.percentile(a_np, 50)
     assert_close(res, expected)
 
+
 @assert_one_kernel
 def test_percentile_scalar_axis():
     a_np = np.arange(12).reshape(3, 4).astype(np.float32)
@@ -21,6 +23,7 @@ def test_percentile_scalar_axis():
     res = percentile(a, 50, axis=1).realize()
     expected = np.percentile(a_np, 50, axis=1)
     assert_close(res, expected)
+
 
 @assert_one_kernel
 def test_percentile_array():
@@ -32,6 +35,7 @@ def test_percentile_array():
     expected = np.percentile(a_np, q, axis=1)
     assert_close(res, expected)
 
+
 @assert_one_kernel
 def test_percentile_keepdims():
     a_np = np.arange(12).reshape(3, 4).astype(np.float32)
@@ -40,6 +44,7 @@ def test_percentile_keepdims():
     res = percentile(a, 50, axis=1, keepdims=True).realize()
     expected = np.percentile(a_np, 50, axis=1, keepdims=True)
     assert_close(res, expected)
+
 
 @assert_one_kernel
 def test_percentile_array_keepdims():

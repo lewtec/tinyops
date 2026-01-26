@@ -1,5 +1,7 @@
 from tinygrad import Tensor
+
 from tinyops.linalg import cholesky
+
 
 def sigma_points(x: Tensor, P: Tensor, alpha: float, beta: float, kappa: float) -> tuple[Tensor, Tensor, Tensor]:
     """
@@ -48,7 +50,7 @@ def sigma_points(x: Tensor, P: Tensor, alpha: float, beta: float, kappa: float) 
     Wm_0 = lambda_ / (n + lambda_)
     Wc_0 = lambda_ / (n + lambda_) + (1 - alpha**2 + beta)
 
-    rest = Tensor.full((2*n,), c, dtype=x.dtype, device=x.device)
+    rest = Tensor.full((2 * n,), c, dtype=x.dtype, device=x.device)
 
     Wm_0_t = Tensor([Wm_0], dtype=x.dtype, device=x.device)
     Wc_0_t = Tensor([Wc_0], dtype=x.dtype, device=x.device)

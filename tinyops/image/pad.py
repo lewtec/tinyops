@@ -1,5 +1,6 @@
 from enum import Enum
 from functools import partial
+
 from tinygrad import Tensor
 
 def _parse_padding(padding):
@@ -42,7 +43,8 @@ def pad_reflect(x: Tensor, padding, fill=None) -> Tensor:
   return x
 
 def pad_not_implemented(x: Tensor, padding, fill=None) -> Tensor:
-  raise NotImplementedError("This padding mode is not yet implemented.")
+    raise NotImplementedError("This padding mode is not yet implemented.")
+
 
 class PaddingMode(Enum):
   CONSTANT = (partial(pad_constant),)
@@ -50,30 +52,28 @@ class PaddingMode(Enum):
   REPLICATE = (partial(pad_not_implemented),)
   CIRCULAR = (partial(pad_not_implemented),)
 
-  def __call__(self, *args, **kwargs):
-    return self.value[0](*args, **kwargs)
 
 def pad(x: Tensor, padding, fill=0, padding_mode="constant") -> Tensor:
-  """
-  Pads an image.
+    """
+    Pads an image.
 
-  Args:
-    x: Input image tensor (H, W, C) or (H, W).
-    padding: Padding on each border.
-    fill: Value for constant padding.
-    padding_mode: Type of padding. "constant", "reflect", "replicate" or "circular".
+    Args:
+      x: Input image tensor (H, W, C) or (H, W).
+      padding: Padding on each border.
+      fill: Value for constant padding.
+      padding_mode: Type of padding. "constant", "reflect", "replicate" or "circular".
 
-  Returns:
-    The padded image tensor.
-  """
-  if isinstance(padding_mode, str):
-    try:
-      mode = PaddingMode[padding_mode.upper()]
-    except KeyError:
-      raise ValueError(f"Padding mode '{padding_mode}' is not supported.")
-  elif isinstance(padding_mode, PaddingMode):
-    mode = padding_mode
-  else:
-    raise TypeError(f"Invalid type for padding_mode: {type(padding_mode)}")
+    Returns:
+      The padded image tensor.
+    """
+    if isinstance(padding_mode, str):
+        try:
+            mode = PaddingMode[padding_mode.upper()]
+        except KeyError:
+            raise ValueError(f"Padding mode '{padding_mode}' is not supported.") from None
+    elif isinstance(padding_mode, PaddingMode):
+        mode = padding_mode
+    else:
+        raise TypeError(f"Invalid type for padding_mode: {type(padding_mode)}")
 
-  return mode(x, padding, fill=fill)
+    return mode(x, padding, fill=fill)

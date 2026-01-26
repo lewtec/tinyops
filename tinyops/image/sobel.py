@@ -1,6 +1,7 @@
 from tinygrad import Tensor, dtypes
 from tinyops.image._utils import apply_filter
 
+
 def get_sobel_kernel(dx: int, dy: int, ksize: int, dtype) -> Tensor:
     if ksize % 2 == 0 or ksize <= 1:
         raise ValueError("ksize must be odd and > 1")
@@ -12,6 +13,7 @@ def get_sobel_kernel(dx: int, dy: int, ksize: int, dtype) -> Tensor:
             return Tensor([[-1, -2, -1], [0, 0, 0], [1, 2, 1]], dtype=dtype)
 
     raise NotImplementedError(f"Sobel kernel for ksize={ksize} is not implemented.")
+
 
 def sobel(x: Tensor, dx: int, dy: int, ksize: int = 3, scale: float = 1.0, delta: float = 0.0) -> Tensor:
     if not ((dx == 1 and dy == 0) or (dx == 0 and dy == 1)):

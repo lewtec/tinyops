@@ -1,8 +1,11 @@
 from tinygrad import Tensor, dtypes
-from typing import Optional, Tuple, Union, List
+
 from .bincount import bincount
 
-def hist2d(x: Tensor, y: Tensor, bins: Union[int, List[int]] = 10, range: Optional[List[List[float]]] = None, density: bool = False) -> Tuple[Tensor, Tensor, Tensor]:
+
+def hist2d(
+    x: Tensor, y: Tensor, bins: int | list[int] = 10, range: list[list[float]] | None = None, density: bool = False
+) -> tuple[Tensor, Tensor, Tensor]:
     x, y = x.flatten(), y.flatten()
 
     if isinstance(bins, int):
@@ -60,6 +63,6 @@ def hist2d(x: Tensor, y: Tensor, bins: Union[int, List[int]] = 10, range: Option
     if density:
         db = width_x * width_y
         if h.sum().item() > 0:
-          h = h / (h.sum() * db)
+            h = h / (h.sum() * db)
 
     return h, edges_x, edges_y

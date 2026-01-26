@@ -1,8 +1,9 @@
 import numpy as np
 from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.stats.corrcoef import corrcoef
-from tinyops._core import assert_one_kernel
-from tinyops._core import assert_close
+
 
 @assert_one_kernel
 def test_corrcoef_basic():
@@ -11,6 +12,7 @@ def test_corrcoef_basic():
     expected = np.corrcoef(data)
     assert_close(result, expected)
 
+
 @assert_one_kernel
 def test_corrcoef_y():
     x = np.array([1, 2, 3]).astype(np.float32)
@@ -18,6 +20,7 @@ def test_corrcoef_y():
     result = corrcoef(Tensor(x), Tensor(y))
     expected = np.corrcoef(x, y)
     assert_close(result, expected)
+
 
 @assert_one_kernel
 def test_corrcoef_rowvar_false():

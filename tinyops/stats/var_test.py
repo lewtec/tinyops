@@ -1,8 +1,9 @@
 import numpy as np
 from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.stats.var import var
-from tinyops._core import assert_one_kernel
-from tinyops._core import assert_close
+
 
 @assert_one_kernel
 def test_var_default():
@@ -10,8 +11,9 @@ def test_var_default():
     a = Tensor(a_np).realize()
 
     res = var(a).realize()
-    expected = np.var(a_np) # ddof=0
+    expected = np.var(a_np)  # ddof=0
     assert_close(res, expected)
+
 
 @assert_one_kernel
 def test_var_ddof1():
@@ -22,6 +24,7 @@ def test_var_ddof1():
     expected = np.var(a_np, ddof=1)
     assert_close(res, expected)
 
+
 @assert_one_kernel
 def test_var_axis():
     a_np = np.random.randn(2, 3, 4).astype(np.float32)
@@ -30,6 +33,7 @@ def test_var_axis():
     res = var(a, axis=1).realize()
     expected = np.var(a_np, axis=1)
     assert_close(res, expected)
+
 
 @assert_one_kernel
 def test_var_keepdims():

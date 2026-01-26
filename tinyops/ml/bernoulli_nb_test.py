@@ -1,18 +1,22 @@
 import numpy as np
 import pytest
 from sklearn.datasets import make_classification
-from sklearn.naive_bayes import BernoulliNB
 from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import BernoulliNB
 from tinygrad import Tensor
-from tinyops._core import assert_close
-from tinyops.ml.bernoulli_nb import bernoulli_nb
-from tinyops._core import assert_one_kernel
 
-@pytest.mark.parametrize("n_samples, n_features, n_classes, alpha, binarize", [
-    (150, 20, 4, 1.0, 0.5),
-    (250, 30, 6, 0.5, 0.0),
-    (200, 25, 5, 1.5, None),
-])
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.ml.bernoulli_nb import bernoulli_nb
+
+
+@pytest.mark.parametrize(
+    "n_samples, n_features, n_classes, alpha, binarize",
+    [
+        (150, 20, 4, 1.0, 0.5),
+        (250, 30, 6, 0.5, 0.0),
+        (200, 25, 5, 1.5, None),
+    ],
+)
 def test_bernoulli_nb(n_samples, n_features, n_classes, alpha, binarize):
     # Generate synthetic data
     X_np, y_np = make_classification(
@@ -22,15 +26,13 @@ def test_bernoulli_nb(n_samples, n_features, n_classes, alpha, binarize):
         n_redundant=0,
         n_classes=n_classes,
         n_clusters_per_class=1,
-        random_state=42
+        random_state=42,
     )
     # For Bernoulli, data is often binary (0/1)
     if binarize is None:
         X_np = (X_np > 0.5).astype(np.float32)
 
-    X_train_np, X_test_np, y_train_np, _ = train_test_split(
-        X_np, y_np, test_size=0.25, random_state=42
-    )
+    X_train_np, X_test_np, y_train_np, _ = train_test_split(X_np, y_np, test_size=0.25, random_state=42)
 
     X_train_np = X_train_np.astype(np.float32)
     X_test_np = X_test_np.astype(np.float32)

@@ -1,9 +1,11 @@
-from typing import List
-from tinygrad import Tensor
-from tinyops.text.count_vectorizer import count_vectorizer
 import math
 
-def tfidf_vectorizer(corpus: List[str]) -> Tensor:
+from tinygrad import Tensor
+
+from tinyops.text.count_vectorizer import count_vectorizer
+
+
+def tfidf_vectorizer(corpus: list[str]) -> Tensor:
     """
     Convert a collection of text documents to a matrix of TF-IDF features.
 
