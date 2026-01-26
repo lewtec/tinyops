@@ -1,6 +1,9 @@
 from tinygrad import Tensor
 import itertools
 
+# 🛡️ Sentinel: A reasonable limit to prevent DoS via combinatorial explosion.
+MAX_DEGREE = 10
+
 def polynomial_features(X: Tensor, degree: int = 2, interaction_only: bool = False, include_bias: bool = True) -> Tensor:
     """
     Generate polynomial and interaction features.
@@ -26,6 +29,10 @@ def polynomial_features(X: Tensor, degree: int = 2, interaction_only: bool = Fal
         High values can lead to massive memory consumption and Denial of Service (DoS).
     """
     n_samples, n_features = X.shape
+
+    # 🛡️ Sentinel: Add security check to prevent DoS attack.
+    if degree > MAX_DEGREE:
+        raise ValueError(f"Degree {degree} exceeds the security limit of {MAX_DEGREE}.")
 
     if degree == 0:
         return Tensor.ones(n_samples, 1, dtype=X.dtype) if include_bias else Tensor.zeros(n_samples, 0, dtype=X.dtype)
