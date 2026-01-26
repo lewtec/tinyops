@@ -5,3 +5,11 @@
 **Learning:** The user explicitly stated that this installation method is **intentional and considered safe** for the project's specific agent environment. This indicates that project-specific context can override general security best practices. The environment is assumed to have controls that mitigate this risk.
 
 **Prevention:** Before flagging common vulnerabilities, consider that the project might have specific, unstated environmental contexts. However, continue to flag them and allow the user to make the final determination. Always document such decisions in the journal to retain context for future sessions.
+
+## 2025-01-18 - DoS in Polynomial Features
+
+**Vulnerability:** The `polynomial_features` function lacked input validation for the number of output features, allowing a user to trigger excessive memory allocation (DoS) by supplying high degree or feature count.
+
+**Learning:** Combinatorial functions can easily explode in size. `itertools.combinations` does not protect against this. Validating the expected size using `math.comb` before allocation is a critical defense.
+
+**Prevention:** Always calculate expected output size for functions that expand input dimensions, and enforce a reasonable upper limit (e.g., 100k) before proceeding.

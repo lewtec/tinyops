@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 from sklearn.preprocessing import PolynomialFeatures as SklearnPolynomialFeatures
-from tinygrad import Tensor
+from tinygrad import Tensor, dtypes
 from tinyops._core import assert_close
 from tinyops.ml.polynomial_features import polynomial_features as tinyops_polynomial_features
 
@@ -41,3 +41,15 @@ def test_polynomial_features_degree_1():
     tinyops_result = tinyops_polynomial_features(X_tiny, degree=1)
 
     assert_close(tinyops_result, sklearn_result)
+
+def test_polynomial_features_dos_limit():
+    # Mock tensor to avoid massive allocation
+    class MockTensor:
+        shape = (1, 100)
+        dtype = dtypes.float32
+
+    X = MockTensor()
+
+    # n=100, degree=3 -> 176,851 features > 100,000
+    with pytest.raises(ValueError, match="exceeds the security limit"):
+        tinyops_polynomial_features(X, degree=3)
