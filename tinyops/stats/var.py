@@ -1,7 +1,7 @@
 from tinygrad import Tensor
-from typing import Optional, Union, Tuple
 
-def var(a: Tensor, axis: Optional[Union[int, Tuple[int, ...]]] = None, ddof: int = 0, keepdims: bool = False) -> Tensor:
+
+def var(a: Tensor, axis: int | tuple[int, ...] | None = None, ddof: int = 0, keepdims: bool = False) -> Tensor:
     """
     Compute the variance along the specified axis.
     """

@@ -1,9 +1,9 @@
 import numpy as np
-import pytest
 from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.linalg.matrix_power import matrix_power
-from tinyops._core import assert_one_kernel
-from tinyops._core import assert_close
+
 
 @assert_one_kernel
 def test_matrix_power_0():
@@ -14,6 +14,7 @@ def test_matrix_power_0():
     expected = np.linalg.matrix_power(a_np, 0)
     assert_close(res, expected)
 
+
 @assert_one_kernel
 def test_matrix_power_1():
     a_np = np.random.randn(3, 3).astype(np.float32)
@@ -22,6 +23,7 @@ def test_matrix_power_1():
     res = matrix_power(a, 1)
     expected = np.linalg.matrix_power(a_np, 1)
     assert_close(res, expected)
+
 
 @assert_one_kernel
 def test_matrix_power_2():
@@ -32,6 +34,7 @@ def test_matrix_power_2():
     expected = np.linalg.matrix_power(a_np, 2)
     assert_close(res, expected)
 
+
 @assert_one_kernel
 def test_matrix_power_3():
     a_np = np.random.randn(3, 3).astype(np.float32)
@@ -40,6 +43,7 @@ def test_matrix_power_3():
     res = matrix_power(a, 3)
     expected = np.linalg.matrix_power(a_np, 3)
     assert_close(res, expected)
+
 
 @assert_one_kernel
 def test_matrix_power_negative():
@@ -54,6 +58,7 @@ def test_matrix_power_negative():
     # Inverse using Newton-Schulz has limits, use loose tolerance
     assert_close(res, expected, atol=1e-3, rtol=1e-3)
 
+
 @assert_one_kernel
 def test_matrix_power_batched():
     a_np = np.random.randn(2, 3, 3).astype(np.float32)
@@ -62,6 +67,7 @@ def test_matrix_power_batched():
     res = matrix_power(a, 2)
     expected = np.linalg.matrix_power(a_np, 2)
     assert_close(res, expected)
+
 
 @assert_one_kernel
 def test_matrix_power_batched_0():

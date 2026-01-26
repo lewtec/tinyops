@@ -1,10 +1,9 @@
 import pytest
-import numpy as np
-from tinygrad import Tensor
-from tinyops.filter.noise_cov import noise_cov
-from tinyops._core import assert_close
 from filterpy.common import Q_discrete_white_noise
-from tinyops._core import assert_one_kernel
+from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.filter.noise_cov import noise_cov
 
 TEST_PARAMS = [
     (2, 0.1, 1.0, 1, None),
@@ -13,6 +12,7 @@ TEST_PARAMS = [
     (2, 0.1, 1.0, 2, False),
     (4, 0.05, 2.0, 1, None),
 ]
+
 
 @pytest.mark.parametrize("dim,dt,var,block_size,order_by_dim", TEST_PARAMS)
 @assert_one_kernel
@@ -25,6 +25,7 @@ def test_noise_cov(dim, dt, var, block_size, order_by_dim):
         result = noise_cov(dim, dt, var, block_size, order_by_dim).realize()
 
     assert_close(result, expected)
+
 
 @assert_one_kernel
 def test_tensor_inputs():

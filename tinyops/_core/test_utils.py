@@ -1,8 +1,11 @@
 from functools import wraps
 
+
 class KernelCountError(AssertionError):
     """Exception raised when the kernel count is not as expected."""
+
     pass
+
 
 def assert_one_kernel(func):
     """
@@ -10,8 +13,10 @@ def assert_one_kernel(func):
 
     NOTE: This check is temporarily disabled project-wide.
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         # The check is disabled, so we just run the function.
         return func(*args, **kwargs)
+
     return wrapper

@@ -1,5 +1,6 @@
 from tinygrad import Tensor, dtypes
 
+
 def decision_tree_regressor(X: Tensor, tree: dict) -> Tensor:
     """
     Predicts regression target for samples in X using a pre-trained decision tree.
@@ -15,10 +16,10 @@ def decision_tree_regressor(X: Tensor, tree: dict) -> Tensor:
     """
     node_indices = Tensor.zeros(X.shape[0], dtype=dtypes.int32)
 
-    for _ in range(tree['max_depth']):
+    for _ in range(tree["max_depth"]):
         # Get properties of the current nodes for each sample using gather
-        features = tree['feature'].gather(0, node_indices)
-        thresholds = tree['threshold'].gather(0, node_indices)
+        features = tree["feature"].gather(0, node_indices)
+        thresholds = tree["threshold"].gather(0, node_indices)
 
         # Determine if the current nodes are leaves. In sklearn, feature is < 0 for leaves.
         is_leaf = features < 0
@@ -32,8 +33,8 @@ def decision_tree_regressor(X: Tensor, tree: dict) -> Tensor:
         go_left = sample_feature_values <= thresholds
 
         # Get the IDs of the potential next nodes
-        children_left = tree['children_left'].gather(0, node_indices)
-        children_right = tree['children_right'].gather(0, node_indices)
+        children_left = tree["children_left"].gather(0, node_indices)
+        children_right = tree["children_right"].gather(0, node_indices)
 
         # Choose the next node based on the split condition
         next_nodes = Tensor.where(go_left, children_left, children_right)
@@ -44,6 +45,6 @@ def decision_tree_regressor(X: Tensor, tree: dict) -> Tensor:
 
     # After traversal, node_indices contains the leaf node ID for each sample.
     # Gather the final prediction values from the leaf nodes.
-    final_values = tree['value'].gather(0, node_indices)
+    final_values = tree["value"].gather(0, node_indices)
 
     return final_values

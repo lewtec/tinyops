@@ -1,5 +1,7 @@
-from tinygrad import Tensor
 from typing import Literal
+
+from tinygrad import Tensor
+
 
 def correlate(a: Tensor, v: Tensor, mode: Literal["valid", "same", "full"] = "valid") -> Tensor:
     """
@@ -27,7 +29,7 @@ def correlate(a: Tensor, v: Tensor, mode: Literal["valid", "same", "full"] = "va
 
     result = []
     for i in range(output_len):
-        result.append((padded_a[i:i+m] * v).sum())
+        result.append((padded_a[i : i + m] * v).sum())
 
     if not result:
         return Tensor([])

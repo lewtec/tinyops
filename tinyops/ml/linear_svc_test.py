@@ -1,17 +1,19 @@
-import pytest
 import numpy as np
-from tinygrad import Tensor
-from tinyops._core import assert_close
-from tinyops.ml.linear_svc import linear_svc
-from tinyops._core import assert_one_kernel
-
-from sklearn.svm import LinearSVC
+import pytest
 from sklearn.datasets import make_classification
+from sklearn.svm import LinearSVC
+from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.ml.linear_svc import linear_svc
+
 
 @pytest.mark.parametrize("n_classes", [2, 4])
 def test_linear_svc(n_classes):
     # 1. Train a model in scikit-learn
-    X_np, y_np = make_classification(n_samples=100, n_features=10, n_classes=n_classes, n_informative=5, random_state=42)
+    X_np, y_np = make_classification(
+        n_samples=100, n_features=10, n_classes=n_classes, n_informative=5, random_state=42
+    )
     X_np = X_np.astype(np.float32)
 
     model = LinearSVC(random_state=42)
@@ -42,6 +44,6 @@ def test_linear_svc(n_classes):
     # 6. Assert parity
     # Sklearn returns a 1D array for binary classification, so we reshape to match
     if n_classes == 2:
-      expected_np = expected_np.reshape(-1, 1)
+        expected_np = expected_np.reshape(-1, 1)
 
     assert_close(result_to, expected_np, atol=1e-5, rtol=1e-5)

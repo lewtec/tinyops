@@ -1,5 +1,6 @@
 from tinygrad import Tensor, dtypes
 
+
 def mu_law_decode(x: Tensor, quantization_channels: int = 256) -> Tensor:
     """
     Decode mu-law encoded signal.

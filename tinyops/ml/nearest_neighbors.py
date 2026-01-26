@@ -1,5 +1,6 @@
 from tinygrad import Tensor, dtypes
 
+
 def nearest_neighbors(X: Tensor, n_neighbors: int) -> Tensor:
     """
     Finds the K-Nearest Neighbors for each point in the input tensor.

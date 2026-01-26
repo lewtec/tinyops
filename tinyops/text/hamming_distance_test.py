@@ -1,16 +1,23 @@
-import pytest
 import numpy as np
-from tinygrad import Tensor
-from tinyops.text.hamming_distance import hamming_distance
-from tinyops._core import assert_close
-from tinyops._core import assert_one_kernel
+import pytest
 from scipy.spatial.distance import hamming
+from tinygrad import Tensor
 
-@pytest.mark.parametrize("a_np, b_np", [
-    (np.random.randint(0, 2, size=(10,)).astype(np.float32), np.random.randint(0, 2, size=(10,)).astype(np.float32)),
-    (np.array([1, 0, 1, 0, 1, 0, 1, 0], dtype=np.float32), np.array([1, 0, 1, 0, 1, 0, 1, 0], dtype=np.float32)),
-    (np.array([1, 0, 1, 0, 1, 0, 1, 0], dtype=np.float32), np.array([0, 1, 0, 1, 0, 1, 0, 1], dtype=np.float32)),
-])
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.text.hamming_distance import hamming_distance
+
+
+@pytest.mark.parametrize(
+    "a_np, b_np",
+    [
+        (
+            np.random.randint(0, 2, size=(10,)).astype(np.float32),
+            np.random.randint(0, 2, size=(10,)).astype(np.float32),
+        ),
+        (np.array([1, 0, 1, 0, 1, 0, 1, 0], dtype=np.float32), np.array([1, 0, 1, 0, 1, 0, 1, 0], dtype=np.float32)),
+        (np.array([1, 0, 1, 0, 1, 0, 1, 0], dtype=np.float32), np.array([0, 1, 0, 1, 0, 1, 0, 1], dtype=np.float32)),
+    ],
+)
 def test_hamming_distance(a_np, b_np):
     a = Tensor(a_np).realize()
     b = Tensor(b_np).realize()

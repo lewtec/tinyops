@@ -1,6 +1,8 @@
 import numpy as np
 from tinygrad import Tensor
+
 from tinyops.ml.nmf import nmf
+
 
 def test_nmf_parity():
     """
@@ -21,10 +23,10 @@ def test_nmf_parity():
     # Using 'nndsvd' for initialization is more stable for tests
     # but since our implementation is random, we stick to random for a fair comparison.
     # scikit-learn's random is different, so results won't be identical.
-    model = NMF(n_components=n_components, init='random', random_state=42, max_iter=200, tol=1e-4, solver='mu')
+    model = NMF(n_components=n_components, init="random", random_state=42, max_iter=200, tol=1e-4, solver="mu")
     W_sklearn = model.fit_transform(X_np)
     H_sklearn = model.components_
-    sklearn_error = np.linalg.norm(X_np - W_sklearn @ H_sklearn, 'fro')
+    sklearn_error = np.linalg.norm(X_np - W_sklearn @ H_sklearn, "fro")
 
     # tinyops NMF
     W_tinyops, H_tinyops = nmf(X_tg, n_components=n_components, max_iter=200, tol=1e-4)

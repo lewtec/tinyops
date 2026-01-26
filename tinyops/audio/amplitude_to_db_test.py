@@ -1,17 +1,20 @@
-import torch
-import torchaudio
 import numpy as np
-from tinygrad import Tensor
-from tinyops.audio.amplitude_to_db import amplitude_to_db
-from tinyops._core import assert_close
 import pytest
+from tinygrad import Tensor
 
-@pytest.mark.parametrize("shape, stype, top_db", [
-    ((10, 20), "power", 80.0),
-    ((10, 20), "magnitude", 80.0),
-    ((10, 20), "power", None),
-    ((5, 15, 25), "magnitude", 60.0),
-])
+from tinyops._core import assert_close
+from tinyops.audio.amplitude_to_db import amplitude_to_db
+
+
+@pytest.mark.parametrize(
+    "shape, stype, top_db",
+    [
+        ((10, 20), "power", 80.0),
+        ((10, 20), "magnitude", 80.0),
+        ((10, 20), "power", None),
+        ((5, 15, 25), "magnitude", 60.0),
+    ],
+)
 def test_amplitude_to_db(shape, stype, top_db):
     # a = np.random.rand(*shape).astype(np.float32)
     # create deterministic input
@@ -21,7 +24,7 @@ def test_amplitude_to_db(shape, stype, top_db):
     tinygrad_out = amplitude_to_db(Tensor(a), stype=stype, top_db=top_db)
 
     # reference implementation
-    if stype == 'power':
+    if stype == "power":
         multiplier = 10.0
     else:
         multiplier = 20.0

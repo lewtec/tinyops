@@ -1,9 +1,10 @@
 import numpy as np
-from tinygrad import Tensor
-from tinyops.linalg.dot import dot
-from tinyops._core import assert_one_kernel
-from tinyops._core import assert_close
 import pytest
+from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.linalg.dot import dot
+
 
 @assert_one_kernel
 def test_dot_1d():
@@ -12,12 +13,14 @@ def test_dot_1d():
 
     assert_close(dot(Tensor(a), Tensor(b)), np.dot(a, b))
 
+
 @assert_one_kernel
 def test_dot_2d():
     a = np.random.randn(3, 4).astype(np.float32)
     b = np.random.randn(4, 5).astype(np.float32)
 
     assert_close(dot(Tensor(a), Tensor(b)), np.dot(a, b))
+
 
 @assert_one_kernel
 def test_dot_scalar():
@@ -33,12 +36,14 @@ def test_dot_scalar():
     # 0D, 0D
     assert_close(dot(Tensor(a), Tensor(a)), np.dot(a, a))
 
+
 @assert_one_kernel
 def test_dot_nd_1d():
     a = np.random.randn(2, 3, 4).astype(np.float32)
     b = np.random.randn(4).astype(np.float32)
 
     assert_close(dot(Tensor(a), Tensor(b)), np.dot(a, b))
+
 
 @assert_one_kernel
 def test_dot_nd_nd():
@@ -47,6 +52,7 @@ def test_dot_nd_nd():
     b = np.random.randn(5, 4, 6).astype(np.float32)
 
     assert_close(dot(Tensor(a), Tensor(b)), np.dot(a, b))
+
 
 @assert_one_kernel
 def test_dot_mismatch():

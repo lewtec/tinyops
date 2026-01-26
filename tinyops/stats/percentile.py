@@ -1,11 +1,17 @@
 from tinygrad import Tensor, dtypes
-from typing import Optional, Union, Tuple, List
 
-def percentile(a: Tensor, q: Union[float, List[float], Tensor], axis: Optional[Union[int, Tuple[int, ...]]] = None, keepdims: bool = False, method: str = 'linear') -> Tensor:
+
+def percentile(
+    a: Tensor,
+    q: float | list[float] | Tensor,
+    axis: int | tuple[int, ...] | None = None,
+    keepdims: bool = False,
+    method: str = "linear",
+) -> Tensor:
     """
     Compute the q-th percentile of the data along the specified axis.
     """
-    if method != 'linear':
+    if method != "linear":
         raise NotImplementedError("Only 'linear' interpolation is supported currently")
 
     scalar_q = False
@@ -52,8 +58,8 @@ def percentile(a: Tensor, q: Union[float, List[float], Tensor], axis: Optional[U
     upper = indices.ceil()
     fraction = indices - lower
 
-    lower_idx = lower.cast(dtype=dtypes.int32) # (Q,)
-    upper_idx = upper.cast(dtype=dtypes.int32) # (Q,)
+    lower_idx = lower.cast(dtype=dtypes.int32)  # (Q,)
+    upper_idx = upper.cast(dtype=dtypes.int32)  # (Q,)
 
     # Expand sorted_a to (Q, B..., N)
     # sorted_a: (B..., N)
@@ -64,14 +70,14 @@ def percentile(a: Tensor, q: Union[float, List[float], Tensor], axis: Optional[U
     # Expand indices to (Q, B..., 1)
     target_shape = [q_t.shape[0]] + list(sorted_a.shape[:-1]) + [1]
 
-    lower_idx_exp = lower_idx.reshape((q_t.shape[0],) + (1,) * (ndim-1) + (1,)).expand(target_shape)
-    upper_idx_exp = upper_idx.reshape((q_t.shape[0],) + (1,) * (ndim-1) + (1,)).expand(target_shape)
+    lower_idx_exp = lower_idx.reshape((q_t.shape[0],) + (1,) * (ndim - 1) + (1,)).expand(target_shape)
+    upper_idx_exp = upper_idx.reshape((q_t.shape[0],) + (1,) * (ndim - 1) + (1,)).expand(target_shape)
 
     lower_vals = sorted_a_exp.gather(-1, lower_idx_exp).squeeze(-1)
     upper_vals = sorted_a_exp.gather(-1, upper_idx_exp).squeeze(-1)
 
     # Fraction reshaping for broadcasting
-    fraction = fraction.reshape((q_t.shape[0],) + (1,) * (ndim-1))
+    fraction = fraction.reshape((q_t.shape[0],) + (1,) * (ndim - 1))
 
     res = lower_vals + (upper_vals - lower_vals) * fraction
 

@@ -1,9 +1,10 @@
-import pytest
 import numpy as np
+import pytest
 from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.ml.logistic_regression import logistic_regression
-from tinyops._core import assert_close
-from tinyops._core import assert_one_kernel
+
 
 @pytest.mark.parametrize("n_samples, n_features", [(100, 10)])
 def test_logistic_regression_step(n_samples, n_features):

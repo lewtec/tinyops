@@ -1,5 +1,6 @@
 from tinygrad import Tensor
 
+
 def logistic_regression(X: Tensor, y: Tensor, weights: Tensor, bias: Tensor, lr: float = 0.01) -> tuple[Tensor, Tensor]:
     """
     Performs a single gradient descent update for logistic regression.

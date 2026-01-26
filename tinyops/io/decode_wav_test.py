@@ -1,12 +1,12 @@
+import io
+import struct
+import wave
+
 import numpy as np
 import pytest
-from tinygrad import dtypes
-from tinyops._core import assert_close
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.io.decode_wav import decode_wav
-from tinyops._core import assert_one_kernel
-import io
-import wave
-import struct
 
 # SciPy is a test-only dependency
 try:
@@ -14,34 +14,32 @@ try:
 except ImportError:
     wavfile = None
 
+
 def generate_wav_bytes(sample_rate, data):
     """Generates WAV file bytes from a NumPy array."""
     bytes_io = io.BytesIO()
     wavfile.write(bytes_io, sample_rate, data)
     return bytes_io.getvalue()
 
+
 def generate_24bit_wav_bytes(sample_rate, channels, frames, data_int24):
     """Generates a 24-bit WAV file manually."""
     bytes_io = io.BytesIO()
-    with wave.open(bytes_io, 'wb') as wf:
+    with wave.open(bytes_io, "wb") as wf:
         wf.setnchannels(channels)
         wf.setsampwidth(3)  # 24-bit
         wf.setframerate(sample_rate)
         wf.setnframes(frames)
         packed_data = bytearray()
         for sample in data_int24.flat:
-            packed_data.extend(struct.pack('<i', sample)[:3])
+            packed_data.extend(struct.pack("<i", sample)[:3])
         wf.writeframes(packed_data)
     return bytes_io.getvalue()
 
 
 @pytest.mark.skipif(wavfile is None, reason="scipy is not installed")
 @pytest.mark.parametrize("channels", [1, 2])
-@pytest.mark.parametrize("dtype, sampwidth", [
-    (np.uint8, 1),
-    (np.int16, 2),
-    (np.int32, 4)
-])
+@pytest.mark.parametrize("dtype, sampwidth", [(np.uint8, 1), (np.int16, 2), (np.int32, 4)])
 @assert_one_kernel
 def test_decode_wav_scipy_comparable(channels, dtype, sampwidth):
     sample_rate = 44100
@@ -70,10 +68,10 @@ def test_decode_wav_scipy_comparable(channels, dtype, sampwidth):
     rate_sp, data_sp = wavfile.read(io.BytesIO(wav_bytes))
 
     # Normalize scipy data for comparison
-    if sampwidth == 1: # uint8
+    if sampwidth == 1:  # uint8
         expected_data = (data_sp.astype(np.float32) - 128.0) / 128.0
-    else: # int16, int32
-        norm_factor = 2**(sampwidth * 8 - 1)
+    else:  # int16, int32
+        norm_factor = 2 ** (sampwidth * 8 - 1)
         expected_data = data_sp.astype(np.float32) / norm_factor
 
     if channels == 1:
@@ -81,6 +79,7 @@ def test_decode_wav_scipy_comparable(channels, dtype, sampwidth):
 
     assert rate_to == rate_sp
     assert_close(tensor_to, expected_data, atol=1e-5, rtol=1e-5)
+
 
 @pytest.mark.skipif(wavfile is None, reason="scipy is not installed")
 @pytest.mark.parametrize("channels", [1, 2])
@@ -93,7 +92,9 @@ def test_decode_wav_24bit(channels):
     # Generate 24-bit audio data
     max_val_24bit = 2**23 - 1
     # Create data as int32, but ensure it fits within 24-bit signed range
-    data_int32 = (np.sin(2 * np.pi * 440 * np.arange(n_frames * channels) / sample_rate) * max_val_24bit).astype(np.int32)
+    data_int32 = (np.sin(2 * np.pi * 440 * np.arange(n_frames * channels) / sample_rate) * max_val_24bit).astype(
+        np.int32
+    )
     if channels > 1:
         data_int32 = data_int32.reshape(n_frames, channels)
 
@@ -113,6 +114,7 @@ def test_decode_wav_24bit(channels):
     assert rate_to == sample_rate
     assert_close(tensor_to, expected_data, atol=1e-5, rtol=1e-5)
 
+
 def test_decode_wav_dos_security():
     # 🛡️ Sentinel: Test to verify the DoS mitigation.
     # This test creates a fake WAV header with an extremely large n_frames
@@ -122,7 +124,7 @@ def test_decode_wav_dos_security():
     # Malicious parameters
     malicious_n_frames = MAX_WAV_FRAMES + 1
     num_channels = 1
-    sampwidth = 2 # 16-bit
+    sampwidth = 2  # 16-bit
     sample_rate = 44100
 
     # Calculate sizes for the header
@@ -131,19 +133,19 @@ def test_decode_wav_dos_security():
 
     # Create a minimal WAV header manually. This is enough for wave.open()
     # to parse the malicious frame count without needing the actual data.
-    header = b'RIFF'
-    header += struct.pack('<I', chunk_size)
-    header += b'WAVE'
-    header += b'fmt '
-    header += struct.pack('<I', 16)
-    header += struct.pack('<H', 1)
-    header += struct.pack('<H', num_channels)
-    header += struct.pack('<I', sample_rate)
-    header += struct.pack('<I', sample_rate * num_channels * sampwidth)
-    header += struct.pack('<H', num_channels * sampwidth)
-    header += struct.pack('<H', sampwidth * 8)
-    header += b'data'
-    header += struct.pack('<I', subchunk2_size)
+    header = b"RIFF"
+    header += struct.pack("<I", chunk_size)
+    header += b"WAVE"
+    header += b"fmt "
+    header += struct.pack("<I", 16)
+    header += struct.pack("<H", 1)
+    header += struct.pack("<H", num_channels)
+    header += struct.pack("<I", sample_rate)
+    header += struct.pack("<I", sample_rate * num_channels * sampwidth)
+    header += struct.pack("<H", num_channels * sampwidth)
+    header += struct.pack("<H", sampwidth * 8)
+    header += b"data"
+    header += struct.pack("<I", subchunk2_size)
 
-    with pytest.raises(ValueError, match=f"exceeds the security limit"):
+    with pytest.raises(ValueError, match="exceeds the security limit"):
         decode_wav(header)

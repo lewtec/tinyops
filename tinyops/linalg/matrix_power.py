@@ -1,5 +1,7 @@
 from tinygrad import Tensor
+
 from .inv import inv
+
 
 def matrix_power(a: Tensor, n: int) -> Tensor:
     """

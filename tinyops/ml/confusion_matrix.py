@@ -1,8 +1,8 @@
-from typing import List, Optional
 import numpy as np
 from tinygrad import Tensor, dtypes
 
-def confusion_matrix(y_true: Tensor, y_pred: Tensor, labels: Optional[List[int]] = None) -> Tensor:
+
+def confusion_matrix(y_true: Tensor, y_pred: Tensor, labels: list[int] | None = None) -> Tensor:
     """
     Compute confusion matrix to evaluate the accuracy of a classification.
     """

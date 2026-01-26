@@ -1,5 +1,6 @@
 from tinygrad import Tensor
 
+
 def dot(a: Tensor, b: Tensor) -> Tensor:
     """
     Dot product of two arrays.
@@ -26,10 +27,12 @@ def dot(a: Tensor, b: Tensor) -> Tensor:
     b_permuted = b.permute(perm)
 
     prod_A = 1
-    for s in a.shape[:-1]: prod_A *= s
+    for s in a.shape[:-1]:
+        prod_A *= s
 
     prod_B = 1
-    for s in b.shape[:-2]: prod_B *= s
+    for s in b.shape[:-2]:
+        prod_B *= s
 
     N = b.shape[-1]
 

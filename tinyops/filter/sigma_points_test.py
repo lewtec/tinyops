@@ -1,15 +1,16 @@
 import numpy as np
 import pytest
-from tinygrad import Tensor
-from tinyops.filter.sigma_points import sigma_points
 from filterpy.kalman import MerweScaledSigmaPoints
-from tinyops._core import assert_close
-from tinyops._core import assert_one_kernel
+from tinygrad import Tensor
+
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.filter.sigma_points import sigma_points
 
 TEST_PARAMS = [
     (2, 1e-3, 2.0, 0.0, np.array([1.0, 2.0]), np.array([[2.0, 0.5], [0.5, 2.0]])),
     (3, 0.1, 2.0, 1.0, np.array([1.0, 2.0, 3.0]), np.eye(3) * 0.5),
 ]
+
 
 @pytest.mark.parametrize("n,alpha,beta,kappa,x_np,P_np", TEST_PARAMS)
 @assert_one_kernel

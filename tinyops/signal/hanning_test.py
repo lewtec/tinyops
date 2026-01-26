@@ -1,8 +1,9 @@
 import pytest
 import scipy.signal.windows as windows
+
+from tinyops._core import assert_close, assert_one_kernel
 from tinyops.signal.hanning import hanning
-from tinyops._core import assert_close
-from tinyops._core import assert_one_kernel
+
 
 @pytest.mark.parametrize("M, sym", [(10, True), (11, True), (10, False), (11, False)])
 @assert_one_kernel

@@ -1,8 +1,11 @@
 from tinygrad import Tensor, dtypes
-from typing import Optional, Tuple, Union
+
 from .bincount import bincount
 
-def hist(x: Tensor, bins: int = 10, range: Optional[Tuple[float, float]] = None, density: bool = False) -> Tuple[Tensor, Tensor]:
+
+def hist(
+    x: Tensor, bins: int = 10, range: tuple[float, float] | None = None, density: bool = False
+) -> tuple[Tensor, Tensor]:
     """
     Compute the histogram of a tensor.
     """

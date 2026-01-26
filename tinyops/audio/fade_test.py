@@ -1,10 +1,12 @@
+import numpy as np
 import pytest
-from tinygrad import Tensor, dtypes
-from tinyops.audio.fade import fade
-from tinyops._core import assert_close
 import torch
 import torchaudio.transforms as T
-import numpy as np
+from tinygrad import Tensor
+
+from tinyops._core import assert_close
+from tinyops.audio.fade import fade
+
 
 @pytest.mark.parametrize(
     "shape, fade_in_len, fade_out_len, fade_shape",
@@ -29,13 +31,30 @@ def test_fade_parity(shape, fade_in_len, fade_out_len, fade_shape):
 
     assert_close(tinygrad_faded, torch_faded.numpy(), atol=1e-5, rtol=1e-5)
 
+
 @pytest.mark.parametrize(
     "shape, fade_in_len, fade_out_len",
     [
-        ((1, 100), -1, 10, ),
-        ((1, 100), 10, -1, ),
-        ((1, 100), 101, 10, ),
-        ((1, 100), 10, 101, ),
+        (
+            (1, 100),
+            -1,
+            10,
+        ),
+        (
+            (1, 100),
+            10,
+            -1,
+        ),
+        (
+            (1, 100),
+            101,
+            10,
+        ),
+        (
+            (1, 100),
+            10,
+            101,
+        ),
     ],
 )
 def test_fade_invalid_params(shape, fade_in_len, fade_out_len):

@@ -1,5 +1,6 @@
 from tinygrad import Tensor, dtypes
 
+
 def adaboost_classifier(
     estimators_predictions: Tensor,
     estimator_weights: Tensor,
@@ -29,17 +30,13 @@ def adaboost_classifier(
 
     # One-hot encode the predictions from each estimator
     # Shape: (n_estimators, n_samples, n_classes)
-    one_hot_preds = (
-        estimators_predictions.unsqueeze(-1) == classes.reshape(1, 1, n_classes)
-    ).cast(dtypes.float32)
+    one_hot_preds = (estimators_predictions.unsqueeze(-1) == classes.reshape(1, 1, n_classes)).cast(dtypes.float32)
 
     # Calculate the weighted vote for each class
     # Reshape weights for broadcasting: (n_estimators, 1, 1)
     # Sum over estimators to get total vote per class for each sample
     # Shape: (n_samples, n_classes)
-    weighted_votes = (
-        one_hot_preds * estimator_weights.reshape(n_estimators, 1, 1) * learning_rate
-    ).sum(axis=0)
+    weighted_votes = (one_hot_preds * estimator_weights.reshape(n_estimators, 1, 1) * learning_rate).sum(axis=0)
 
     # Get the index of the class with the highest vote for each sample
     # Shape: (n_samples,)
@@ -48,8 +45,7 @@ def adaboost_classifier(
     # Gather the final class labels using the indices
     # This requires a gather operation. A simple way is to use one_hot and matmul.
     final_preds = (
-        (final_pred_indices.unsqueeze(-1) == Tensor.arange(n_classes).reshape(1, n_classes))
-        .cast(dtypes.float32)
+        (final_pred_indices.unsqueeze(-1) == Tensor.arange(n_classes).reshape(1, n_classes)).cast(dtypes.float32)
         @ classes.unsqueeze(-1)
     ).flatten()
 

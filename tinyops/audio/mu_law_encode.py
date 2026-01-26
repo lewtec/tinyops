@@ -1,5 +1,6 @@
 from tinygrad import Tensor, dtypes
 
+
 def mu_law_encode(x: Tensor, quantization_channels: int = 256) -> Tensor:
     """
     Encode signal based on mu-law companding.

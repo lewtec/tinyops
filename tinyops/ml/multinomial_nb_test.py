@@ -1,17 +1,21 @@
 import numpy as np
 import pytest
 from sklearn.datasets import make_classification
-from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
 from tinygrad import Tensor
-from tinyops._core import assert_close
-from tinyops.ml.multinomial_nb import multinomial_nb
-from tinyops._core import assert_one_kernel
 
-@pytest.mark.parametrize("n_samples, n_features, n_classes, alpha", [
-    (150, 20, 4, 1.0),
-    (250, 30, 6, 0.5),
-])
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.ml.multinomial_nb import multinomial_nb
+
+
+@pytest.mark.parametrize(
+    "n_samples, n_features, n_classes, alpha",
+    [
+        (150, 20, 4, 1.0),
+        (250, 30, 6, 0.5),
+    ],
+)
 def test_multinomial_nb(n_samples, n_features, n_classes, alpha):
     # Generate synthetic data with non-negative integer features
     X_np, y_np = make_classification(
@@ -21,13 +25,11 @@ def test_multinomial_nb(n_samples, n_features, n_classes, alpha):
         n_redundant=0,
         n_classes=n_classes,
         n_clusters_per_class=1,
-        random_state=42
+        random_state=42,
     )
     X_np = np.abs(X_np * 100).astype(np.int32).astype(np.float32)
 
-    X_train_np, X_test_np, y_train_np, _ = train_test_split(
-        X_np, y_np, test_size=0.25, random_state=42
-    )
+    X_train_np, X_test_np, y_train_np, _ = train_test_split(X_np, y_np, test_size=0.25, random_state=42)
 
     # Convert to tinygrad Tensors and realize
     X_train = Tensor(X_train_np).realize()

@@ -1,18 +1,22 @@
-import pytest
 import numpy as np
+import pytest
+from sklearn.datasets import make_regression
+from sklearn.svm import SVR as SklearnSVR
 from tinygrad import Tensor
+
 from tinyops._core import assert_close
 from tinyops.ml.svr import svr
 
-from sklearn.svm import SVR as SklearnSVR
-from sklearn.datasets import make_regression
 
-@pytest.mark.parametrize("kernel, params", [
-    ("linear", {}),
-    ("poly", {"degree": 2, "coef0": 0.5, "gamma": "scale"}),
-    pytest.param("rbf", {"gamma": "scale"}, marks=pytest.mark.xfail(reason="RBF kernel has precision issues")),
-    ("sigmoid", {"gamma": "auto", "coef0": 0.5}),
-])
+@pytest.mark.parametrize(
+    "kernel, params",
+    [
+        ("linear", {}),
+        ("poly", {"degree": 2, "coef0": 0.5, "gamma": "scale"}),
+        pytest.param("rbf", {"gamma": "scale"}, marks=pytest.mark.xfail(reason="RBF kernel has precision issues")),
+        ("sigmoid", {"gamma": "auto", "coef0": 0.5}),
+    ],
+)
 def test_svr(kernel, params):
     # 1. Train a model in scikit-learn
     X_np, y_np = make_regression(n_samples=20, n_features=4, n_informative=2, random_state=42)

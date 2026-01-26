@@ -2,13 +2,22 @@ import cv2
 import numpy as np
 import pytest
 from tinygrad import Tensor
-from tinyops.image.threshold import threshold, THRESH_BINARY, THRESH_BINARY_INV, THRESH_TRUNC, THRESH_TOZERO, THRESH_TOZERO_INV
-from tinyops._core import assert_close
-from tinyops._core import assert_one_kernel
+
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.image.threshold import (
+    THRESH_BINARY,
+    THRESH_BINARY_INV,
+    THRESH_TOZERO,
+    THRESH_TOZERO_INV,
+    THRESH_TRUNC,
+    threshold,
+)
+
 
 def _get_input():
     src = np.random.randint(0, 256, (100, 100), dtype=np.uint8)
     return Tensor(src.astype(np.float32)).realize(), src
+
 
 THRESH_PARAMS = [
     (THRESH_BINARY, cv2.THRESH_BINARY),
@@ -17,6 +26,7 @@ THRESH_PARAMS = [
     (THRESH_TOZERO, cv2.THRESH_TOZERO),
     (THRESH_TOZERO_INV, cv2.THRESH_TOZERO_INV),
 ]
+
 
 @pytest.mark.parametrize("type, cv2_type", THRESH_PARAMS)
 @assert_one_kernel

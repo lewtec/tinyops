@@ -1,15 +1,19 @@
 import numpy as np
-from tinygrad import Tensor
-from tinyops.ml.minmax_scaler import minmax_scaler
-from tinyops._core import assert_close
-from tinyops._core import assert_one_kernel
-from sklearn.preprocessing import MinMaxScaler
 import pytest
+from sklearn.preprocessing import MinMaxScaler
+from tinygrad import Tensor
 
-@pytest.mark.parametrize("shape, feature_range", [
-    ((100, 10), (0, 1)),
-    ((50, 5), (-1, 1)),
-])
+from tinyops._core import assert_close, assert_one_kernel
+from tinyops.ml.minmax_scaler import minmax_scaler
+
+
+@pytest.mark.parametrize(
+    "shape, feature_range",
+    [
+        ((100, 10), (0, 1)),
+        ((50, 5), (-1, 1)),
+    ],
+)
 def test_minmax_scaler(shape, feature_range):
     data_np = np.random.randn(*shape).astype(np.float32)
     data = Tensor(data_np)
