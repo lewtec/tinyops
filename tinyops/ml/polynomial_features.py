@@ -1,4 +1,7 @@
 import itertools
+import math
+
+MAX_OUTPUT_FEATURES = 100_000
 
 from tinygrad import Tensor
 
@@ -33,6 +36,17 @@ def polynomial_features(
 
     if degree == 0:
         return Tensor.ones(n_samples, 1, dtype=X.dtype) if include_bias else Tensor.zeros(n_samples, 0, dtype=X.dtype)
+
+    # 🛡️ Sentinel: Validate output size to prevent DoS
+    expected_features = 1 if include_bias else 0
+    for d in range(1, degree + 1):
+        if interaction_only:
+            expected_features += math.comb(n_features, d)
+        else:
+            expected_features += math.comb(n_features + d - 1, d)
+
+    if expected_features > MAX_OUTPUT_FEATURES:
+        raise ValueError(f"Polynomial features count {expected_features} exceeds the security limit of {MAX_OUTPUT_FEATURES}.")
 
     feature_indices = range(n_features)
 
