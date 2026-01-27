@@ -15,8 +15,17 @@ run = "uv run ruff check ."
 [tasks.lint]
 depends = ["lint:*"]
 
+[tasks."fmt:ruff"]
+run = "uv run ruff format ."
+
+[tasks.fmt]
+depends = ["fmt:*"]
+
+[tasks.codegen]
+run = "echo 'No codegen tasks defined'"
+
 [tasks.test]
 run = "ci-status run test -- uv run pytest"
 
 [tasks.ci]
-depends = ["install", "lint", "test"]
+depends = ["lint", "test"]

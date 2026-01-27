@@ -3,6 +3,7 @@ from functools import partial
 
 from tinygrad import Tensor
 
+
 def _parse_padding(padding):
   if isinstance(padding, int):
     return padding, padding, padding, padding
@@ -76,4 +77,4 @@ def pad(x: Tensor, padding, fill=0, padding_mode="constant") -> Tensor:
     else:
         raise TypeError(f"Invalid type for padding_mode: {type(padding_mode)}")
 
-    return mode(x, padding, fill=fill)
+    return mode.value[0](x, padding, fill=fill)
