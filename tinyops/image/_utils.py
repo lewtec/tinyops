@@ -1,7 +1,16 @@
 from tinygrad import Tensor, dtypes
+
 from tinyops.image.pad import pad
 
-def apply_filter(x: Tensor, kernel: Tensor, scale: float = 1.0, delta: float = 0.0, padding_mode: str = 'reflect', padding=None) -> Tensor:
+
+def apply_filter(
+    x: Tensor,
+    kernel: Tensor,
+    scale: float = 1.0,
+    delta: float = 0.0,
+    padding_mode: str = 'reflect',
+    padding=None
+) -> Tensor:
     """
     Applies a 2D filter to the image.
 
