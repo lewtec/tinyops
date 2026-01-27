@@ -1,4 +1,7 @@
 import itertools
+import math
+
+MAX_OUTPUT_FEATURES = 100000
 
 from tinygrad import Tensor
 
@@ -30,6 +33,17 @@ def polynomial_features(
         High values can lead to massive memory consumption and Denial of Service (DoS).
     """
     n_samples, n_features = X.shape
+
+    # Security check: Prevent DoS via combinatorial explosion
+    n_output_features = 1 if include_bias else 0
+    for d in range(1, degree + 1):
+        if interaction_only:
+            n_output_features += math.comb(n_features, d)
+        else:
+            n_output_features += math.comb(n_features + d - 1, d)
+
+    if n_output_features > MAX_OUTPUT_FEATURES:
+        raise ValueError(f"Too many output features: {n_output_features}. Limit is {MAX_OUTPUT_FEATURES}.")
 
     if degree == 0:
         return Tensor.ones(n_samples, 1, dtype=X.dtype) if include_bias else Tensor.zeros(n_samples, 0, dtype=X.dtype)
