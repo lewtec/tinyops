@@ -3,6 +3,7 @@ from functools import partial
 
 from tinygrad import Tensor
 
+
 def _parse_padding(padding):
   if isinstance(padding, int):
     return padding, padding, padding, padding
@@ -52,16 +53,24 @@ class PaddingMode(Enum):
   REPLICATE = (partial(pad_not_implemented),)
   CIRCULAR = (partial(pad_not_implemented),)
 
+  def __call__(self, *args, **kwargs):
+    return self.value[0](*args, **kwargs)
+
 
 def pad(x: Tensor, padding, fill=0, padding_mode="constant") -> Tensor:
     """
-    Pads an image.
+    Pads an image with a constant value or reflection.
 
     Args:
-      x: Input image tensor (H, W, C) or (H, W).
-      padding: Padding on each border.
-      fill: Value for constant padding.
-      padding_mode: Type of padding. "constant", "reflect", "replicate" or "circular".
+      x: Input image tensor of shape (H, W, C) or (H, W).
+      padding: Padding configuration. Can be:
+        - int: Same padding on all sides.
+        - tuple of 2 ints: (pad_left_right, pad_top_bottom).
+        - tuple of 4 ints: (left, top, right, bottom).
+      fill: Value to fill when padding_mode is "constant". Default is 0.
+      padding_mode: Type of padding. Supported: "constant", "reflect".
+        - "constant": Pads with a constant value.
+        - "reflect": Pads with reflection of image (OpenCV 101 style), excluding edge pixels.
 
     Returns:
       The padded image tensor.

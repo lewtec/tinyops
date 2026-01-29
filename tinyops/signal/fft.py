@@ -3,7 +3,11 @@ from tinygrad import Tensor, dtypes
 
 
 def fft_cooley_tukey(x: Tensor) -> Tensor:
-    """Computes FFT using Cooley-Tukey algorithm for power-of-two sizes."""
+    """
+    Computes FFT using Cooley-Tukey algorithm.
+
+    This is a recursive implementation optimized for power-of-two input sizes.
+    """
     N = x.shape[0]
     if N <= 1:
         return x
@@ -39,10 +43,21 @@ def fft_cooley_tukey(x: Tensor) -> Tensor:
 def fft(x: Tensor) -> Tensor:
     """
     Computes the one-dimensional discrete Fourier Transform.
+
+    This function automatically selects the algorithm based on input size:
+    - **Cooley-Tukey** (Recursive): Used for power-of-two sizes. Time complexity O(N log N).
+    - **DFT Matrix** (Matmul): Used for non-power-of-two sizes. Time complexity O(N^2).
+
     Args:
-      x: The input tensor, representing complex numbers as a tensor with shape (N, 2).
+        x: The input tensor of shape (N, 2), where the last dimension represents
+           (real, imaginary) parts of complex numbers.
+
     Returns:
-      The FFT of the input tensor.
+        The FFT of the input tensor, shape (N, 2).
+
+    Warning:
+        The fallback for non-power-of-2 sizes uses a dense DFT matrix and is O(N^2).
+        For performance, pad input to the nearest power of 2 if possible.
     """
     N = x.shape[0]
     if N <= 1:
