@@ -3,6 +3,26 @@ from tinygrad import Tensor, dtypes
 
 
 def onehot_encoder(X: Tensor) -> Tensor:
+    """
+    Encode categorical features as a one-hot numeric array.
+
+    This function performs both "fit" and "transform" in a single step. It identifies
+    unique values in each column (feature) and transforms them into binary vectors.
+
+    The logic is analogous to `sklearn.preprocessing.OneHotEncoder`, but simplified for
+    stateless tensor operations.
+
+    Args:
+        X: Input tensor of shape (n_samples, n_features) or (n_samples,).
+
+    Returns:
+        A dense tensor of shape (n_samples, n_encoded_features).
+        Each feature from input is expanded into `n_categories` binary columns.
+
+    Warning:
+        This function returns a dense Tensor. If the number of categories is very large,
+        memory consumption will be high.
+    """
     if X.ndim == 1:
         X = X.unsqueeze(1)
 
