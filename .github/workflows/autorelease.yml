@@ -43,14 +43,3 @@ jobs:
 
       - name: CI
         run: mise run ci
-
-      - name: Release
-        if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if [[ "${{ github.ref_type }}" == "tag" ]]; then
-            gh release create ${{ github.ref_name }} --generate-notes
-          else
-            echo "Not a tag, skipping release creation or handle dispatch logic here if needed."
-          fi
