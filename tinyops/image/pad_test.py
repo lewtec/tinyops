@@ -41,6 +41,7 @@ def test_pad_constant_grayscale(padding):
 
     assert_close(result, expected_torch.numpy())
 
+
 @pytest.mark.parametrize("padding", [1, (2, 3), (1, 2, 3, 4)])
 @assert_one_kernel
 def test_pad_reflect_color(padding):
@@ -51,6 +52,7 @@ def test_pad_reflect_color(padding):
     expected_torch = F.pad(img_torch.permute(2, 0, 1), padding, padding_mode="reflect").permute(1, 2, 0)
 
     assert_close(result, expected_torch.numpy())
+
 
 @pytest.mark.parametrize("padding", [1, (2, 3), (1, 2, 3, 4)])
 @assert_one_kernel
