@@ -82,8 +82,9 @@ _INT_TO_INTERPOLATION = {
     INTER_LINEAR: Interpolation.LINEAR,
     INTER_CUBIC: Interpolation.CUBIC,
     INTER_AREA: Interpolation.AREA,
-    INTER_LANCZOS4: Interpolation.LANCZOS4
+    INTER_LANCZOS4: Interpolation.LANCZOS4,
 }
+
 
 def resize(x: Tensor, dsize: tuple[int, int], interpolation: int | Interpolation = INTER_LINEAR) -> Tensor:
     """

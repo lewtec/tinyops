@@ -1,0 +1,45 @@
+name: autorelease
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - "v*"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  autorelease:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install mise
+        uses: jdx/mise-action@v2
+
+      - name: Install dependencies
+        run: mise run install
+
+      - name: Codegen
+        run: mise run codegen
+
+      - name: Create Pull Request if Codegen Changed Files
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update generated code"
+          branch: "codegen-update-${{ github.ref_name }}"
+          title: "chore: update generated code"
+          body: "This PR updates the generated code detected during CI."
+          base: ${{ github.head_ref }}
+
+      - name: CI
+        run: mise run ci
