@@ -60,14 +60,14 @@ def resize_not_implemented(*args, **kwargs):
 
 
 class Interpolation(Enum):
-    NEAREST = partial(resize_nearest)
-    LINEAR = partial(resize_linear)
-    CUBIC = partial(resize_not_implemented)
-    AREA = partial(resize_not_implemented)
-    LANCZOS4 = partial(resize_not_implemented)
+    NEAREST = (partial(resize_nearest),)
+    LINEAR = (partial(resize_linear),)
+    CUBIC = (partial(resize_not_implemented),)
+    AREA = (partial(resize_not_implemented),)
+    LANCZOS4 = (partial(resize_not_implemented),)
 
     def __call__(self, *args, **kwargs):
-        return self.value(*args, **kwargs)
+        return self.value[0](*args, **kwargs)
 
 
 # Backward compatibility constants

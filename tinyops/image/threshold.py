@@ -25,14 +25,14 @@ def threshold_tozero_inv(src: Tensor, thresh: float, maxval: float) -> Tensor:
 
 
 class ThresholdType(Enum):
-    BINARY = partial(threshold_binary)
-    BINARY_INV = partial(threshold_binary_inv)
-    TRUNC = partial(threshold_trunc)
-    TOZERO = partial(threshold_tozero)
-    TOZERO_INV = partial(threshold_tozero_inv)
+    BINARY = (partial(threshold_binary),)
+    BINARY_INV = (partial(threshold_binary_inv),)
+    TRUNC = (partial(threshold_trunc),)
+    TOZERO = (partial(threshold_tozero),)
+    TOZERO_INV = (partial(threshold_tozero_inv),)
 
     def __call__(self, *args, **kwargs):
-        return self.value(*args, **kwargs)
+        return self.value[0](*args, **kwargs)
 
 
 # Backward compatibility constants

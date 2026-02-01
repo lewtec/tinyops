@@ -10,6 +10,7 @@ from tinyops.image.threshold import (
     THRESH_TOZERO,
     THRESH_TOZERO_INV,
     THRESH_TRUNC,
+    ThresholdType,
     threshold,
 )
 
@@ -37,5 +38,18 @@ def test_threshold(type, cv2_type):
 
     _, expected = cv2.threshold(src, thresh, maxval, cv2_type)
     result = threshold(src_tensor, thresh, maxval, type).realize()
+
+    assert_close(result, Tensor(expected.astype(np.float32)))
+
+
+@assert_one_kernel
+def test_threshold_enum_usage():
+    src_tensor, src = _get_input()
+    thresh = 127.0
+    maxval = 255.0
+
+    # Test using the Enum member directly
+    _, expected = cv2.threshold(src, thresh, maxval, cv2.THRESH_BINARY)
+    result = threshold(src_tensor, thresh, maxval, ThresholdType.BINARY).realize()
 
     assert_close(result, Tensor(expected.astype(np.float32)))

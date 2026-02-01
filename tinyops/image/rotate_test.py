@@ -4,7 +4,13 @@ import pytest
 from tinygrad import Tensor
 
 from tinyops._core import assert_close, assert_one_kernel
-from tinyops.image.rotate import ROTATE_90_CLOCKWISE, ROTATE_90_COUNTERCLOCKWISE, ROTATE_180, rotate
+from tinyops.image.rotate import (
+    ROTATE_90_CLOCKWISE,
+    ROTATE_90_COUNTERCLOCKWISE,
+    ROTATE_180,
+    RotateCode,
+    rotate,
+)
 
 
 def _get_input(shape):
@@ -27,4 +33,15 @@ def test_rotate(shape, rotate_code):
     }[rotate_code]
 
     expected = cv2.rotate(data, cv2_code)
+    assert_close(result, expected)
+
+
+@assert_one_kernel
+def test_rotate_enum_usage():
+    tensor, data = _get_input((10, 20))
+
+    # Test using the Enum member directly
+    result = rotate(tensor, RotateCode.CLOCKWISE_90).realize()
+    expected = cv2.rotate(data, cv2.ROTATE_90_CLOCKWISE)
+
     assert_close(result, expected)

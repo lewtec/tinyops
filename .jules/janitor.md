@@ -38,3 +38,9 @@
 **Root Cause:** The mapping dictionary was defined inside the function scope instead of as a module-level constant, mirroring the inefficient pattern found in `rotate.py`.
 **Solution:** I moved the mapping dictionary to a module-level constant `_INT_TO_THRESHOLD_TYPE` and simplified the `ThresholdType` Enum to store `partial` functions directly.
 **Pattern:** Apply the "Enum optimization" pattern (module-level constants for maps, direct partial storage) consistently across image processing modules.
+
+## 2026-02-01 - Fix Enum partial wrapping for Python 3.14
+**Issue:** Functions `threshold`, `rotate`, and `resize` in `tinyops/image` failed with `TypeError` when using `Enum` members (e.g., `ThresholdType.BINARY`) instead of integer constants.
+**Root Cause:** In Python 3.14 (and potentially 3.11+), assigning a `partial` object directly to an `Enum` member makes the member the `partial` itself, rather than an instance of the `Enum` class. This caused `isinstance(arg, EnumType)` checks to fail.
+**Solution:** Wrapped `partial` objects in single-element tuples (e.g., `BINARY = (partial(...),)`) in `ThresholdType`, `RotateCode`, and `Interpolation` Enums. Updated `__call__` to unpack the tuple. This restores the correct `Enum` behavior where members are instances of the class.
+**Pattern:** When using `functools.partial` (or other callables) as `Enum` values, always wrap them in a tuple to prevent the `Enum` metaclass from interpreting them as methods or raw values.

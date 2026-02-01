@@ -4,7 +4,7 @@ import pytest
 from tinygrad import Tensor
 
 from tinyops._core import assert_close, assert_one_kernel
-from tinyops.image.resize import INTER_LINEAR, INTER_NEAREST, resize
+from tinyops.image.resize import INTER_LINEAR, INTER_NEAREST, Interpolation, resize
 
 
 def _get_input_2d():
@@ -35,4 +35,16 @@ def test_resize(interp, cv2_interp, dsize, is_3d):
 
     result = resize(tensor, dsize, interpolation=interp).realize()
     expected = cv2.resize(data, (dsize[1], dsize[0]), interpolation=cv2_interp)
+    assert_close(result, expected, atol=1e-5, rtol=1e-5)
+
+
+@assert_one_kernel
+def test_resize_enum_usage():
+    tensor, data = _get_input_2d()
+    dsize = (5, 10)
+
+    # Test using the Enum member directly
+    result = resize(tensor, dsize, interpolation=Interpolation.LINEAR).realize()
+    expected = cv2.resize(data, (dsize[1], dsize[0]), interpolation=cv2.INTER_LINEAR)
+
     assert_close(result, expected, atol=1e-5, rtol=1e-5)
