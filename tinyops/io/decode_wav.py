@@ -15,13 +15,24 @@ def decode_wav(wav_bytes: bytes) -> tuple[int, Tensor]:
     """
     Decodes WAV audio bytes into a tinygrad.Tensor.
 
+    This function supports standard PCM WAV formats:
+    - 8-bit unsigned (normalized from [0, 255] to [-1.0, 1.0])
+    - 16-bit signed
+    - 24-bit signed (using 3-byte packing)
+    - 32-bit signed
+
+    The output is always float32 in the range [-1.0, 1.0].
+
     Args:
-      wav_bytes: The WAV audio data in bytes.
+        wav_bytes: The WAV audio data in bytes.
 
     Returns:
-      A tuple containing the sample rate (int) and the audio data as a Tensor.
-      The tensor will have a shape of (frames, channels) and will be of dtype float32,
-      normalized to the range [-1.0, 1.0].
+        A tuple containing the sample rate (int) and the audio data as a Tensor.
+        The tensor will have a shape of (frames, channels).
+
+    Raises:
+        ValueError: If the WAV header specifies an excessive number of frames (DoS protection),
+            or if the data chunk size doesn't match the header.
     """
     with io.BytesIO(wav_bytes) as bio:
         with wave.open(bio, "rb") as wf:

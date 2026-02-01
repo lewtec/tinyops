@@ -4,6 +4,20 @@ from tinygrad import Tensor
 def median(a: Tensor, axis: int | None = None, keepdims: bool = False) -> Tensor:
     """
     Compute the median along the specified axis.
+
+    The median is the value separating the higher half from the lower half of a data sample.
+    This implementation uses sorting, which provides deterministic results but requires
+    O(N log N) memory and computation.
+
+    Args:
+        a: Input tensor.
+        axis: Axis or axes along which the median is computed. The default is to compute
+            the median along a flattened version of the array.
+        keepdims: If this is set to True, the axes which are reduced are left in the
+            result as dimensions with size one.
+
+    Returns:
+        The median of the array elements.
     """
     if axis is None:
         a = a.flatten()

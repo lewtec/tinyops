@@ -5,20 +5,26 @@ from tinyops.linalg import cholesky
 
 def sigma_points(x: Tensor, P: Tensor, alpha: float, beta: float, kappa: float) -> tuple[Tensor, Tensor, Tensor]:
     """
-    Computes Merwe Scaled Sigma Points and weights.
+    Computes Merwe Scaled Sigma Points and weights for the Unscented Kalman Filter (UKF).
+
+    Sigma points are a set of deterministic vectors chosen to capture the mean and covariance
+    of a random variable. Merwe Scaled Sigma Points allow for precise control over the spread
+    of the points, improving stability and accuracy for non-linear transformations.
 
     Args:
-        x: Mean vector of shape (n,).
-        P: Covariance matrix of shape (n, n).
-        alpha: Spread parameter.
-        beta: Prior knowledge parameter.
-        kappa: Scaling parameter.
+        x: Mean vector of state distribution, shape (n,).
+        P: Covariance matrix of state distribution, shape (n, n).
+        alpha: Spread parameter. Determines the spread of the sigma points around the mean.
+            Typically a small positive value (e.g., 1e-3).
+        beta: Prior knowledge parameter. Used to incorporate prior knowledge of the distribution.
+            For Gaussian distributions, beta = 2 is optimal.
+        kappa: Secondary scaling parameter. Usually set to 0 or 3 - n.
 
     Returns:
-        tuple: (sigmas, Wm, Wc)
-            sigmas: Sigma points (2n+1, n).
-            Wm: Weights for mean (2n+1,).
-            Wc: Weights for covariance (2n+1,).
+        A tuple of (sigmas, Wm, Wc):
+            - sigmas: The generated sigma points with shape (2n+1, n).
+            - Wm: Weights for the mean calculation, shape (2n+1,).
+            - Wc: Weights for the covariance calculation, shape (2n+1,).
     """
     n = x.shape[0]
 

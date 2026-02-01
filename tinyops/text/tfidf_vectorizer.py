@@ -9,11 +9,23 @@ def tfidf_vectorizer(corpus: list[str]) -> Tensor:
     """
     Convert a collection of text documents to a matrix of TF-IDF features.
 
+    TF-IDF (Term Frequency-Inverse Document Frequency) scales the impact of tokens
+    that occur very frequently in a given corpus (like "the", "a") and are therefore
+    less informative than features that occur in a small fraction of the training corpus.
+
+    This implementation aligns with scikit-learn's default behavior:
+    - Uses ``log((N + 1) / (df + 1)) + 1`` for IDF (smoothing).
+    - Applies L2 normalization to the resulting TF-IDF vectors.
+
     Args:
         corpus: A list of strings (documents).
 
     Returns:
-        A tinygrad Tensor representing the TF-IDF matrix.
+        A tinygrad Tensor representing the document-term matrix of shape (n_samples, n_features).
+
+    Warning:
+        This implementation builds a dense matrix. For large corpora or vocabularies,
+        it may consume significant memory.
     """
     counts_tensor = count_vectorizer(corpus)
     counts = counts_tensor.numpy().tolist()

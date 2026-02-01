@@ -10,6 +10,22 @@ def percentile(
 ) -> Tensor:
     """
     Compute the q-th percentile of the data along the specified axis.
+
+    Returns the q-th percentile(s) of the array elements.
+
+    Args:
+        a: Input tensor.
+        q: Percentile or sequence of percentiles to compute, which must be between 0 and 100 inclusive.
+        axis: Axis or axes along which the percentiles are computed. The default is to compute
+            the percentile(s) along a flattened version of the array.
+        keepdims: If this is set to True, the axes which are reduced are left in the
+            result as dimensions with size one.
+        method: Interpolation method to use when the desired percentile lies between two data points.
+            Only "linear" is supported: ``i + (j - i) * fraction``, where ``i`` and ``j``
+            are the indices surrounding the percentile.
+
+    Returns:
+        The q-th percentile(s) of the input data.
     """
     if method != "linear":
         raise NotImplementedError("Only 'linear' interpolation is supported currently")

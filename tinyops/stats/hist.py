@@ -8,6 +8,22 @@ def hist(
 ) -> tuple[Tensor, Tensor]:
     """
     Compute the histogram of a tensor.
+
+    The bins (of equal width) are determined by the range argument or the min/max of the input.
+    Values outside the range are ignored.
+
+    Args:
+        x: Input tensor. Flattened before computation.
+        bins: Number of equal-width bins.
+        range: The lower and upper range of the bins. If not provided, range is simply
+            ``(x.min(), x.max())``.
+        density: If True, the result is the value of the probability *density* function
+            at the bin, normalized such that the *integral* over the range is 1.
+
+    Returns:
+        A tuple of (hist, bin_edges):
+            - hist: The values of the histogram.
+            - bin_edges: The bin edges (length(hist) + 1).
     """
     x = x.flatten()
 
