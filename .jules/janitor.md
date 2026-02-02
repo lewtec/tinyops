@@ -38,3 +38,9 @@
 **Root Cause:** The mapping dictionary was defined inside the function scope instead of as a module-level constant, mirroring the inefficient pattern found in `rotate.py`.
 **Solution:** I moved the mapping dictionary to a module-level constant `_INT_TO_THRESHOLD_TYPE` and simplified the `ThresholdType` Enum to store `partial` functions directly.
 **Pattern:** Apply the "Enum optimization" pattern (module-level constants for maps, direct partial storage) consistently across image processing modules.
+
+## 2026-02-02 - Optimize Enum Usage in CvtColor
+**Issue:** The `cvt_color` function in `tinyops/image/cvt_color.py` was using an `if/else` chain for integer code lookup instead of a dictionary.
+**Root Cause:** The function was implemented with conditional logic for backward compatibility, but this pattern is less extensible than a dictionary lookup.
+**Solution:** I moved the mapping to a module-level constant `_INT_TO_COLOR_CONVERSION`. I retained the tuple wrapping for `partial` values in the Enum to ensure correct `isinstance` behavior and compatibility with existing tests.
+**Pattern:** Use module-level constants for static mapping dictionaries to improve readability and performance. When using `partial` in Enums, ensure they are correctly wrapped if member instance validation is required.

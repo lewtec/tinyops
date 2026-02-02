@@ -30,6 +30,10 @@ class ColorConversion(Enum):
 # Backward compatibility
 COLOR_BGR2GRAY = 6
 
+_INT_TO_COLOR_CONVERSION = {
+    COLOR_BGR2GRAY: ColorConversion.BGR2GRAY,
+}
+
 
 def cvt_color(src: Tensor, code: int | ColorConversion) -> Tensor:
     """
@@ -37,8 +41,8 @@ def cvt_color(src: Tensor, code: int | ColorConversion) -> Tensor:
     This implementation aims to be compatible with OpenCV's cvtColor function.
     """
     if isinstance(code, int):
-        if code == COLOR_BGR2GRAY:
-            code = ColorConversion.BGR2GRAY
+        if code in _INT_TO_COLOR_CONVERSION:
+            code = _INT_TO_COLOR_CONVERSION[code]
         else:
             raise NotImplementedError(f"Color conversion code {code} not implemented yet.")
 
