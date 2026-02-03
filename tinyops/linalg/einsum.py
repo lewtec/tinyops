@@ -2,7 +2,32 @@ from tinygrad import Tensor
 
 
 def einsum(subscripts: str, *operands: Tensor) -> Tensor:
-    """Evaluates the Einstein summation convention."""
+    """
+    Evaluates the Einstein summation convention on the operands.
+
+    This implementation extends the standard `tinygrad.Tensor.einsum` by adding support
+    for repeated indices within a single operand (e.g., 'ii->i'), which implies
+    extracting the diagonal. It preprocesses the inputs to handle these cases explicitly
+    using slicing and `arange` before passing the simplified expression to the backend.
+
+    Args:
+        subscripts: Specifies the subscripts for summation as comma-separated list of subscript labels.
+            An implicit (classical Einstein summation) calculation is performed unless the explicit
+            indicator '->' is included as well as subscript labels of the precise output form.
+        *operands: The tensors to compute the einsum of.
+
+    Returns:
+        The calculation based on the Einstein summation convention.
+
+    Raises:
+        ValueError: If the number of operands does not match the subscripts, or if dimensions
+            corresponding to the same label mismatch.
+
+    Example:
+        >>> a = Tensor.eye(3)
+        >>> einsum('ii->i', a).numpy()
+        array([1., 1., 1.], dtype=float32)
+    """
     if "->" in subscripts:
         input_str, output_str = subscripts.split("->")
         explicit = True

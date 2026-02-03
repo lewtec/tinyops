@@ -4,8 +4,24 @@ from tinygrad import Tensor
 def det(a: Tensor) -> Tensor:
     """
     Calculates the determinant of a square matrix using recursive Laplace expansion.
-    Note: This implementation is computationally expensive for large matrices (O(n!))
-    and is intended for small matrices typically found in test cases.
+
+    This function expands the determinant along the first row. While mathematically elegant,
+    this algorithm has a factorial time complexity O(N!) and is extremely inefficient for
+    matrices larger than 10x10.
+
+    Args:
+        a: Input tensor of shape (M, M). Must be a square 2D matrix.
+
+    Returns:
+        The determinant of the matrix.
+
+    Raises:
+        ValueError: If the input matrix is not square or not 2D.
+
+    Note:
+        This implementation is primarily intended for educational purposes or extremely small
+        matrices (e.g., 2x2, 3x3, 4x4) used in geometric transformations or unit tests.
+        Do not use for large-scale linear algebra operations.
     """
     if len(a.shape) != 2 or a.shape[0] != a.shape[1]:
         raise ValueError("Input must be a square 2D matrix.")

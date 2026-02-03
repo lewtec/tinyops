@@ -5,6 +5,24 @@ from tinygrad import Tensor, dtypes
 def confusion_matrix(y_true: Tensor, y_pred: Tensor, labels: list[int] | None = None) -> Tensor:
     """
     Compute confusion matrix to evaluate the accuracy of a classification.
+
+    By definition a confusion matrix :math:`C` is such that :math:`C_{i, j}`
+    is equal to the number of observations known to be in group :math:`i` and
+    predicted to be in group :math:`j`.
+
+    This implementation avoids explicit loops over samples by using a matrix multiplication
+    trick with boolean masks.
+
+    Args:
+        y_true: Ground truth (correct) target values. Shape (n_samples,).
+        y_pred: Estimated targets as returned by a classifier. Shape (n_samples,).
+        labels: List of labels to index the matrix. This may be used to reorder or
+            select a subset of labels. If None, labels are determined from the unique
+            values in `y_true` and `y_pred` sorted in ascending order.
+
+    Returns:
+        Confusion matrix of shape (n_classes, n_classes). The rows represent the
+        true classes, and the columns represent the predicted classes.
     """
     if labels is None:
         y_true_np = y_true.numpy()
