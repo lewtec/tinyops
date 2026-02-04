@@ -21,11 +21,17 @@ run = "uv run ruff format ."
 [tasks.fmt]
 depends = ["fmt:*"]
 
-[tasks.test]
+[tasks."test:pytest"]
 run = "ci-status run test -- uv run pytest"
 
-[tasks.codegen]
+[tasks.test]
+depends = ["test:*"]
+
+[tasks."codegen:noop"]
 run = "true"
+
+[tasks.codegen]
+depends = ["codegen:*"]
 
 [tasks.ci]
 depends = ["lint", "test"]
