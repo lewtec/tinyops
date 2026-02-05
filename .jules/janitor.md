@@ -33,8 +33,15 @@
 **Root Cause:** The mapping dictionary was defined inside the function scope instead of as a module-level constant. The Enum definition followed the same older pattern seen in `rotate.py` before its refactor.
 **Solution:** I moved the mapping dictionary to a module-level constant `_INT_TO_INTERPOLATION` and simplified the `Interpolation` Enum to store `partial` functions directly.
 **Pattern:** Static mapping dictionaries should be defined as module-level constants. Enum members can store `partial` callables directly without tuple wrapping.
+
 ## 2026-01-20 - Optimize Enum Usage in Threshold
 **Issue:** The `threshold` function in `tinyops/image/threshold.py` was recreating a mapping dictionary on every call, and the `ThresholdType` Enum definition used unnecessary tuple wrapping for `partial` functions.
 **Root Cause:** The mapping dictionary was defined inside the function scope instead of as a module-level constant, mirroring the inefficient pattern found in `rotate.py`.
 **Solution:** I moved the mapping dictionary to a module-level constant `_INT_TO_THRESHOLD_TYPE` and simplified the `ThresholdType` Enum to store `partial` functions directly.
 **Pattern:** Apply the "Enum optimization" pattern (module-level constants for maps, direct partial storage) consistently across image processing modules.
+
+## 2026-01-31 - Use IntEnum for morphology operations
+**Issue:** The `morphology` function in `tinyops/image/morphology.py` used magic numbers (0, 1, 2, 3, 4) in its `match` statement, reducing clarity and maintainability.
+**Root Cause:** The constants were defined at the module level but not used in the `match` statement, likely for brevity or because `match` requires dotted names to match values.
+**Solution:** I refactored the constants into an `IntEnum` named `MorphOp` and used its members in the `match` statement. This improves clarity and type safety while maintaining backward compatibility by aliasing the old constants to the new Enum members.
+**Pattern:** Replace magic numbers with `IntEnum` where applicable, especially in `match` statements, to improve code self-documentation and safety.
