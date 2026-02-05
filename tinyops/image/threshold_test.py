@@ -10,6 +10,7 @@ from tinyops.image.threshold import (
     THRESH_TOZERO,
     THRESH_TOZERO_INV,
     THRESH_TRUNC,
+    ThresholdType,
     threshold,
 )
 
@@ -25,6 +26,11 @@ THRESH_PARAMS = [
     (THRESH_TRUNC, cv2.THRESH_TRUNC),
     (THRESH_TOZERO, cv2.THRESH_TOZERO),
     (THRESH_TOZERO_INV, cv2.THRESH_TOZERO_INV),
+    (ThresholdType.BINARY, cv2.THRESH_BINARY),
+    (ThresholdType.BINARY_INV, cv2.THRESH_BINARY_INV),
+    (ThresholdType.TRUNC, cv2.THRESH_TRUNC),
+    (ThresholdType.TOZERO, cv2.THRESH_TOZERO),
+    (ThresholdType.TOZERO_INV, cv2.THRESH_TOZERO_INV),
 ]
 
 

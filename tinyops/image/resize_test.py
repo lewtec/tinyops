@@ -4,7 +4,7 @@ import pytest
 from tinygrad import Tensor
 
 from tinyops._core import assert_close, assert_one_kernel
-from tinyops.image.resize import INTER_LINEAR, INTER_NEAREST, resize
+from tinyops.image.resize import INTER_LINEAR, INTER_NEAREST, Interpolation, resize
 
 
 def _get_input_2d():
@@ -22,6 +22,8 @@ TEST_PARAMS = [
     (INTER_NEAREST, cv2.INTER_NEAREST, (15, 25), True),
     (INTER_LINEAR, cv2.INTER_LINEAR, (5, 10), False),
     (INTER_LINEAR, cv2.INTER_LINEAR, (15, 25), True),
+    (Interpolation.NEAREST, cv2.INTER_NEAREST, (5, 10), False),
+    (Interpolation.LINEAR, cv2.INTER_LINEAR, (15, 25), True),
 ]
 
 
