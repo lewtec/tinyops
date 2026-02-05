@@ -49,3 +49,12 @@ def test_polynomial_features_degree_1():
     tinyops_result = tinyops_polynomial_features(X_tiny, degree=1)
 
     assert_close(tinyops_result, sklearn_result)
+
+
+def test_polynomial_features_dos_protection():
+    """Test that polynomial_features raises ValueError for potential DoS inputs."""
+    X_tiny = Tensor.zeros(1, 100)
+
+    # 100 features, degree 4 -> ~4.6 million features > 1,000,000 limit
+    with pytest.raises(ValueError, match="Too many output features"):
+        tinyops_polynomial_features(X_tiny, degree=4)

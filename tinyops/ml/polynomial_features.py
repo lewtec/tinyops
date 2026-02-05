@@ -1,6 +1,9 @@
 import itertools
+import math
 
 from tinygrad import Tensor
+
+MAX_OUTPUT_FEATURES = 1_000_000
 
 
 def polynomial_features(
@@ -33,6 +36,19 @@ def polynomial_features(
 
     if degree == 0:
         return Tensor.ones(n_samples, 1, dtype=X.dtype) if include_bias else Tensor.zeros(n_samples, 0, dtype=X.dtype)
+
+    expected_features = 1 if include_bias else 0
+    for d in range(1, degree + 1):
+        if interaction_only:
+            expected_features += math.comb(n_features, d)
+        else:
+            expected_features += math.comb(n_features + d - 1, d)
+
+        if expected_features > MAX_OUTPUT_FEATURES:
+            raise ValueError(
+                f"Too many output features (expected > {MAX_OUTPUT_FEATURES}). "
+                "Decrease degree or n_features to avoid Denial of Service."
+            )
 
     feature_indices = range(n_features)
 
