@@ -93,3 +93,53 @@ def apply_filter(
 
 # Alias for backward compatibility if needed, though we will update callers
 _apply_filter_iterative = apply_filter
+
+
+def apply_morphological_filter(x: Tensor, kernel: Tensor, mode: str) -> Tensor:
+    """
+    Applies morphological filter (erode/dilate) manually using sliding window views.
+    This is less efficient than conv2d but required for non-linear operations (min/max).
+
+    Args:
+        x: Input tensor (H, W) or (H, W, C).
+        kernel: Structuring element (H, W).
+        mode: 'min' for erosion, 'max' for dilation.
+    """
+    h_k, w_k = kernel.shape
+    py, px = (h_k - 1) // 2, (w_k - 1) // 2
+
+    if x.ndim == 2:
+        padding = ((py, py), (px, px))
+        h_orig, w_orig = x.shape
+    elif x.ndim == 3:
+        padding = ((py, py), (px, px), (0, 0))
+        h_orig, w_orig, _ = x.shape
+    else:
+        raise NotImplementedError(f"morphological filter not implemented for ndim={x.ndim}")
+
+    pad_value = float("inf") if mode == "min" else float("-inf")
+    # Use standard tinygrad pad since we just need constant padding
+    x_padded = x.pad(padding, value=pad_value)
+
+    views = []
+    for i in range(h_k):
+        for j in range(w_k):
+            if x.ndim == 2:
+                view = x_padded[i : i + h_orig, j : j + w_orig]
+            else:
+                view = x_padded[i : i + h_orig, j : j + w_orig, :]
+            views.append(view.unsqueeze(0))
+
+    stacked_views = Tensor.cat(*views, dim=0)
+
+    mask_shape = (h_k * w_k,) + (1,) * x.ndim
+    kernel_mask = kernel.flatten().reshape(mask_shape) > 0
+
+    masked_views = Tensor.where(kernel_mask, stacked_views, pad_value)
+
+    if mode == "min":
+        return masked_views.min(axis=0)
+    elif mode == "max":
+        return masked_views.max(axis=0)
+    else:
+        raise ValueError(f"Invalid mode: {mode}")
