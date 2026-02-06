@@ -1,4 +1,3 @@
-import numpy as np
 from tinygrad import Tensor, dtypes
 
 
@@ -11,6 +10,8 @@ def bernoulli_nb(
     _classes: Tensor | None = None,
 ) -> Tensor:
     if _classes is None:
+        import numpy as np
+
         y_np = y_train.numpy()
         classes_np = np.unique(y_np)
         classes = Tensor(classes_np, dtype=y_train.dtype)

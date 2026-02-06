@@ -1,4 +1,3 @@
-import numpy as np
 from tinygrad import Tensor, dtypes
 
 
@@ -7,6 +6,8 @@ def confusion_matrix(y_true: Tensor, y_pred: Tensor, labels: list[int] | None = 
     Compute confusion matrix to evaluate the accuracy of a classification.
     """
     if labels is None:
+        import numpy as np
+
         y_true_np = y_true.numpy()
         y_pred_np = y_pred.numpy()
         labels_list = sorted(list(np.unique(np.concatenate((y_true_np, y_pred_np)))))

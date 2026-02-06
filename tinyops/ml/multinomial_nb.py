@@ -1,4 +1,3 @@
-import numpy as np
 from tinygrad import Tensor, dtypes
 
 
@@ -6,6 +5,8 @@ def multinomial_nb(
     X_train: Tensor, y_train: Tensor, X_test: Tensor, alpha: float = 1.0, _classes: Tensor | None = None
 ) -> Tensor:
     if _classes is None:
+        import numpy as np
+
         y_np = y_train.numpy()
         classes_np = np.unique(y_np)
         classes = Tensor(classes_np, dtype=y_train.dtype)

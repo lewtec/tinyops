@@ -2,7 +2,6 @@ import io
 import struct
 import wave
 
-import numpy as np
 from tinygrad import Tensor
 
 
@@ -19,6 +18,8 @@ def encode_wav(tensor: Tensor, sample_rate: int, sampwidth: int = 2) -> bytes:
     Returns:
       The WAV audio data in bytes.
     """
+    import numpy as np
+
     if not (tensor.dtype.name == "float32" or tensor.dtype.name == "float"):
         raise TypeError(f"Input tensor must be float32, but got {tensor.dtype}")
 

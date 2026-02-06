@@ -1,4 +1,5 @@
-import numpy as np
+import math
+
 from tinygrad import Tensor
 
 
@@ -11,6 +12,6 @@ def blackman(M: int, sym: bool = True) -> Tensor:
     denominator = M - 1 if sym else M
     n = Tensor.arange(M)
 
-    w = 0.42 - 0.5 * (2 * np.pi * n / denominator).cos() + 0.08 * (4 * np.pi * n / denominator).cos()
+    w = 0.42 - 0.5 * (2 * math.pi * n / denominator).cos() + 0.08 * (4 * math.pi * n / denominator).cos()
 
     return w
