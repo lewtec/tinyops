@@ -1,4 +1,3 @@
-import numpy as np
 from tinygrad import Tensor
 
 
@@ -6,6 +5,8 @@ def roc_auc(y_true: Tensor, y_score: Tensor) -> Tensor:
     """
     Compute Area Under the Receiver Operating Characteristic Curve (ROC AUC) from prediction scores.
     """
+    import numpy as np
+
     # Validation using numpy. This is fine as it happens before the graph computation.
     y_true_np = y_true.numpy()
     unique_labels = np.unique(y_true_np)

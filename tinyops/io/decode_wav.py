@@ -2,7 +2,6 @@ import io
 import struct
 import wave
 
-import numpy as np
 from tinygrad import Tensor, dtypes
 
 # A reasonable limit to prevent DoS from malformed WAV headers.
@@ -34,6 +33,8 @@ def decode_wav(wav_bytes: bytes) -> tuple[int, Tensor]:
         ValueError: If the WAV header specifies an excessive number of frames (DoS protection),
             or if the data chunk size doesn't match the header.
     """
+    import numpy as np
+
     with io.BytesIO(wav_bytes) as bio:
         with wave.open(bio, "rb") as wf:
             n_channels = wf.getnchannels()

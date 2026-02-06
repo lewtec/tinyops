@@ -1,4 +1,3 @@
-import numpy as np
 from tinygrad import Tensor, dtypes
 
 
@@ -23,6 +22,8 @@ def onehot_encoder(X: Tensor) -> Tensor:
         This function returns a dense Tensor. If the number of categories is very large,
         memory consumption will be high.
     """
+    import numpy as np
+
     if X.ndim == 1:
         X = X.unsqueeze(1)
 
