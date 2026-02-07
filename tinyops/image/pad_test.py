@@ -69,7 +69,7 @@ def test_pad_reflect_grayscale(padding):
 @pytest.mark.parametrize("padding", [1, (2, 3), (1, 2, 3, 4)])
 @assert_one_kernel
 def test_pad_constant_4d(padding):
-    """Test pad with constant mode for a 4D input (H, W, N, C)."""
+    """Test pad with constant mode for a 4D input (H, W, N, C) comparing against torchvision as ground truth."""
     # Create 4D input: (H=10, W=12, N=2, C=3)
     img_torch = torch.randn(10, 12, 2, 3)
     tensor_img = Tensor(img_torch.numpy()).realize()
