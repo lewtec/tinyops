@@ -108,12 +108,11 @@ def apply_morphological_filter(x: Tensor, kernel: Tensor, mode: str) -> Tensor:
     h_k, w_k = kernel.shape
     py, px = (h_k - 1) // 2, (w_k - 1) // 2
 
+    h_orig, w_orig = x.shape[:2]
     if x.ndim == 2:
         padding = ((py, py), (px, px))
-        h_orig, w_orig = x.shape
     elif x.ndim == 3:
         padding = ((py, py), (px, px), (0, 0))
-        h_orig, w_orig, _ = x.shape
     else:
         raise NotImplementedError(f"morphological filter not implemented for ndim={x.ndim}")
 
@@ -137,9 +136,10 @@ def apply_morphological_filter(x: Tensor, kernel: Tensor, mode: str) -> Tensor:
 
     masked_views = Tensor.where(kernel_mask, stacked_views, pad_value)
 
-    if mode == "min":
-        return masked_views.min(axis=0)
-    elif mode == "max":
-        return masked_views.max(axis=0)
-    else:
-        raise ValueError(f"Invalid mode: {mode}")
+    match mode:
+        case "min":
+            return masked_views.min(axis=0)
+        case "max":
+            return masked_views.max(axis=0)
+        case _:
+            raise ValueError(f"Invalid mode: {mode}")
