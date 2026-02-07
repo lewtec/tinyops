@@ -25,7 +25,23 @@ MORPH_BLACKHAT = MorphOp.BLACKHAT
 def morphology(x: Tensor, op: int | MorphOp, kernel: Tensor) -> Tensor:
     """
     Performs advanced morphological transformations.
-    https://docs.opencv.org/4.x/d4/d86/group__imgproc__filter.html#ga67493776e3ad1a3df63883829375201f
+
+    Args:
+        x: Input image tensor (2D or 3D).
+           Currently supports shapes (H, W) or (H, W, C).
+        op: Type of morphological operation.
+            - OPEN: Erosion followed by Dilation. Useful for removing small noise.
+            - CLOSE: Dilation followed by Erosion. Useful for closing small holes inside foreground objects.
+            - GRADIENT: Difference between Dilation and Erosion. Useful for finding outlines.
+            - TOPHAT: Difference between input image and Opening. Highlights bright details.
+            - BLACKHAT: Difference between Closing and input image. Highlights dark details.
+        kernel: Structuring element (2D tensor).
+
+    Returns:
+        The processed image tensor with the same shape as `x`.
+
+    Raises:
+        ValueError: If `op` is not a valid morphological operation.
     """
     match op:
         case MorphOp.OPEN:

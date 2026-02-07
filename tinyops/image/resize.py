@@ -7,7 +7,6 @@ from tinygrad import Tensor, dtypes
 def resize_nearest(x, out_H, out_W, H, W, ty, tx) -> Tensor:
     """
     Nearest-neighbor interpolation kernel.
-
     Maps output coordinates (ty, tx) to input coordinates using the nearest integer index.
     """
     scale_y = H / out_H
@@ -22,7 +21,6 @@ def resize_nearest(x, out_H, out_W, H, W, ty, tx) -> Tensor:
 def resize_linear(x, out_H, out_W, H, W, ty, tx) -> Tensor:
     """
     Bilinear interpolation kernel.
-
     Maps output coordinates (ty, tx) to input coordinates and computes the weighted average
     of the 2x2 neighborhood.
     """
@@ -88,19 +86,23 @@ _INT_TO_INTERPOLATION = {
 
 def resize(x: Tensor, dsize: tuple[int, int], interpolation: int | Interpolation = INTER_LINEAR) -> Tensor:
     """
-    Resizes an image.
+    Resizes an image to a specific size.
 
     Args:
-        x: Input tensor, shape (H, W) or (H, W, C).
+        x: Input image tensor. Supports (H, W) or (H, W, C).
         dsize: Desired output size in (height, width) format.
                **Note**: This differs from OpenCV's `(width, height)` convention.
-        interpolation: Interpolation method. Only INTER_NEAREST and INTER_LINEAR are supported.
+        interpolation: Interpolation method.
+                       - INTER_NEAREST: Nearest-neighbor interpolation.
+                       - INTER_LINEAR: Bilinear interpolation.
+                       - Other methods (CUBIC, AREA, LANCZOS4) are defined but not implemented.
 
     Returns:
-        The resized tensor.
+        The resized image tensor with shape (dsize[0], dsize[1]) or (dsize[0], dsize[1], C).
 
     Raises:
-        NotImplementedError: If the interpolation method is not supported.
+        NotImplementedError: If the interpolation method is not supported (e.g., CUBIC).
+        TypeError: If `interpolation` is not an int or Interpolation Enum.
     """
     if x.ndim == 2:
         is_hw = True

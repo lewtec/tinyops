@@ -3,8 +3,22 @@ from tinygrad import Tensor
 
 def dilate(x: Tensor, kernel: Tensor) -> Tensor:
     """
-    Dilates an image by using a specific structuring element.
-    https://docs.opencv.org/4.x/d4/d86/group__imgproc__filter.html#ga4ff0f3318642c4f469d0e11f242f3b6c
+    Dilates an image using a specific structuring element.
+    Computes the local maximum over the area of the kernel.
+
+    Args:
+        x: Input image tensor.
+           Currently supports shapes (H, W) or (H, W, C).
+        kernel: Structuring element (2D tensor).
+           The shape of the kernel determines the neighborhood size.
+           Non-zero values in the kernel indicate the neighborhood to consider.
+
+    Returns:
+        Dilated image tensor with the same shape as `x`.
+        Padding is handled by filling borders with negative infinity, so maximum is computed only on valid pixels.
+
+    Raises:
+        NotImplementedError: If `x` has unsupported dimensions (e.g., 4D).
     """
     h_k, w_k = kernel.shape
     py, px = (h_k - 1) // 2, (w_k - 1) // 2

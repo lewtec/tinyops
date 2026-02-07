@@ -66,6 +66,7 @@ def pad(x: Tensor, padding, fill=0, padding_mode="constant") -> Tensor:
 
     Args:
       x: Input image tensor of shape (H, W, C) or (H, W).
+         **Note**: This function currently does not support batch dimensions (N, H, W, C).
       padding: Padding configuration. Can be:
         - int: Same padding on all sides.
         - tuple of 2 ints: (pad_left_right, pad_top_bottom).
@@ -77,6 +78,9 @@ def pad(x: Tensor, padding, fill=0, padding_mode="constant") -> Tensor:
 
     Returns:
       The padded image tensor.
+
+    Raises:
+        ValueError: If padding_mode is not supported.
     """
     if isinstance(padding_mode, str):
         try:
