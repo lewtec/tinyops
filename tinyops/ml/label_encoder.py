@@ -1,8 +1,8 @@
-import numpy as np
 from tinygrad import Tensor
 
 
 def label_encoder(y: Tensor) -> Tensor:
+    import numpy as np
     # "Fit" step: Find unique labels. Using numpy is a pragmatic choice for this
     # operation, as a pure-tensor unique is complex. This is analogous to
     # sklearn's .fit() method.
