@@ -7,15 +7,24 @@ def gaussian_blur(x: Tensor, ksize: tuple[int, int], sigmaX: float, sigmaY: floa
     """
     Blurs an image using a Gaussian filter.
 
+    This function is implemented using separable convolution for efficiency.
+    It performs two 1D convolutions (horizontal then vertical) instead of a single 2D convolution.
+
     Args:
-        x (Tensor): Input image tensor (H, W, C) or (H, W).
-        ksize (tuple[int, int]): Gaussian kernel size.
-        sigmaX (float): Gaussian kernel standard deviation in X direction.
-        sigmaY (float): Gaussian kernel standard deviation in Y direction. If zero,
-                        it is set to be the same as sigmaX.
+        x: Input image tensor.
+           Supports shapes (H, W), (H, W, C), and (N, H, W, C).
+        ksize: Gaussian kernel size (width, height).
+               Both dimensions must be positive and odd.
+        sigmaX: Gaussian kernel standard deviation in X direction.
+        sigmaY: Gaussian kernel standard deviation in Y direction.
+                If 0.0, it is set to be equal to sigmaX.
 
     Returns:
-        Tensor: Blurred image tensor.
+        Blurred image tensor with the same shape as `x`.
+        Uses constant padding (zero padding) at the borders.
+
+    Raises:
+        ValueError: If ksize width or height is not a positive odd number.
     """
     if sigmaY == 0.0:
         sigmaY = sigmaX

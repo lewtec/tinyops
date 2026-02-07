@@ -5,6 +5,22 @@ from tinygrad import Tensor, dtypes
 
 
 def cvt_bgr2gray(src: Tensor) -> Tensor:
+    """
+    Converts a BGR image to grayscale.
+
+    Formula: Y = 0.299*R + 0.587*G + 0.114*B
+
+    Args:
+        src: Input BGR image tensor of shape (..., 3).
+             The last dimension must be 3 (Blue, Green, Red).
+
+    Returns:
+        Grayscale image tensor of shape (...,).
+        Preserves input dtype (uint8 or float).
+
+    Raises:
+        ValueError: If the last dimension size is not 3.
+    """
     if src.shape[-1] != 3:
         raise ValueError("Input image must have 3 channels for BGR to Grayscale conversion.")
 
@@ -20,6 +36,8 @@ def cvt_bgr2gray(src: Tensor) -> Tensor:
 
 
 class ColorConversion(Enum):
+    """Supported color conversion codes."""
+
     # Wrap in tuple to avoid Enum treating partial as the member itself in some envs
     BGR2GRAY = (partial(cvt_bgr2gray),)
 
@@ -34,7 +52,20 @@ COLOR_BGR2GRAY = 6
 def cvt_color(src: Tensor, code: int | ColorConversion) -> Tensor:
     """
     Converts an image from one color space to another.
-    This implementation aims to be compatible with OpenCV's cvtColor function.
+
+    Args:
+        src: Input image tensor. Channel order and shape depend on the conversion code.
+             - For BGR2GRAY: Expects (..., 3) with BGR channel order.
+        code: Color conversion code.
+             - COLOR_BGR2GRAY (6): Convert BGR to Grayscale.
+
+    Returns:
+        Converted image tensor.
+
+    Raises:
+        NotImplementedError: If the conversion code is not supported.
+        ValueError: If the input shape is invalid for the specified conversion.
+        TypeError: If `code` has an invalid type.
     """
     if isinstance(code, int):
         if code == COLOR_BGR2GRAY:

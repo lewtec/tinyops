@@ -3,8 +3,22 @@ from tinygrad import Tensor
 
 def erode(x: Tensor, kernel: Tensor) -> Tensor:
     """
-    Erodes an image by using a specific structuring element.
-    https://docs.opencv.org/4.x/d4/d86/group__imgproc__filter.html#gaeb1e0c1033e3f6b891a25d0511362aeb
+    Erodes an image using a specific structuring element.
+    Computes the local minimum over the area of the kernel.
+
+    Args:
+        x: Input image tensor.
+           Currently supports shapes (H, W) or (H, W, C).
+        kernel: Structuring element (2D tensor).
+           The shape of the kernel determines the neighborhood size.
+           Non-zero values in the kernel indicate the neighborhood to consider.
+
+    Returns:
+        Eroded image tensor with the same shape as `x`.
+        Padding is handled by filling borders with infinity, so minimum is computed only on valid pixels.
+
+    Raises:
+        NotImplementedError: If `x` has unsupported dimensions (e.g., 4D).
     """
     h_k, w_k = kernel.shape
     py, px = (h_k - 1) // 2, (w_k - 1) // 2
