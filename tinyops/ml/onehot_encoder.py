@@ -1,4 +1,3 @@
-import numpy as np
 from tinygrad import Tensor, dtypes
 
 
@@ -25,6 +24,8 @@ def onehot_encoder(X: Tensor) -> Tensor:
     """
     if X.ndim == 1:
         X = X.unsqueeze(1)
+
+    import numpy as np
 
     encoded_cols = []
     for i in range(X.shape[1]):
