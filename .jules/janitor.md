@@ -45,3 +45,5 @@
 **Root Cause:** The constants were defined at the module level but not used in the `match` statement, likely for brevity or because `match` requires dotted names to match values.
 **Solution:** I refactored the constants into an `IntEnum` named `MorphOp` and used its members in the `match` statement. This improves clarity and type safety while maintaining backward compatibility by aliasing the old constants to the new Enum members.
 **Pattern:** Replace magic numbers with `IntEnum` where applicable, especially in `match` statements, to improve code self-documentation and safety.
+
+- 2026-02-07: Support arbitrary dimensions in padding functions to avoid hardcoded constraints.
