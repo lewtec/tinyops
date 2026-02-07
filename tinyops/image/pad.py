@@ -19,8 +19,8 @@ def pad_constant(x: Tensor, padding, fill) -> Tensor:
     p_left, p_top, p_right, p_bottom = _parse_padding(padding)
 
     pad_widths = ((p_top, p_bottom), (p_left, p_right))
-    if x.ndim == 3:
-        pad_widths += ((0, 0),)
+    if x.ndim > 2:
+        pad_widths += ((0, 0),) * (x.ndim - 2)
 
     return x.pad(pad_widths, value=fill)
 

@@ -64,3 +64,18 @@ def test_pad_reflect_grayscale(padding):
     expected_torch = F.pad(img_torch, padding, padding_mode="reflect")
 
     assert_close(result, expected_torch.numpy())
+
+
+@pytest.mark.parametrize("padding", [1, (2, 3), (1, 2, 3, 4)])
+@assert_one_kernel
+def test_pad_constant_4d(padding):
+    """Test pad with constant mode for a 4D input (H, W, N, C)."""
+    # Create 4D input: (H=10, W=12, N=2, C=3)
+    img_torch = torch.randn(10, 12, 2, 3)
+    tensor_img = Tensor(img_torch.numpy()).realize()
+
+    result = pad(tensor_img, padding, fill=0, padding_mode="constant").realize()
+    # To test against torchvision, we need to permute from (H, W, N, C) to (N, C, H, W) and back
+    expected_torch = F.pad(img_torch.permute(2, 3, 0, 1), padding, fill=0, padding_mode="constant").permute(2, 3, 0, 1)
+
+    assert_close(result, expected_torch.numpy())
