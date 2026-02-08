@@ -1,6 +1,6 @@
 [tools]
 "github:lucasew/ci-status" = "0.3.0"
-uv = "0.9.21"
+uv = "0.10.0"
 "vfox:clang" = "18.1.8"
 
 [tasks."install:uv"]
