@@ -4,26 +4,24 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = [
-    "tinygrad>=0.11.0",
-]
+dependencies = ["tinygrad>=0.11.0"]
 
 [dependency-groups]
 dev = [
-    "numpy>=2.4.0",
-    "pytest>=9.0.2",
-    "opencv-python-headless>=4.9.0.80",
-    "Pillow>=10.5.0",
-    "scipy>=1.15.1",
-    "scikit-learn>=1.6.0",
-    "torchaudio>=2.5.0",
-    "torchvision>=0.18.0",
-    "rapidfuzz>=3.9.4",
-    "jellyfish>=1.1.0",
-    "nltk>=3.8.1",
-    "python-Levenshtein>=0.25.1",
-    "filterpy>=1.4.5",
-    "ruff>=0.9.1",
+  "numpy>=2.4.0",
+  "pytest>=9.0.2",
+  "opencv-python-headless>=4.9.0.80",
+  "Pillow>=10.5.0",
+  "scipy>=1.15.1",
+  "scikit-learn>=1.6.0",
+  "torchaudio>=2.5.0",
+  "torchvision>=0.18.0",
+  "rapidfuzz>=3.9.4",
+  "jellyfish>=1.1.0",
+  "nltk>=3.8.1",
+  "python-Levenshtein>=0.25.1",
+  "filterpy>=1.4.5",
+  "ruff>=0.9.1",
 ]
 
 [tool.ruff]
