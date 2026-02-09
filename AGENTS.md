@@ -27,6 +27,7 @@ src/tinyops/
 ├── image/          # image transformations
 ├── audio/          # audio processing
 ├── signal/         # signal processing
+├── text/           # text processing (feature extraction, metrics)
 ├── io/             # file encoder/decoder, if implementable in tinygrad (wav, bmp)
 └── ml/             # machine learning algorithms (sklearn-like)
 ```

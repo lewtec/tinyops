@@ -3,7 +3,7 @@ from tinygrad import Tensor
 from tinyops.linalg import kron
 
 
-def noise_cov(
+def q_discrete_white_noise(
     dim: int, dt: float | Tensor = 1.0, var: float | Tensor = 1.0, block_size: int = 1, order_by_dim: bool = True
 ) -> Tensor:
     """
