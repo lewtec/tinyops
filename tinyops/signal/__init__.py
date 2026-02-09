@@ -5,3 +5,5 @@ from .fftfreq import fftfreq
 from .hamming import hamming
 from .hanning import hanning
 from .ifft import ifft
+from .q_discrete_white_noise import q_discrete_white_noise
+from .sigma_points import sigma_points

@@ -52,11 +52,11 @@
 - [ ] `np.fft.rfft` → `tinyops.signal.rfft`
 - [ ] `np.fft.irfft` → `tinyops.signal.irfft`
 - [x] `np.fft.fftfreq` → `tinyops.signal.fftfreq`
-- [x] `filterpy.kalman.MerweScaledSigmaPoints` → `tinyops.filter.sigma_points`
-- [x] `filterpy.common.Q_discrete_white_noise` → `tinyops.filter.noise_cov`
-- [ ] `filterpy.kalman.KalmanFilter` → `tinyops.filter.kalman`
-- [ ] `filterpy.kalman.ExtendedKalmanFilter` → `tinyops.filter.ekf`
-- [ ] `filterpy.kalman.UnscentedKalmanFilter` → `tinyops.filter.ukf`
+- [x] `filterpy.kalman.MerweScaledSigmaPoints` → `tinyops.signal.sigma_points`
+- [x] `filterpy.common.Q_discrete_white_noise` → `tinyops.signal.q_discrete_white_noise`
+- [ ] `filterpy.kalman.KalmanFilter` → `tinyops.signal.kalman`
+- [ ] `filterpy.kalman.ExtendedKalmanFilter` → `tinyops.signal.ekf`
+- [ ] `filterpy.kalman.UnscentedKalmanFilter` → `tinyops.signal.ukf`
 - [x] wav decode → `tinyops.io.decode_wav`
 - [x] wav encode → `tinyops.io.encode_wav`
 - [ ] bmp decode → `tinyops.io.decode_bmp`

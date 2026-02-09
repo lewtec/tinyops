@@ -4,7 +4,7 @@ from filterpy.kalman import MerweScaledSigmaPoints
 from tinygrad import Tensor
 
 from tinyops._core import assert_close, assert_one_kernel
-from tinyops.filter.sigma_points import sigma_points
+from tinyops.signal.sigma_points import sigma_points
 
 TEST_PARAMS = [
     (2, 1e-3, 2.0, 0.0, np.array([1.0, 2.0]), np.array([[2.0, 0.5], [0.5, 2.0]])),

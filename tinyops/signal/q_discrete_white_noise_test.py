@@ -3,7 +3,7 @@ from filterpy.common import Q_discrete_white_noise
 from tinygrad import Tensor
 
 from tinyops._core import assert_close, assert_one_kernel
-from tinyops.filter.noise_cov import noise_cov
+from tinyops.signal.q_discrete_white_noise import q_discrete_white_noise
 
 TEST_PARAMS = [
     (2, 0.1, 1.0, 1, None),
@@ -16,13 +16,13 @@ TEST_PARAMS = [
 
 @pytest.mark.parametrize("dim,dt,var,block_size,order_by_dim", TEST_PARAMS)
 @assert_one_kernel
-def test_noise_cov(dim, dt, var, block_size, order_by_dim):
+def test_q_discrete_white_noise(dim, dt, var, block_size, order_by_dim):
     if order_by_dim is None:
         expected = Q_discrete_white_noise(dim=dim, dt=dt, var=var, block_size=block_size)
-        result = noise_cov(dim, dt, var, block_size).realize()
+        result = q_discrete_white_noise(dim, dt, var, block_size).realize()
     else:
         expected = Q_discrete_white_noise(dim=dim, dt=dt, var=var, block_size=block_size, order_by_dim=order_by_dim)
-        result = noise_cov(dim, dt, var, block_size, order_by_dim).realize()
+        result = q_discrete_white_noise(dim, dt, var, block_size, order_by_dim).realize()
 
     assert_close(result, expected)
 
@@ -33,7 +33,7 @@ def test_tensor_inputs():
     var = Tensor(1.0).realize()
     dim = 2
 
-    result = noise_cov(dim, dt, var).realize()
+    result = q_discrete_white_noise(dim, dt, var).realize()
     expected = Q_discrete_white_noise(dim=dim, dt=0.1, var=1.0)
 
     assert_close(result, expected)
