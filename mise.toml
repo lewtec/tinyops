@@ -2,6 +2,9 @@
 "github:lucasew/ci-status" = "0.3.0"
 uv = "0.10.0"
 "vfox:clang" = "18.1.8"
+taplo = "0.10.0"
+typos = "1.43.3"
+actionlint = "1.7.10"
 
 [tasks."install:uv"]
 run = "uv sync"
@@ -12,11 +15,23 @@ depends = ["install:*"]
 [tasks."lint:ruff"]
 run = "uv run ruff check ."
 
+[tasks."lint:taplo"]
+run = "taplo fmt --check"
+
+[tasks."lint:typos"]
+run = "typos"
+
+[tasks."lint:actionlint"]
+run = "actionlint"
+
 [tasks.lint]
 depends = ["lint:*"]
 
 [tasks."fmt:ruff"]
 run = "uv run ruff format ."
+
+[tasks."fmt:taplo"]
+run = "taplo fmt"
 
 [tasks.fmt]
 depends = ["fmt:*"]

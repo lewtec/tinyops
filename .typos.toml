@@ -1,0 +1,9 @@
+[default.extend-words]
+nd = "nd"
+arange = "arange"
+iy = "iy"
+ix = "ix"
+erro = "erro"
+ser = "ser"
+Erros = "Erros"
+Erro = "Erro"
