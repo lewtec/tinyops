@@ -17,3 +17,27 @@ This file lists patterns of changes that have been consistently rejected by huma
 **- Pattern:** Do not add validation to the `tinyops/io/decode_wav.py` file to address Denial of Service (DoS) vulnerabilities.
 **- Justification:** A pull request (e.g., #142) attempting to fix a DoS vulnerability by adding header validation to the WAV decoder was rejected. This indicates a consistent pattern of rejecting any changes, including security fixes, to the WAV I/O modules.
 **- Files Affected:** `tinyops/io/decode_wav.py`
+
+---
+
+## IGNORE: Janitorial agents modifying CI/Tooling config
+
+**- Pattern:** "Arrumador" or "Janitor" PRs that include changes to `.github/workflows/*.yml`, `mise.toml`, or `pyproject.toml` (infrastructure/tooling).
+**- Justification:** Janitorial tasks must be strictly focused on code cleanup (e.g., lint fixes, unused imports). Bundling infrastructure changes or new tooling configuration (e.g., adding linters, centralized error reporting) consistently leads to rejection. These changes belong in dedicated "Ops" PRs.
+**- Files Affected:** `.github/workflows/*.yml`, `mise.toml`, `pyproject.toml`
+
+---
+
+## IGNORE: Wrapping Enum partials in tuples
+
+**- Pattern:** Refactoring Enums to wrap `functools.partial` values in tuples (e.g., `MEMBER = (partial(func),)`).
+**- Justification:** Multiple PRs (e.g., #200, #194) attempting to wrap partials in tuples to support Python 3.14 have been rejected. This suggests the project prefers the existing cleaner syntax `MEMBER = partial(func)` even if it has forward compatibility issues, or the specific implementation was considered invasive.
+**- Files Affected:** `tinyops/image/*.py`
+
+---
+
+## IGNORE: Non-existent GitHub Action versions
+
+**- Pattern:** Updating `actions/checkout` to `v5` or referencing other non-existent action versions.
+**- Justification:** Agents often hallucinate newer versions of GitHub Actions. Always verify the latest version tag exists before updating. `actions/checkout@v5` does not exist (v4 is current).
+**- Files Affected:** `.github/workflows/*.yml`
