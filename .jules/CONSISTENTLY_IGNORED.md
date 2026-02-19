@@ -41,3 +41,27 @@ This file lists patterns of changes that have been consistently rejected by huma
 **- Pattern:** Updating `actions/checkout` to `v5` or referencing other non-existent action versions.
 **- Justification:** Agents often hallucinate newer versions of GitHub Actions. Always verify the latest version tag exists before updating. `actions/checkout@v5` does not exist (v4 is current).
 **- Files Affected:** `.github/workflows/*.yml`
+
+---
+
+## IGNORE: Arbitrary Resource Limits in Library Code
+
+**- Pattern:** Adding hardcoded constants (e.g., `MAX_OUTPUT_FEATURES`) to limit input/output sizes for "DoS protection".
+**- Justification:** Libraries should not enforce arbitrary limits on users. Resource management is the application's responsibility. Rejections (e.g., PR #201) confirm this is considered unwanted noise.
+**- Files Affected:** `tinyops/ml/*.py`, `tinyops/image/*.py`
+
+---
+
+## IGNORE: Subjective "Educational" Disclaimers
+
+**- Pattern:** Adding docstrings stating the implementation is "primarily for educational purposes", "extremely inefficient", or "do not use for large-scale".
+**- Justification:** These disclaimers can be interpreted as disparaging the codebase or adding unnecessary noise. Documentation should focus on usage and objective complexity (e.g., "O(N!)") without subjective labeling. PR #197 was rejected for this pattern.
+**- Files Affected:** `tinyops/linalg/*.py`, `tinyops/ml/*.py`
+
+---
+
+## IGNORE: Unnecessary Dictionary Lookups for Small Enums
+
+**- Pattern:** Replacing simple `if/else` checks with dictionary lookups for small sets of Enums (e.g., color conversion codes).
+**- Justification:** For small, static mappings, introducing a dictionary lookup can be considered over-engineering or premature optimization that adds complexity without significant benefit. PR #196 was rejected for this.
+**- Files Affected:** `tinyops/image/*.py`
