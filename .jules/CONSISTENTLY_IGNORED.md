@@ -23,7 +23,7 @@ This file lists patterns of changes that have been consistently rejected by huma
 ## IGNORE: Janitorial agents modifying CI/Tooling config
 
 **- Pattern:** "Arrumador" or "Janitor" PRs that include changes to `.github/workflows/*.yml`, `mise.toml`, or `pyproject.toml` (infrastructure/tooling).
-**- Justification:** Janitorial tasks must be strictly focused on code cleanup (e.g., lint fixes, unused imports). Bundling infrastructure changes or new tooling configuration (e.g., adding linters, centralized error reporting) consistently leads to rejection. These changes belong in dedicated "Ops" PRs.
+**- Justification:** Janitorial tasks must be strictly focused on code cleanup (e.g., lint fixes, unused imports). Bundling infrastructure changes or new tooling configuration (e.g., adding linters, centralized error reporting) consistently leads to rejection (e.g., PRs #211, #209). These changes belong in dedicated "Ops" PRs.
 **- Files Affected:** `.github/workflows/*.yml`, `mise.toml`, `pyproject.toml`
 
 ---
@@ -39,7 +39,7 @@ This file lists patterns of changes that have been consistently rejected by huma
 ## IGNORE: Non-existent GitHub Action versions
 
 **- Pattern:** Updating `actions/checkout` to `v5` or referencing other non-existent action versions.
-**- Justification:** Agents often hallucinate newer versions of GitHub Actions. Always verify the latest version tag exists before updating. `actions/checkout@v5` does not exist (v4 is current).
+**- Justification:** Agents often hallucinate newer versions of GitHub Actions. Always verify the latest version tag exists before updating. `actions/checkout@v5` does not exist (v4 is current), as seen in rejected PR #189.
 **- Files Affected:** `.github/workflows/*.yml`
 
 ---
@@ -65,3 +65,19 @@ This file lists patterns of changes that have been consistently rejected by huma
 **- Pattern:** Replacing simple `if/else` checks with dictionary lookups for small sets of Enums (e.g., color conversion codes).
 **- Justification:** For small, static mappings, introducing a dictionary lookup can be considered over-engineering or premature optimization that adds complexity without significant benefit. PR #196 was rejected for this.
 **- Files Affected:** `tinyops/image/*.py`
+
+---
+
+## IGNORE: Enforcing Local Numpy Imports
+
+**- Pattern:** Refactoring module-level `numpy` imports to local imports inside functions (e.g. `def func(): import numpy as np`).
+**- Justification:** PR #206 attempted to enforce local numpy imports across the ML module and was rejected. While the project aims for zero-dependency runtime, mass refactoring of existing top-level imports is evidently not desired.
+**- Files Affected:** `tinyops/ml/*.py`
+
+---
+
+## IGNORE: Replacing Numpy Validation with Tensor Operations
+
+**- Pattern:** Replacing simple `numpy`-based input validation (e.g. `np.unique`, `np.sum`) with complex `tinygrad` tensor operations, especially for eager validation before graph construction.
+**- Justification:** The project explicitly allows numpy for validation "as it happens before the graph computation" (see `tinyops/ml/roc_auc.py`). PR #206 was rejected for attempting to replace clear numpy logic with obscure tensor operations.
+**- Files Affected:** `tinyops/ml/*.py`
