@@ -44,12 +44,12 @@ def rotate_90_counterclockwise(x: Tensor) -> Tensor:
 
 
 class RotateCode(Enum):
-    CLOCKWISE_90 = partial(rotate_90_clockwise)
-    ROTATE_180 = partial(rotate_180)
-    COUNTERCLOCKWISE_90 = partial(rotate_90_counterclockwise)
+    CLOCKWISE_90 = (partial(rotate_90_clockwise),)
+    ROTATE_180 = (partial(rotate_180),)
+    COUNTERCLOCKWISE_90 = (partial(rotate_90_counterclockwise),)
 
     def __call__(self, *args, **kwargs):
-        return self.value(*args, **kwargs)
+        return self.value[0](*args, **kwargs)
 
 
 # Backward compatibility constants
