@@ -23,7 +23,7 @@ This file lists patterns of changes that have been consistently rejected by huma
 ## IGNORE: Janitorial agents modifying CI/Tooling config
 
 **- Pattern:** "Arrumador" or "Janitor" PRs that include changes to `.github/workflows/*.yml`, `mise.toml`, or `pyproject.toml` (infrastructure/tooling).
-**- Justification:** Janitorial tasks must be strictly focused on code cleanup (e.g., lint fixes, unused imports). Bundling infrastructure changes or new tooling configuration (e.g., adding linters, centralized error reporting) consistently leads to rejection. These changes belong in dedicated "Ops" PRs.
+**- Justification:** Janitorial tasks must be strictly focused on code cleanup (e.g., lint fixes, unused imports). Bundling infrastructure changes or new tooling configuration (e.g., adding linters, centralized error reporting) consistently leads to rejection (e.g., PRs #211, #209). These changes belong in dedicated "Ops" PRs.
 **- Files Affected:** `.github/workflows/*.yml`, `mise.toml`, `pyproject.toml`
 
 ---
@@ -31,7 +31,7 @@ This file lists patterns of changes that have been consistently rejected by huma
 ## IGNORE: Wrapping Enum partials in tuples
 
 **- Pattern:** Refactoring Enums to wrap `functools.partial` values in tuples (e.g., `MEMBER = (partial(func),)`).
-**- Justification:** Multiple PRs (e.g., #200, #194) attempting to wrap partials in tuples to support Python 3.14 have been rejected. This suggests the project prefers the existing cleaner syntax `MEMBER = partial(func)` even if it has forward compatibility issues, or the specific implementation was considered invasive.
+**- Justification:** Multiple PRs (e.g., #204, #200, #194) attempting to wrap partials in tuples to support Python 3.14 have been rejected. This suggests the project prefers the existing cleaner syntax `MEMBER = partial(func)` even if it has forward compatibility issues, or the specific implementation was considered invasive.
 **- Files Affected:** `tinyops/image/*.py`
 
 ---
@@ -39,7 +39,7 @@ This file lists patterns of changes that have been consistently rejected by huma
 ## IGNORE: Non-existent GitHub Action versions
 
 **- Pattern:** Updating `actions/checkout` to `v5` or referencing other non-existent action versions.
-**- Justification:** Agents often hallucinate newer versions of GitHub Actions. Always verify the latest version tag exists before updating. `actions/checkout@v5` does not exist (v4 is current).
+**- Justification:** Agents often hallucinate newer versions of GitHub Actions. Always verify the latest version tag exists before updating. `actions/checkout@v5` does not exist (v4 is current). Rejected in PR #189.
 **- Files Affected:** `.github/workflows/*.yml`
 
 ---
@@ -65,3 +65,19 @@ This file lists patterns of changes that have been consistently rejected by huma
 **- Pattern:** Replacing simple `if/else` checks with dictionary lookups for small sets of Enums (e.g., color conversion codes).
 **- Justification:** For small, static mappings, introducing a dictionary lookup can be considered over-engineering or premature optimization that adds complexity without significant benefit. PR #196 was rejected for this.
 **- Files Affected:** `tinyops/image/*.py`
+
+---
+
+## IGNORE: Enforcing Local Numpy Imports
+
+**- Pattern:** Refactoring module-level `numpy` imports to local imports inside functions (e.g., `def func(): import numpy as np`).
+**- Justification:** Mass refactoring of existing top-level imports to local imports across modules (e.g., `tinyops/ml`) is considered unwanted noise/churn, as seen in rejected PRs #206 and #202. While reducing import time is good, mass changes like this are disruptive.
+**- Files Affected:** `tinyops/ml/*.py`, `tinyops/io/*.py`
+
+---
+
+## IGNORE: Replacing Numpy Validation with Tensor Operations
+
+**- Pattern:** Replacing simple `numpy`-based input validation (e.g., `np.unique`, `np.sum`) with complex `tinygrad` tensor operations, especially for eager validation before graph construction.
+**- Justification:** The project explicitly allows numpy for validation "as it happens before the graph computation". Replacing clear, standard numpy logic with more obscure or complex tensor operations for validation purposes is rejected (PR #206).
+**- Files Affected:** `tinyops/ml/*.py`
