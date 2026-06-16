@@ -65,3 +65,19 @@ This file lists patterns of changes that have been consistently rejected by huma
 **- Pattern:** Replacing simple `if/else` checks with dictionary lookups for small sets of Enums (e.g., color conversion codes).
 **- Justification:** For small, static mappings, introducing a dictionary lookup can be considered over-engineering or premature optimization that adds complexity without significant benefit. PR #196 was rejected for this.
 **- Files Affected:** `tinyops/image/*.py`
+
+---
+
+## IGNORE: Enforcing Local Numpy Imports
+
+**- Pattern:** Refactoring module-level `numpy` imports to local imports inside functions (e.g., `def func(): import numpy as np`).
+**- Justification:** Mass refactoring of existing top-level imports to local imports across modules (e.g., `tinyops/ml`, `tinyops/io`) is considered unwanted noise/churn, as seen in rejected PRs (e.g., #206, #202). While the project aims for minimal dependencies, this mass change is disruptive.
+**- Files Affected:** `tinyops/ml/*.py`, `tinyops/io/*.py`
+
+---
+
+## IGNORE: Replacing Numpy Validation with Tensor Operations
+
+**- Pattern:** Replacing simple `numpy`-based input validation (e.g., `np.unique`, `np.sum`) with complex `tinygrad` tensor operations, especially for eager validation before graph construction.
+**- Justification:** The project explicitly allows numpy for validation "as it happens before the graph computation". Replacing clear, standard numpy logic with more obscure or complex tensor operations for validation purposes is rejected (e.g., PR #206).
+**- Files Affected:** `tinyops/ml/*.py`
