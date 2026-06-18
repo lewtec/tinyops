@@ -30,7 +30,7 @@
 - [x] `np.var`
 - [x] `np.average`
 - [x] `np.percentile`
-- [ ] `np.quantile`
+- [x] `np.quantile`
 - [x] `np.ptp`
 - [x] `np.bincount`
 - [x] `np.digitize`
@@ -57,8 +57,8 @@
 - [ ] `filterpy.kalman.KalmanFilter`
 - [ ] `filterpy.kalman.ExtendedKalmanFilter`
 - [ ] `filterpy.kalman.UnscentedKalmanFilter`
-- [x] wav decode
-- [x] wav encode
+- [ ] wav decode
+- [ ] wav encode
 - [ ] bmp decode
 - [ ] bmp encode
 - [x] `cv2.resize`
@@ -137,15 +137,15 @@
 - [ ] `sklearn.linear_model.Ridge`
 - [ ] `sklearn.linear_model.Lasso`
 - [ ] `sklearn.linear_model.ElasticNet`
-- [x] `sklearn.linear_model.LogisticRegression`
-- [x] `sklearn.linear_model.SGDClassifier`
-- [x] `sklearn.linear_model.SGDRegressor`
-- [x] `sklearn.svm.LinearSVC`
-- [x] `sklearn.svm.LinearSVR`
-- [x] `sklearn.svm.SVC`
-- [x] `sklearn.svm.SVR`
-- [x] `sklearn.tree.DecisionTreeClassifier`
-- [x] `sklearn.tree.DecisionTreeRegressor`
+- [ ] `sklearn.linear_model.LogisticRegression`
+- [ ] `sklearn.linear_model.SGDClassifier`
+- [ ] `sklearn.linear_model.SGDRegressor`
+- [ ] `sklearn.svm.LinearSVC`
+- [ ] `sklearn.svm.LinearSVR`
+- [ ] `sklearn.svm.SVC`
+- [ ] `sklearn.svm.SVR`
+- [ ] `sklearn.tree.DecisionTreeClassifier`
+- [ ] `sklearn.tree.DecisionTreeRegressor`
 - [ ] `sklearn.cluster.KMeans`
 - [ ] `sklearn.cluster.MiniBatchKMeans`
 - [ ] `sklearn.cluster.MeanShift`
@@ -162,9 +162,9 @@
 - [ ] `sklearn.manifold.TSNE`
 - [ ] `sklearn.mixture.GaussianMixture`
 - [ ] `sklearn.mixture.BayesianGaussianMixture`
-- [x] `sklearn.ensemble.RandomForestClassifier`
-- [x] `sklearn.ensemble.RandomForestRegressor`
-- [x] `sklearn.ensemble.AdaBoostClassifier`
+- [ ] `sklearn.ensemble.RandomForestClassifier`
+- [ ] `sklearn.ensemble.RandomForestRegressor`
+- [ ] `sklearn.ensemble.AdaBoostClassifier`
 - [ ] `sklearn.ensemble.AdaBoostRegressor`
 - [ ] `sklearn.ensemble.GradientBoostingClassifier`
-- [x] `sklearn.ensemble.GradientBoostingRegressor`
+- [ ] `sklearn.ensemble.GradientBoostingRegressor`
