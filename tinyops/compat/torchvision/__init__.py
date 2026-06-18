@@ -6,7 +6,8 @@ Provides torchvision.transforms-compatible class signatures that delegate to tin
 from tinygrad import Tensor
 
 from tinyops.ops.image.center_crop import center_crop as _center_crop
-from tinyops.ops.image.pad import pad_image as _pad_image, PaddingMode
+from tinyops.ops.image.pad import PaddingMode
+from tinyops.ops.image.pad import pad_image as _pad_image
 
 
 class _Transforms:

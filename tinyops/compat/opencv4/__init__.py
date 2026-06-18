@@ -5,25 +5,25 @@ Provides cv2-compatible function signatures that delegate to tinyops.ops.
 
 from tinygrad import Tensor
 
-from tinyops.ops.image.resize import resize_image, InterpolationMethod
-from tinyops.ops.image.rotate import rotate_image, RotationAngle
-from tinyops.ops.image.flip import flip_image, FlipDirection
 from tinyops.ops.image.box_blur import box_blur as _box_blur
+from tinyops.ops.image.color_conversion import ColorSpace, convert_color_space
+from tinyops.ops.image.flip import FlipDirection, flip_image
 from tinyops.ops.image.gaussian_blur import gaussian_blur as _gaussian_blur
-from tinyops.ops.image.spatial_filter import spatial_filter as _spatial_filter
-from tinyops.ops.image.sobel_gradient import sobel_gradient, GradientDirection
-from tinyops.ops.image.scharr_gradient import scharr_gradient
+from tinyops.ops.image.histogram_equalization import histogram_equalization
 from tinyops.ops.image.laplacian_filter import laplacian_filter
 from tinyops.ops.image.morphological_operation import (
-    morphological_erode,
-    morphological_dilate,
-    morphological_operation,
     MorphologicalOperation,
+    morphological_dilate,
+    morphological_erode,
+    morphological_operation,
 )
-from tinyops.ops.image.threshold import apply_threshold, ThresholdMethod
-from tinyops.ops.image.color_conversion import convert_color_space, ColorSpace
-from tinyops.ops.image.histogram_equalization import histogram_equalization
 from tinyops.ops.image.normalize_intensity import normalize_intensity
+from tinyops.ops.image.resize import InterpolationMethod, resize_image
+from tinyops.ops.image.rotate import RotationAngle, rotate_image
+from tinyops.ops.image.scharr_gradient import scharr_gradient
+from tinyops.ops.image.sobel_gradient import GradientDirection, sobel_gradient
+from tinyops.ops.image.spatial_filter import spatial_filter as _spatial_filter
+from tinyops.ops.image.threshold import ThresholdMethod, apply_threshold
 
 # --- OpenCV constants ---
 

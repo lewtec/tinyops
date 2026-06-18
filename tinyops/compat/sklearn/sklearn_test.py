@@ -4,36 +4,31 @@ Compares tinyops.compat.sklearn against actual sklearn.
 """
 
 import numpy as np
-import pytest
-from sklearn.preprocessing import (
-    StandardScaler,
-    MinMaxScaler,
-    MaxAbsScaler,
-    RobustScaler,
-    Normalizer,
-    Binarizer,
-    OneHotEncoder,
-    LabelEncoder,
-    PolynomialFeatures,
-)
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics import (
-    accuracy_score,
-    precision_score,
-    recall_score,
-    f1_score,
     confusion_matrix,
-    roc_auc_score,
-    mean_squared_error,
+    f1_score,
     mean_absolute_error,
+    mean_squared_error,
+    precision_score,
     r2_score,
+    recall_score,
+    roc_auc_score,
 )
 from sklearn.metrics.pairwise import pairwise_distances
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.preprocessing import (
+    Binarizer,
+    MaxAbsScaler,
+    MinMaxScaler,
+    Normalizer,
+    PolynomialFeatures,
+    RobustScaler,
+    StandardScaler,
+)
 from tinygrad import Tensor
 
 from tinyops._core import assert_close
 from tinyops.compat import sklearn as tsk
-
 
 # ============================================================================
 # Preprocessing

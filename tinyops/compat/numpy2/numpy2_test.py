@@ -4,12 +4,10 @@ Compares tinyops.compat.numpy2 against actual numpy.
 """
 
 import numpy as np
-import pytest
 from tinygrad import Tensor
 
 from tinyops._core import assert_close
 from tinyops.compat import numpy2 as tnp
-
 
 # ============================================================================
 # Statistics

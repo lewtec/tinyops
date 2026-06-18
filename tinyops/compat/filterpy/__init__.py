@@ -5,8 +5,8 @@ Provides filterpy-compatible function signatures that delegate to tinyops.ops.
 
 from tinygrad import Tensor
 
-from tinyops.ops.signal.merwe_scaled_sigma_points import merwe_scaled_sigma_points as _merwe_sigma
 from tinyops.ops.signal.discrete_white_noise_matrix import discrete_white_noise_matrix as _q_discrete
+from tinyops.ops.signal.merwe_scaled_sigma_points import merwe_scaled_sigma_points as _merwe_sigma
 
 
 class _Common:

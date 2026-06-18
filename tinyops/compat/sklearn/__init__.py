@@ -6,40 +6,38 @@ Organized into sub-namespaces matching sklearn's package structure.
 
 from tinygrad import Tensor
 
-# --- ops imports ---
-from tinyops.ops.machine_learning.standard_scaler import standard_scaler as _standard_scaler
-from tinyops.ops.machine_learning.min_max_scaler import min_max_scaler as _min_max_scaler
-from tinyops.ops.machine_learning.max_absolute_scaler import max_absolute_scaler as _max_absolute_scaler
-from tinyops.ops.machine_learning.robust_scaler import robust_scaler as _robust_scaler
-from tinyops.ops.machine_learning.normalizer import normalizer as _normalizer, NormType
-from tinyops.ops.machine_learning.binarizer import binarizer as _binarizer
-from tinyops.ops.machine_learning.one_hot_encoder import one_hot_encoder as _one_hot_encoder
-from tinyops.ops.machine_learning.label_encoder import label_encoder as _label_encoder
-from tinyops.ops.machine_learning.polynomial_features import polynomial_features as _polynomial_features
-
 from tinyops.ops.machine_learning.accuracy_score import accuracy_score as _accuracy_score
-from tinyops.ops.machine_learning.precision_score import precision_score as _precision_score
-from tinyops.ops.machine_learning.recall_score import recall_score as _recall_score
-from tinyops.ops.machine_learning.f1_score import f1_score as _f1_score
-from tinyops.ops.machine_learning.confusion_matrix import confusion_matrix as _confusion_matrix
-from tinyops.ops.machine_learning.receiver_operating_characteristic import (
-    receiver_operating_characteristic_area as _roc_auc,
-)
-from tinyops.ops.machine_learning.mean_squared_error import mean_squared_error as _mse
-from tinyops.ops.machine_learning.mean_absolute_error import mean_absolute_error as _mae
-from tinyops.ops.machine_learning.coefficient_of_determination import coefficient_of_determination as _r2
-
-from tinyops.ops.machine_learning.nearest_neighbors import nearest_neighbors as _nearest_neighbors
-from tinyops.ops.machine_learning.multinomial_naive_bayes import multinomial_naive_bayes as _mnb
 from tinyops.ops.machine_learning.bernoulli_naive_bayes import bernoulli_naive_bayes as _bnb
+from tinyops.ops.machine_learning.binarizer import binarizer as _binarizer
+from tinyops.ops.machine_learning.coefficient_of_determination import coefficient_of_determination as _r2
+from tinyops.ops.machine_learning.confusion_matrix import confusion_matrix as _confusion_matrix
+from tinyops.ops.machine_learning.f1_score import f1_score as _f1_score
+from tinyops.ops.machine_learning.label_encoder import label_encoder as _label_encoder
+from tinyops.ops.machine_learning.max_absolute_scaler import max_absolute_scaler as _max_absolute_scaler
+from tinyops.ops.machine_learning.mean_absolute_error import mean_absolute_error as _mae
+from tinyops.ops.machine_learning.mean_squared_error import mean_squared_error as _mse
+from tinyops.ops.machine_learning.min_max_scaler import min_max_scaler as _min_max_scaler
+from tinyops.ops.machine_learning.multinomial_naive_bayes import multinomial_naive_bayes as _mnb
+from tinyops.ops.machine_learning.nearest_neighbors import nearest_neighbors as _nearest_neighbors
 from tinyops.ops.machine_learning.non_negative_matrix_factorization import (
     non_negative_matrix_factorization as _nmf,
 )
+from tinyops.ops.machine_learning.normalizer import NormType
+from tinyops.ops.machine_learning.normalizer import normalizer as _normalizer
+from tinyops.ops.machine_learning.one_hot_encoder import one_hot_encoder as _one_hot_encoder
+from tinyops.ops.machine_learning.polynomial_features import polynomial_features as _polynomial_features
+from tinyops.ops.machine_learning.precision_score import precision_score as _precision_score
+from tinyops.ops.machine_learning.recall_score import recall_score as _recall_score
+from tinyops.ops.machine_learning.receiver_operating_characteristic import (
+    receiver_operating_characteristic_area as _roc_auc,
+)
+from tinyops.ops.machine_learning.robust_scaler import robust_scaler as _robust_scaler
 
+# --- ops imports ---
+from tinyops.ops.machine_learning.standard_scaler import standard_scaler as _standard_scaler
 from tinyops.ops.text.count_vectorizer import count_vectorizer as _count_vectorizer
-from tinyops.ops.text.tfidf_vectorizer import tfidf_vectorizer as _tfidf_vectorizer
 from tinyops.ops.text.pairwise_hamming_distance import pairwise_hamming_distance as _pairwise_hamming
-
+from tinyops.ops.text.tfidf_vectorizer import tfidf_vectorizer as _tfidf_vectorizer
 
 # ============================================================================
 # preprocessing

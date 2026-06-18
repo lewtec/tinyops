@@ -5,11 +5,13 @@ Provides torchaudio.transforms-compatible class signatures that delegate to tiny
 
 from tinygrad import Tensor
 
-from tinyops.ops.audio.mu_law_encode import mu_law_encode as _mu_law_encode
-from tinyops.ops.audio.mu_law_decode import mu_law_decode as _mu_law_decode
-from tinyops.ops.audio.amplitude_to_decibels import amplitude_to_decibels as _amp_to_db, SpectrogramScale
-from tinyops.ops.audio.fade import fade as _fade, FadeShape
+from tinyops.ops.audio.amplitude_to_decibels import SpectrogramScale
+from tinyops.ops.audio.amplitude_to_decibels import amplitude_to_decibels as _amp_to_db
+from tinyops.ops.audio.fade import FadeShape
+from tinyops.ops.audio.fade import fade as _fade
 from tinyops.ops.audio.frequency_mask import frequency_mask as _freq_mask
+from tinyops.ops.audio.mu_law_decode import mu_law_decode as _mu_law_decode
+from tinyops.ops.audio.mu_law_encode import mu_law_encode as _mu_law_encode
 from tinyops.ops.audio.time_mask import time_mask as _time_mask
 
 

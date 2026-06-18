@@ -2,7 +2,7 @@
 
 from tinygrad import Tensor, dtypes
 
-from tinyops.ops.image.pad import pad_image, PaddingMode
+from tinyops.ops.image.pad import PaddingMode, pad_image
 
 
 def apply_convolution_filter(

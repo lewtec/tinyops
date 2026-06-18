@@ -4,8 +4,6 @@ Compares tinyops.compat.torchvision against actual torchvision.
 """
 
 import numpy as np
-import torch
-import torchvision.transforms.functional as F
 from tinygrad import Tensor
 
 from tinyops._core import assert_close

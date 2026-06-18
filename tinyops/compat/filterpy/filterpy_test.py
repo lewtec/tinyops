@@ -4,8 +4,8 @@ Compares tinyops.compat.filterpy against actual filterpy.
 """
 
 import numpy as np
-from filterpy.kalman import MerweScaledSigmaPoints as FPMerweScaledSigmaPoints
 from filterpy.common import Q_discrete_white_noise as fp_Q_discrete_white_noise
+from filterpy.kalman import MerweScaledSigmaPoints as FPMerweScaledSigmaPoints
 from tinygrad import Tensor
 
 from tinyops._core import assert_close

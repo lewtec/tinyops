@@ -2,7 +2,6 @@ from tinygrad import Tensor, dtypes
 
 from tinyops.ops.image._filtering import apply_convolution_filter
 from tinyops.ops.image.sobel_gradient import GradientDirection
-from tinyops.ops.image.pad import PaddingMode
 
 _SCHARR_HORIZONTAL = [[-3, 0, 3], [-10, 0, 10], [-3, 0, 3]]
 _SCHARR_VERTICAL = [[-3, -10, -3], [0, 0, 0], [3, 10, 3]]

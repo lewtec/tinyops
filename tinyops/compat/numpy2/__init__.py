@@ -3,54 +3,53 @@
 Provides numpy-compatible function signatures that delegate to tinyops.ops.
 """
 
+from tinygrad import Tensor
+
+from tinyops.ops.linear_algebra.cholesky_decomposition import cholesky_decomposition as _cholesky
+from tinyops.ops.linear_algebra.condition_number import condition_number as _condition_number
+from tinyops.ops.linear_algebra.determinant import determinant as _determinant
+from tinyops.ops.linear_algebra.diagonal import diagonal as _diagonal
+from tinyops.ops.linear_algebra.dot_product import dot_product as _dot_product
+from tinyops.ops.linear_algebra.einstein_summation import einstein_summation as _einstein_summation
+from tinyops.ops.linear_algebra.inner_product import inner_product as _inner_product
+from tinyops.ops.linear_algebra.inverse import inverse as _inverse
+from tinyops.ops.linear_algebra.kronecker_product import kronecker_product as _kronecker_product
+from tinyops.ops.linear_algebra.least_squares import least_squares as _least_squares
+from tinyops.ops.linear_algebra.matrix_multiply import matrix_multiply as _matrix_multiply
+from tinyops.ops.linear_algebra.matrix_power import matrix_power as _matrix_power
+from tinyops.ops.linear_algebra.matrix_rank import matrix_rank as _matrix_rank
+from tinyops.ops.linear_algebra.norm import norm as _norm
+from tinyops.ops.linear_algebra.outer_product import outer_product as _outer_product
+from tinyops.ops.linear_algebra.pseudo_inverse import pseudo_inverse as _pseudo_inverse
+from tinyops.ops.linear_algebra.qr_decomposition import qr_decomposition as _qr_decomposition
+from tinyops.ops.linear_algebra.solve_linear_system import solve_linear_system as _solve
+from tinyops.ops.linear_algebra.tensor_dot_product import tensor_dot_product as _tensor_dot_product
+from tinyops.ops.linear_algebra.trace import trace as _trace
+from tinyops.ops.linear_algebra.vector_dot_product import vector_dot_product as _vector_dot_product
+from tinyops.ops.signal.blackman_window import blackman_window as _blackman_window
+from tinyops.ops.signal.convolution_1d import ConvolutionMode
+from tinyops.ops.signal.convolution_1d import convolution_1d as _convolution_1d
+from tinyops.ops.signal.discrete_fourier_transform import discrete_fourier_transform as _dft
+from tinyops.ops.signal.fourier_frequencies import fourier_frequencies as _fourier_frequencies
+from tinyops.ops.signal.hamming_window import hamming_window as _hamming_window
+from tinyops.ops.signal.hanning_window import hanning_window as _hanning_window
+from tinyops.ops.signal.inverse_discrete_fourier_transform import inverse_discrete_fourier_transform as _idft
 from tinyops.ops.statistics.arithmetic_mean import arithmetic_mean as _arithmetic_mean
-from tinyops.ops.statistics.weighted_average import weighted_average as _weighted_average
+from tinyops.ops.statistics.bin_count import bin_count as _bin_count
+from tinyops.ops.statistics.correlation_coefficients import correlation_coefficients as _correlation_coefficients
+from tinyops.ops.statistics.covariance_matrix import covariance_matrix as _covariance_matrix
+from tinyops.ops.statistics.cross_correlation import CorrelationMode
+from tinyops.ops.statistics.cross_correlation import cross_correlation as _cross_correlation
+from tinyops.ops.statistics.digitize import digitize as _digitize
+from tinyops.ops.statistics.histogram import histogram as _histogram
+from tinyops.ops.statistics.histogram_2d import histogram_2d as _histogram_2d
 from tinyops.ops.statistics.median import median as _median
-from tinyops.ops.statistics.standard_deviation import standard_deviation as _standard_deviation
-from tinyops.ops.statistics.variance import variance as _variance
 from tinyops.ops.statistics.peak_to_peak import peak_to_peak as _peak_to_peak
 from tinyops.ops.statistics.percentile import percentile as _percentile
 from tinyops.ops.statistics.quantile import quantile as _quantile
-from tinyops.ops.statistics.covariance_matrix import covariance_matrix as _covariance_matrix
-from tinyops.ops.statistics.correlation_coefficients import correlation_coefficients as _correlation_coefficients
-from tinyops.ops.statistics.cross_correlation import cross_correlation as _cross_correlation, CorrelationMode
-from tinyops.ops.statistics.histogram import histogram as _histogram
-from tinyops.ops.statistics.histogram_2d import histogram_2d as _histogram_2d
-from tinyops.ops.statistics.bin_count import bin_count as _bin_count
-from tinyops.ops.statistics.digitize import digitize as _digitize
-
-from tinyops.ops.linear_algebra.dot_product import dot_product as _dot_product
-from tinyops.ops.linear_algebra.matrix_multiply import matrix_multiply as _matrix_multiply
-from tinyops.ops.linear_algebra.vector_dot_product import vector_dot_product as _vector_dot_product
-from tinyops.ops.linear_algebra.inner_product import inner_product as _inner_product
-from tinyops.ops.linear_algebra.outer_product import outer_product as _outer_product
-from tinyops.ops.linear_algebra.tensor_dot_product import tensor_dot_product as _tensor_dot_product
-from tinyops.ops.linear_algebra.einstein_summation import einstein_summation as _einstein_summation
-from tinyops.ops.linear_algebra.trace import trace as _trace
-from tinyops.ops.linear_algebra.diagonal import diagonal as _diagonal
-from tinyops.ops.linear_algebra.kronecker_product import kronecker_product as _kronecker_product
-from tinyops.ops.linear_algebra.norm import norm as _norm
-from tinyops.ops.linear_algebra.determinant import determinant as _determinant
-from tinyops.ops.linear_algebra.inverse import inverse as _inverse
-from tinyops.ops.linear_algebra.pseudo_inverse import pseudo_inverse as _pseudo_inverse
-from tinyops.ops.linear_algebra.solve_linear_system import solve_linear_system as _solve
-from tinyops.ops.linear_algebra.least_squares import least_squares as _least_squares
-from tinyops.ops.linear_algebra.condition_number import condition_number as _condition_number
-from tinyops.ops.linear_algebra.matrix_rank import matrix_rank as _matrix_rank
-from tinyops.ops.linear_algebra.cholesky_decomposition import cholesky_decomposition as _cholesky
-from tinyops.ops.linear_algebra.qr_decomposition import qr_decomposition as _qr_decomposition
-from tinyops.ops.linear_algebra.matrix_power import matrix_power as _matrix_power
-
-from tinyops.ops.signal.convolution_1d import convolution_1d as _convolution_1d, ConvolutionMode
-from tinyops.ops.signal.hanning_window import hanning_window as _hanning_window
-from tinyops.ops.signal.hamming_window import hamming_window as _hamming_window
-from tinyops.ops.signal.blackman_window import blackman_window as _blackman_window
-from tinyops.ops.signal.discrete_fourier_transform import discrete_fourier_transform as _dft
-from tinyops.ops.signal.inverse_discrete_fourier_transform import inverse_discrete_fourier_transform as _idft
-from tinyops.ops.signal.fourier_frequencies import fourier_frequencies as _fourier_frequencies
-
-from tinygrad import Tensor
-
+from tinyops.ops.statistics.standard_deviation import standard_deviation as _standard_deviation
+from tinyops.ops.statistics.variance import variance as _variance
+from tinyops.ops.statistics.weighted_average import weighted_average as _weighted_average
 
 # --- Statistics ---
 
