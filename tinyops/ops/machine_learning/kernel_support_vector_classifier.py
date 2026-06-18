@@ -5,6 +5,7 @@ from tinygrad import Tensor
 
 class KernelType(Enum):
     """Kernel functions for SVM."""
+
     LINEAR = "linear"
     POLYNOMIAL = "polynomial"
     RADIAL_BASIS_FUNCTION = "radial_basis_function"

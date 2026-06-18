@@ -5,6 +5,7 @@ from tinygrad import Tensor
 
 class ThresholdMethod(Enum):
     """Thresholding methods."""
+
     BINARY = "binary"
     BINARY_INVERSE = "binary_inverse"
     TRUNCATE = "truncate"

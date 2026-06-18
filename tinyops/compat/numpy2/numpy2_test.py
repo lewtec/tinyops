@@ -93,9 +93,7 @@ class TestAverage:
     def test_returned(self):
         data = np.array([1, 2, 3, 4], dtype=np.float32)
         weights = np.array([4, 3, 2, 1], dtype=np.float32)
-        result_avg, result_wsum = tnp.average(
-            Tensor(data), weights=Tensor(weights), returned=True
-        )
+        result_avg, result_wsum = tnp.average(Tensor(data), weights=Tensor(weights), returned=True)
         expected_avg, expected_wsum = np.average(data, weights=weights, returned=True)
         assert_close(result_avg, expected_avg)
         assert_close(result_wsum, expected_wsum)

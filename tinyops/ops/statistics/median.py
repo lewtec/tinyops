@@ -50,7 +50,9 @@ def median(
 
     if keep_dimensions:
         if axis != number_of_dimensions - 1:
-            inverse_permutation = list(range(axis)) + [number_of_dimensions - 1] + list(range(axis, number_of_dimensions - 1))
+            inverse_permutation = (
+                list(range(axis)) + [number_of_dimensions - 1] + list(range(axis, number_of_dimensions - 1))
+            )
             result = result.permute(inverse_permutation)
     else:
         result = result.squeeze(-1)

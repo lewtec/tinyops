@@ -69,6 +69,7 @@ class MerweScaledSigmaPoints:
 
 class _Kalman:
     """Namespace mimicking filterpy.kalman."""
+
     MerweScaledSigmaPoints = MerweScaledSigmaPoints
 
 

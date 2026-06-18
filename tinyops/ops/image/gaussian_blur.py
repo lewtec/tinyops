@@ -39,13 +39,13 @@ def gaussian_blur(
 
     # Horizontal kernel (1, width)
     horizontal_positions = Tensor.arange(width) - (width - 1) / 2
-    horizontal_weights = (-(horizontal_positions ** 2) / (2 * sigma_x ** 2)).exp()
+    horizontal_weights = (-(horizontal_positions**2) / (2 * sigma_x**2)).exp()
     horizontal_weights = horizontal_weights / horizontal_weights.sum()
     horizontal_kernel = horizontal_weights.reshape(1, width)
 
     # Vertical kernel (height, 1)
     vertical_positions = Tensor.arange(height) - (height - 1) / 2
-    vertical_weights = (-(vertical_positions ** 2) / (2 * sigma_y ** 2)).exp()
+    vertical_weights = (-(vertical_positions**2) / (2 * sigma_y**2)).exp()
     vertical_weights = vertical_weights / vertical_weights.sum()
     vertical_kernel = vertical_weights.reshape(height, 1)
 

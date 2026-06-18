@@ -6,6 +6,7 @@ from tinygrad import Tensor, dtypes
 
 class FadeShape(Enum):
     """Shape of the fade envelope."""
+
     LINEAR = "linear"
     EXPONENTIAL = "exponential"
     LOGARITHMIC = "logarithmic"

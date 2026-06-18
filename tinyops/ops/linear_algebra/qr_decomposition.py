@@ -37,7 +37,7 @@ def qr_decomposition(matrix: Tensor) -> tuple[Tensor, Tensor]:
     upper_triangular = orthogonal.T @ matrix
 
     # Ensure non-negative diagonal elements (convention matching)
-    diagonal_values = upper_triangular.flatten()[::upper_triangular.shape[1] + 1][:rank]
+    diagonal_values = upper_triangular.flatten()[:: upper_triangular.shape[1] + 1][:rank]
     signs = (diagonal_values < 0).cast(matrix.dtype) * -2 + 1
     orthogonal = orthogonal * signs
     upper_triangular = signs.reshape(-1, 1) * upper_triangular

@@ -29,9 +29,7 @@ def frequency_mask(
 
     frequency_count = spectrogram.shape[-2]
     if maximum_mask_length > frequency_count:
-        raise ValueError(
-            f"maximum_mask_length ({maximum_mask_length}) must be <= frequency_count ({frequency_count})"
-        )
+        raise ValueError(f"maximum_mask_length ({maximum_mask_length}) must be <= frequency_count ({frequency_count})")
 
     if maximum_mask_length == 0:
         return spectrogram

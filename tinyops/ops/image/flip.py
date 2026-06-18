@@ -5,6 +5,7 @@ from tinygrad import Tensor
 
 class FlipDirection(Enum):
     """Image flip directions."""
+
     HORIZONTAL = "horizontal"
     VERTICAL = "vertical"
     BOTH = "both"

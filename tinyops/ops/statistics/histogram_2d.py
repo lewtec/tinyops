@@ -61,10 +61,7 @@ def histogram_2d(
     idx_x = (x_flat == range_x[1]).where(bins_x - 1, idx_x)
     idx_y = (y_flat == range_y[1]).where(bins_y - 1, idx_y)
 
-    valid_mask = (
-        (x_flat >= range_x[0]) & (x_flat <= range_x[1]) &
-        (y_flat >= range_y[0]) & (y_flat <= range_y[1])
-    )
+    valid_mask = (x_flat >= range_x[0]) & (x_flat <= range_x[1]) & (y_flat >= range_y[0]) & (y_flat <= range_y[1])
 
     total_bins = bins_x * bins_y
     flat_indices = (idx_x * bins_y + idx_y).cast(dtypes.int32)

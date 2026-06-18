@@ -20,8 +20,4 @@ def blackman_window(length: int, symmetric: bool = True) -> Tensor:
 
     denominator = length - 1 if symmetric else length
     indices = Tensor.arange(length)
-    return (
-        0.42
-        - 0.5 * (2 * math.pi * indices / denominator).cos()
-        + 0.08 * (4 * math.pi * indices / denominator).cos()
-    )
+    return 0.42 - 0.5 * (2 * math.pi * indices / denominator).cos() + 0.08 * (4 * math.pi * indices / denominator).cos()

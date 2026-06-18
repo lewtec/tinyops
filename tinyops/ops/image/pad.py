@@ -5,6 +5,7 @@ from tinygrad import Tensor
 
 class PaddingMode(Enum):
     """Image padding modes."""
+
     CONSTANT = "constant"
     REFLECT = "reflect"
 

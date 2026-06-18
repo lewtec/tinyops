@@ -5,13 +5,20 @@ from tinygrad import Tensor, dtypes
 
 class InterpolationMethod(Enum):
     """Supported interpolation methods for image resizing."""
+
     NEAREST_NEIGHBOR = "nearest_neighbor"
     BILINEAR = "bilinear"
 
 
-def _resize_nearest(image: Tensor, output_height: int, output_width: int,
-                    input_height: int, input_width: int,
-                    row_coords: Tensor, column_coords: Tensor) -> Tensor:
+def _resize_nearest(
+    image: Tensor,
+    output_height: int,
+    output_width: int,
+    input_height: int,
+    input_width: int,
+    row_coords: Tensor,
+    column_coords: Tensor,
+) -> Tensor:
     scale_y = input_height / output_height
     scale_x = input_width / output_width
     source_y = (row_coords.cast(dtypes.float32) * scale_y).floor().cast(dtypes.int32).clip(0, input_height - 1)
@@ -19,9 +26,15 @@ def _resize_nearest(image: Tensor, output_height: int, output_width: int,
     return image[source_y, source_x]
 
 
-def _resize_bilinear(image: Tensor, output_height: int, output_width: int,
-                     input_height: int, input_width: int,
-                     row_coords: Tensor, column_coords: Tensor) -> Tensor:
+def _resize_bilinear(
+    image: Tensor,
+    output_height: int,
+    output_width: int,
+    input_height: int,
+    input_width: int,
+    row_coords: Tensor,
+    column_coords: Tensor,
+) -> Tensor:
     scale_y = input_height / output_height
     scale_x = input_width / output_width
     source_y = ((row_coords.cast(dtypes.float32) + 0.5) * scale_y - 0.5).clip(0, input_height - 1)
@@ -41,10 +54,10 @@ def _resize_bilinear(image: Tensor, output_height: int, output_width: int,
     bottom_right = image[y_ceil, x_ceil]
 
     return (
-        top_left * (1 - dy) * (1 - dx) +
-        top_right * (1 - dy) * dx +
-        bottom_left * dy * (1 - dx) +
-        bottom_right * dy * dx
+        top_left * (1 - dy) * (1 - dx)
+        + top_right * (1 - dy) * dx
+        + bottom_left * dy * (1 - dx)
+        + bottom_right * dy * dx
     )
 
 
@@ -75,9 +88,13 @@ def resize_image(
     )
 
     if method == InterpolationMethod.NEAREST_NEIGHBOR:
-        result = _resize_nearest(image, output_height, output_width, input_height, input_width, row_coords, column_coords)
+        result = _resize_nearest(
+            image, output_height, output_width, input_height, input_width, row_coords, column_coords
+        )
     elif method == InterpolationMethod.BILINEAR:
-        result = _resize_bilinear(image, output_height, output_width, input_height, input_width, row_coords, column_coords)
+        result = _resize_bilinear(
+            image, output_height, output_width, input_height, input_width, row_coords, column_coords
+        )
     else:
         raise NotImplementedError(f"Interpolation method {method} is not supported.")
 

@@ -32,17 +32,14 @@ def decode_wav(wav_bytes: bytes) -> tuple[int, Tensor]:
             frame_count = wav_file.getnframes()
 
             if frame_count > MAXIMUM_FRAME_COUNT:
-                raise ValueError(
-                    f"WAV file frame count {frame_count} exceeds limit of {MAXIMUM_FRAME_COUNT}."
-                )
+                raise ValueError(f"WAV file frame count {frame_count} exceeds limit of {MAXIMUM_FRAME_COUNT}.")
 
             raw_frames = wav_file.readframes(frame_count)
 
     expected_size = frame_count * channel_count * sample_width
     if len(raw_frames) < expected_size:
         raise ValueError(
-            f"WAV data is smaller than expected. "
-            f"Header: {expected_size} bytes, actual: {len(raw_frames)} bytes."
+            f"WAV data is smaller than expected. Header: {expected_size} bytes, actual: {len(raw_frames)} bytes."
         )
 
     if sample_width == 1:

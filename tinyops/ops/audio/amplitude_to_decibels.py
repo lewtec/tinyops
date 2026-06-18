@@ -6,8 +6,10 @@ from tinygrad import Tensor
 
 class SpectrogramScale(Enum):
     """Scale of the input spectrogram."""
+
     POWER = "power"
     MAGNITUDE = "magnitude"
+
 
 _SCALE_MULTIPLIERS = {
     SpectrogramScale.POWER: 10.0,

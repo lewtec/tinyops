@@ -33,30 +33,36 @@ def discrete_white_noise_matrix(
 
     one = Tensor(1.0, dtype=time_step_tensor.dtype, device=time_step_tensor.device)
 
-    dt2 = time_step_tensor ** 2
-    dt3 = time_step_tensor ** 3
-    dt4 = time_step_tensor ** 4
-    dt5 = time_step_tensor ** 5
-    dt6 = time_step_tensor ** 6
+    dt2 = time_step_tensor**2
+    dt3 = time_step_tensor**3
+    dt4 = time_step_tensor**4
+    dt5 = time_step_tensor**5
+    dt6 = time_step_tensor**6
 
     if dimension == 2:
-        noise_matrix = Tensor.stack([
-            Tensor.stack([dt4 / 4, dt3 / 2]),
-            Tensor.stack([dt3 / 2, dt2]),
-        ])
+        noise_matrix = Tensor.stack(
+            [
+                Tensor.stack([dt4 / 4, dt3 / 2]),
+                Tensor.stack([dt3 / 2, dt2]),
+            ]
+        )
     elif dimension == 3:
-        noise_matrix = Tensor.stack([
-            Tensor.stack([dt4 / 4, dt3 / 2, dt2 / 2]),
-            Tensor.stack([dt3 / 2, dt2, time_step_tensor]),
-            Tensor.stack([dt2 / 2, time_step_tensor, one]),
-        ])
+        noise_matrix = Tensor.stack(
+            [
+                Tensor.stack([dt4 / 4, dt3 / 2, dt2 / 2]),
+                Tensor.stack([dt3 / 2, dt2, time_step_tensor]),
+                Tensor.stack([dt2 / 2, time_step_tensor, one]),
+            ]
+        )
     else:
-        noise_matrix = Tensor.stack([
-            Tensor.stack([dt6 / 36, dt5 / 12, dt4 / 6, dt3 / 6]),
-            Tensor.stack([dt5 / 12, dt4 / 4, dt3 / 2, dt2 / 2]),
-            Tensor.stack([dt4 / 6, dt3 / 2, dt2, time_step_tensor]),
-            Tensor.stack([dt3 / 6, dt2 / 2, time_step_tensor, one]),
-        ])
+        noise_matrix = Tensor.stack(
+            [
+                Tensor.stack([dt6 / 36, dt5 / 12, dt4 / 6, dt3 / 6]),
+                Tensor.stack([dt5 / 12, dt4 / 4, dt3 / 2, dt2 / 2]),
+                Tensor.stack([dt4 / 6, dt3 / 2, dt2, time_step_tensor]),
+                Tensor.stack([dt3 / 6, dt2 / 2, time_step_tensor, one]),
+            ]
+        )
 
     if block_size == 1:
         return noise_matrix * variance_tensor

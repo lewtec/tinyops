@@ -29,9 +29,7 @@ def time_mask(
 
     time_step_count = spectrogram.shape[-1]
     if maximum_mask_length > time_step_count:
-        raise ValueError(
-            f"maximum_mask_length ({maximum_mask_length}) must be <= time_step_count ({time_step_count})"
-        )
+        raise ValueError(f"maximum_mask_length ({maximum_mask_length}) must be <= time_step_count ({time_step_count})")
 
     if maximum_mask_length == 0:
         return spectrogram

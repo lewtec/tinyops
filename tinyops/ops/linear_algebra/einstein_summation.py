@@ -48,8 +48,7 @@ def einstein_summation(subscripts: str, *operands: Tensor) -> Tensor:
             operand = operand[tuple(indexer)]
             sorted_positions = sorted(positions)
             contiguous = all(
-                sorted_positions[k] == sorted_positions[k - 1] + 1
-                for k in range(1, len(sorted_positions))
+                sorted_positions[k] == sorted_positions[k - 1] + 1 for k in range(1, len(sorted_positions))
             )
             new_characters = []
             if contiguous:

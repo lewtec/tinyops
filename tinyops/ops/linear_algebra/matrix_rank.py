@@ -18,5 +18,5 @@ def matrix_rank(matrix: Tensor, tolerance: float = 1e-5) -> Tensor:
         return Tensor(0)
 
     _, upper_triangular = qr_decomposition(matrix)
-    diagonal_elements = upper_triangular.flatten()[::upper_triangular.shape[1] + 1]
+    diagonal_elements = upper_triangular.flatten()[:: upper_triangular.shape[1] + 1]
     return (diagonal_elements.abs() > tolerance).sum()

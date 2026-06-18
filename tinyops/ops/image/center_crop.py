@@ -26,9 +26,7 @@ def center_crop(image: Tensor, output_size: int | tuple[int, int]) -> Tensor:
         pad_left = max(0, (target_width - width) // 2)
         pad_right = max(0, target_width - width - pad_left)
 
-        padding_config = tuple(
-            [(0, 0)] * (image.ndim - 2) + [(pad_top, pad_bottom), (pad_left, pad_right)]
-        )
+        padding_config = tuple([(0, 0)] * (image.ndim - 2) + [(pad_top, pad_bottom), (pad_left, pad_right)])
         image = image.pad(padding_config)
         height, width = image.shape[-2:]
 

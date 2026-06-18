@@ -4,6 +4,8 @@ Provides sklearn-compatible class/function signatures that delegate to tinyops.o
 Organized into sub-namespaces matching sklearn's package structure.
 """
 
+from typing import Self
+
 from tinygrad import Tensor
 
 from tinyops.ops.machine_learning.accuracy_score import accuracy_score as _accuracy_score
@@ -109,9 +111,7 @@ class _Preprocessing:
     class PolynomialFeatures:
         """Generate polynomial and interaction features."""
 
-        def __init__(
-            self, degree: int = 2, interaction_only: bool = False, include_bias: bool = True
-        ):
+        def __init__(self, degree: int = 2, interaction_only: bool = False, include_bias: bool = True):
             self.degree = degree
             self.interaction_only = interaction_only
             self.include_bias = include_bias
@@ -196,7 +196,7 @@ class _Neighbors:
             self.n_neighbors = n_neighbors
             self._X = None
 
-        def fit(self, X: Tensor) -> "NearestNeighbors":
+        def fit(self, X: Tensor) -> Self:
             self._X = X
             return self
 
@@ -285,6 +285,7 @@ class _FeatureExtractionText:
 
 class _FeatureExtraction:
     """Namespace mimicking sklearn.feature_extraction."""
+
     text = _FeatureExtractionText()
 
 

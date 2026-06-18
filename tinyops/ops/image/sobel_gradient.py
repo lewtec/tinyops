@@ -8,6 +8,7 @@ from tinyops.ops.image.pad import PaddingMode
 
 class GradientDirection(Enum):
     """Direction for gradient computation."""
+
     HORIZONTAL = "horizontal"
     VERTICAL = "vertical"
 

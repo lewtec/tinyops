@@ -5,6 +5,7 @@ from tinygrad import Tensor
 
 class NormType(Enum):
     """Normalization types for the normalizer."""
+
     L1 = "l1"
     L2 = "l2"
     MAX = "max"

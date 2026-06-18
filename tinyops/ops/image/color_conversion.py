@@ -5,6 +5,7 @@ from tinygrad import Tensor, dtypes
 
 class ColorSpace(Enum):
     """Supported color space conversions."""
+
     BGR_TO_GRAYSCALE = "bgr_to_grayscale"
 
 

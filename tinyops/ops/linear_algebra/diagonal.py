@@ -52,4 +52,4 @@ def diagonal(
     flat_shape = list(permuted.shape[:-2]) + [rows * columns]
     flattened = permuted.reshape(tuple(flat_shape))
 
-    return flattened[..., start:end:(columns + 1)]
+    return flattened[..., start : end : (columns + 1)]

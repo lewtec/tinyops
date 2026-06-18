@@ -31,7 +31,7 @@ def merwe_scaled_sigma_points(
     if state_mean.ndim == 2 and state_mean.shape[1] == 1:
         state_mean = state_mean.squeeze(1)
 
-    lambda_parameter = spread ** 2 * (dimension + secondary_scaling) - dimension
+    lambda_parameter = spread**2 * (dimension + secondary_scaling) - dimension
     scaled_covariance = covariance * (lambda_parameter + dimension)
     lower_triangular = cholesky_decomposition(scaled_covariance)
     upper_triangular = lower_triangular.T
@@ -43,11 +43,13 @@ def merwe_scaled_sigma_points(
 
     weight_rest = 0.5 / (dimension + lambda_parameter)
     mean_weight_center = lambda_parameter / (dimension + lambda_parameter)
-    covariance_weight_center = lambda_parameter / (dimension + lambda_parameter) + (1 - spread ** 2 + prior_knowledge)
+    covariance_weight_center = lambda_parameter / (dimension + lambda_parameter) + (1 - spread**2 + prior_knowledge)
 
     rest_weights = Tensor.full((2 * dimension,), weight_rest, dtype=state_mean.dtype, device=state_mean.device)
     mean_weight_center_tensor = Tensor([mean_weight_center], dtype=state_mean.dtype, device=state_mean.device)
-    covariance_weight_center_tensor = Tensor([covariance_weight_center], dtype=state_mean.dtype, device=state_mean.device)
+    covariance_weight_center_tensor = Tensor(
+        [covariance_weight_center], dtype=state_mean.dtype, device=state_mean.device
+    )
 
     mean_weights = Tensor.cat(mean_weight_center_tensor, rest_weights, dim=0)
     covariance_weights = Tensor.cat(covariance_weight_center_tensor, rest_weights, dim=0)

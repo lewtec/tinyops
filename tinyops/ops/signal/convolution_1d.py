@@ -5,6 +5,7 @@ from tinygrad import Tensor
 
 class ConvolutionMode(Enum):
     """Output size mode for 1D convolution."""
+
     FULL = "full"
     VALID = "valid"
     SAME = "same"

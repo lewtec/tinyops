@@ -7,6 +7,7 @@ from tinyops.ops.image._filtering import apply_morphological_filter
 
 class MorphologicalOperation(Enum):
     """Types of morphological operations."""
+
     OPEN = "open"
     CLOSE = "close"
     GRADIENT = "gradient"

@@ -44,9 +44,8 @@ def bernoulli_naive_bayes(
 
     log_feature_probs = smoothed_counts.log() - smoothed_class_counts.reshape(-1, 1).log()
     log_complement_probs = (
-        (smoothed_class_counts.reshape(-1, 1) - smoothed_counts).log()
-        - smoothed_class_counts.reshape(-1, 1).log()
-    )
+        smoothed_class_counts.reshape(-1, 1) - smoothed_counts
+    ).log() - smoothed_class_counts.reshape(-1, 1).log()
 
     joint_log_likelihood = test_features @ (log_feature_probs - log_complement_probs).T
     joint_log_likelihood += log_complement_probs.sum(1).reshape(1, -1)

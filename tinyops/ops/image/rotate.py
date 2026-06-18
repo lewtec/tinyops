@@ -5,6 +5,7 @@ from tinygrad import Tensor
 
 class RotationAngle(Enum):
     """Fixed rotation angles."""
+
     CLOCKWISE_90 = "clockwise_90"
     HALF_TURN = "half_turn"
     COUNTERCLOCKWISE_90 = "counterclockwise_90"

@@ -19,8 +19,7 @@ def inner_product(first: Tensor, second: Tensor) -> Tensor:
 
     if first.shape[-1] != second.shape[-1]:
         raise ValueError(
-            f"shapes {first.shape} and {second.shape} not aligned: "
-            f"{first.shape[-1]} != {second.shape[-1]}"
+            f"shapes {first.shape} and {second.shape} not aligned: {first.shape[-1]} != {second.shape[-1]}"
         )
 
     contraction_size = first.shape[-1]

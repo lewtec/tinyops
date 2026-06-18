@@ -31,7 +31,9 @@ def histogram_equalization(image: Tensor) -> Tensor:
     minimum_nonzero_cdf = cumulative_distribution.ne(0).where(cumulative_distribution, float("inf")).min()
     total_pixels = image.shape[0] * image.shape[1]
 
-    normalized_cdf = ((cumulative_distribution - minimum_nonzero_cdf) / (total_pixels - minimum_nonzero_cdf)) * (INTENSITY_LEVELS - 1)
+    normalized_cdf = ((cumulative_distribution - minimum_nonzero_cdf) / (total_pixels - minimum_nonzero_cdf)) * (
+        INTENSITY_LEVELS - 1
+    )
     rounded_cdf = normalized_cdf.round()
 
     equalized = rounded_cdf[image.flatten().cast(dtypes.int32)].reshape(image.shape)

@@ -33,7 +33,7 @@ def determinant(matrix: Tensor) -> Tensor:
         if column > 0:
             sub_matrix_parts.append(matrix[1:, :column])
         if column < size - 1:
-            sub_matrix_parts.append(matrix[1:, column + 1:])
+            sub_matrix_parts.append(matrix[1:, column + 1 :])
 
         if len(sub_matrix_parts) > 1:
             sub_matrix = sub_matrix_parts[0].cat(sub_matrix_parts[1], dim=1)

@@ -24,8 +24,8 @@ def cholesky_decomposition(matrix: Tensor) -> Tensor:
         diagonal_element = (matrix[column_index, column_index] - squared_sum).sqrt()
 
         if column_index < size - 1:
-            cross_product = previous_columns[column_index + 1:, :] @ previous_columns[column_index, :]
-            below_diagonal = (matrix[column_index + 1:, column_index] - cross_product) / diagonal_element
+            cross_product = previous_columns[column_index + 1 :, :] @ previous_columns[column_index, :]
+            below_diagonal = (matrix[column_index + 1 :, column_index] - cross_product) / diagonal_element
         else:
             below_diagonal = Tensor.zeros(0, dtype=matrix.dtype)
 

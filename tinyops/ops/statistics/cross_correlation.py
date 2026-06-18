@@ -5,6 +5,7 @@ from tinygrad import Tensor
 
 class CorrelationMode(Enum):
     """Defines how much of the cross-correlation output to return."""
+
     VALID = "valid"
     SAME = "same"
     FULL = "full"

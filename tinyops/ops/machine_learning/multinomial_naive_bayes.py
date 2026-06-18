@@ -35,10 +35,9 @@ def multinomial_naive_bayes(
 
     feature_counts = label_one_hot.T @ training_features
     total_features_per_class = feature_counts.sum(1).reshape(-1, 1)
-    log_feature_probabilities = (
-        (feature_counts + smoothing).log()
-        - (total_features_per_class + smoothing * feature_count).log()
-    )
+    log_feature_probabilities = (feature_counts + smoothing).log() - (
+        total_features_per_class + smoothing * feature_count
+    ).log()
 
     log_likelihoods = test_features @ log_feature_probabilities.T
     posteriors = log_likelihoods + log_class_priors.unsqueeze(0)

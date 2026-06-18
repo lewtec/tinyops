@@ -21,10 +21,7 @@ def condition_number(matrix: Tensor, order: int | float | str | None = None) -> 
         NotImplementedError: For order=None or order=2 (requires SVD).
     """
     if order is None:
-        raise NotImplementedError(
-            "Default condition number (2-norm) not supported. "
-            "Use order='fro', 1, -1, inf, -inf."
-        )
+        raise NotImplementedError("Default condition number (2-norm) not supported. Use order='fro', 1, -1, inf, -inf.")
     if order == 2:
         raise NotImplementedError("2-norm condition number not supported.")
 
