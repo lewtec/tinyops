@@ -1,11 +1,54 @@
+import array
 import io
 import struct
 import wave
 
-import numpy as np
 from tinygrad import Tensor, dtypes
 
 MAXIMUM_FRAME_COUNT = 500_000_000
+
+# PCM peak divisors for normalizing integer samples to [-1, 1].
+_UINT8_MIDPOINT = 128.0
+_INT16_PEAK = 32768.0
+_INT24_PEAK = 8388608.0
+_INT32_PEAK = 2147483648.0
+
+_NORMALIZATION_BY_SAMPLE_WIDTH = {
+    1: _UINT8_MIDPOINT,
+    2: _INT16_PEAK,
+    3: _INT24_PEAK,
+    4: _INT32_PEAK,
+}
+
+
+def _unpack_pcm_samples(raw_frames: bytes, sample_width: int, sample_count: int) -> list[float]:
+    """Unpack PCM bytes into float32 samples in [-1, 1]."""
+    if sample_width == 1:
+        samples = array.array("B")
+        samples.frombytes(raw_frames[:sample_count])
+        return [(value - _UINT8_MIDPOINT) / _UINT8_MIDPOINT for value in samples]
+
+    if sample_width == 2:
+        samples = array.array("h")
+        samples.frombytes(raw_frames[: sample_count * 2])
+        return [value / _INT16_PEAK for value in samples]
+
+    if sample_width == 3:
+        floats: list[float] = []
+        for index in range(sample_count):
+            offset = index * 3
+            sample_bytes = raw_frames[offset : offset + 3]
+            sign_extension = b"\x00" if sample_bytes[2] < 128 else b"\xff"
+            value = struct.unpack("<i", sample_bytes + sign_extension)[0]
+            floats.append(value / _INT24_PEAK)
+        return floats
+
+    if sample_width == 4:
+        samples = array.array("i")
+        samples.frombytes(raw_frames[: sample_count * 4])
+        return [value / _INT32_PEAK for value in samples]
+
+    raise ValueError(f"Unsupported sample width: {sample_width}")
 
 
 def decode_wav(wav_bytes: bytes) -> tuple[int, Tensor]:
@@ -42,34 +85,15 @@ def decode_wav(wav_bytes: bytes) -> tuple[int, Tensor]:
             f"WAV data is smaller than expected. Header: {expected_size} bytes, actual: {len(raw_frames)} bytes."
         )
 
-    if sample_width == 1:
-        numpy_dtype = np.uint8
-    elif sample_width == 2:
-        numpy_dtype = np.int16
-    elif sample_width == 3:
-        data = np.empty((frame_count, channel_count), dtype=np.int32)
-        for i in range(frame_count * channel_count):
-            offset = i * 3
-            sample_bytes = raw_frames[offset : offset + 3]
-            sample_bytes += b"\x00" if sample_bytes[2] < 128 else b"\xff"
-            data.flat[i] = struct.unpack("<i", sample_bytes)[0]
-        numpy_array = data
-    elif sample_width == 4:
-        numpy_dtype = np.int32
-    else:
+    if sample_width not in _NORMALIZATION_BY_SAMPLE_WIDTH:
         raise ValueError(f"Unsupported sample width: {sample_width}")
 
-    if sample_width != 3:
-        numpy_array = np.frombuffer(raw_frames, dtype=numpy_dtype)
+    sample_count = frame_count * channel_count
+    floats = _unpack_pcm_samples(raw_frames, sample_width, sample_count)
 
-    numpy_array = numpy_array.reshape(-1, channel_count) if channel_count > 1 else numpy_array.reshape(-1, 1)
-
-    normalization_factors = {1: 128.0, 2: 32768.0, 3: 8388608.0, 4: 2147483648.0}
-    factor = normalization_factors[sample_width]
-
-    if sample_width == 1:
-        float_array = (numpy_array.astype(np.float32) - 128.0) / 128.0
+    if channel_count == 1:
+        shaped = [[value] for value in floats]
     else:
-        float_array = numpy_array.astype(np.float32) / factor
+        shaped = [floats[index : index + channel_count] for index in range(0, sample_count, channel_count)]
 
-    return sample_rate, Tensor(float_array, dtype=dtypes.float32)
+    return sample_rate, Tensor(shaped, dtype=dtypes.float32)

@@ -1,5 +1,6 @@
-import numpy as np
 from tinygrad import Tensor, dtypes
+
+from tinyops.ops._tensor_utils import unique_sorted_values
 
 
 def one_hot_encoder(features: Tensor) -> Tensor:
@@ -17,7 +18,7 @@ def one_hot_encoder(features: Tensor) -> Tensor:
     encoded_columns = []
     for column_index in range(features.shape[1]):
         column = features[:, column_index]
-        categories = Tensor(np.unique(column.numpy()), requires_grad=False, device=features.device)
+        categories = Tensor(unique_sorted_values(column), requires_grad=False, device=features.device)
         one_hot = column.unsqueeze(1) == categories.unsqueeze(0)
         encoded_columns.append(one_hot)
 

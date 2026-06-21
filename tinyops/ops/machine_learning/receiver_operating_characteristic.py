@@ -1,5 +1,6 @@
-import numpy as np
 from tinygrad import Tensor
+
+from tinyops.ops._tensor_utils import unique_sorted_values
 
 
 def receiver_operating_characteristic_area(
@@ -20,11 +21,10 @@ def receiver_operating_characteristic_area(
     Raises:
         ValueError: If labels are not binary or only one class is present.
     """
-    true_np = true_labels.numpy()
-    unique_labels = np.unique(true_np)
+    unique_labels = unique_sorted_values(true_labels)
     if len(unique_labels) != 2:
         raise ValueError("ROC AUC score is only defined for binary classification.")
-    if np.sum(true_np == 1) == 0 or np.sum(true_np == 0) == 0:
+    if 1 not in unique_labels or 0 not in unique_labels:
         raise ValueError("Only one class present in true_labels.")
 
     positive_mask = true_labels == 1

@@ -1,5 +1,6 @@
-import numpy as np
 from tinygrad import Tensor, dtypes
+
+from tinyops.ops._tensor_utils import unique_sorted_values
 
 
 def bernoulli_naive_bayes(
@@ -24,7 +25,7 @@ def bernoulli_naive_bayes(
         Predicted labels for test samples.
     """
     if _classes is None:
-        classes = Tensor(np.unique(training_labels.numpy()), dtype=training_labels.dtype)
+        classes = Tensor(unique_sorted_values(training_labels), dtype=training_labels.dtype)
     else:
         classes = _classes
 

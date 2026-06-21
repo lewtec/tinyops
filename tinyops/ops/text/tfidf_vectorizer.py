@@ -18,7 +18,7 @@ def tfidf_vectorizer(corpus: list[str]) -> Tensor:
         TF-IDF matrix (n_documents, n_vocabulary).
     """
     counts_tensor = count_vectorizer(corpus)
-    counts = counts_tensor.numpy().tolist()
+    counts = counts_tensor.tolist()
     vocabulary_size = counts_tensor.shape[1]
 
     document_count = len(corpus)

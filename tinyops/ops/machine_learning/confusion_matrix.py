@@ -1,5 +1,6 @@
-import numpy as np
 from tinygrad import Tensor, dtypes
+
+from tinyops.ops._tensor_utils import unique_sorted_values
 
 
 def confusion_matrix(
@@ -18,9 +19,8 @@ def confusion_matrix(
         Confusion matrix of shape (n_classes, n_classes).
     """
     if label_values is None:
-        true_np = true_labels.numpy()
-        pred_np = predicted_labels.numpy()
-        label_values = sorted(list(np.unique(np.concatenate((true_np, pred_np)))))
+        combined = Tensor.cat(true_labels.reshape(-1), predicted_labels.reshape(-1))
+        label_values = unique_sorted_values(combined)
 
     labels_tensor = Tensor(label_values, requires_grad=False)
 
