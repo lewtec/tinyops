@@ -65,3 +65,27 @@ This file lists patterns of changes that have been consistently rejected by huma
 **- Pattern:** Replacing simple `if/else` checks with dictionary lookups for small sets of Enums (e.g., color conversion codes).
 **- Justification:** For small, static mappings, introducing a dictionary lookup can be considered over-engineering or premature optimization that adds complexity without significant benefit. PR #196 was rejected for this.
 **- Files Affected:** `tinyops/image/*.py`
+
+---
+
+## IGNORE: Enforcing Local Numpy Imports
+
+**- Pattern:** Refactoring module-level `numpy` imports to local imports inside functions.
+**- Justification:** Mass refactoring of existing top-level imports to local imports across modules (e.g., `tinyops/ml/*.py`, `tinyops/io/*.py`) is considered unwanted noise/churn. While the project minimizes dependencies, this mass change is disruptive and consistently rejected.
+**- Files Affected:** `tinyops/ml/*.py`, `tinyops/io/*.py`
+
+---
+
+## IGNORE: Replacing Numpy Validation with Tensor Operations
+
+**- Pattern:** Replacing simple `numpy`-based input validation (e.g., `np.unique`, `np.sum`) with complex `tinygrad` tensor operations, especially for eager validation before graph construction.
+**- Justification:** The project explicitly allows numpy for validation as it happens before the graph computation. Replacing clear, standard numpy logic with more obscure or complex tensor operations for validation purposes is rejected.
+**- Files Affected:** `tinyops/ml/*.py`
+
+---
+
+## IGNORE: Resubmitting Previously Rejected Changes
+
+**- Pattern:** Re-proposing the exact same code changes, refactors, or rule additions that were already rejected in recent pull requests.
+**- Justification:** Agents frequently fail to learn from historical rejections and merely repeat the same failing actions. Examples include repeatedly trying to fix Enum partial wrapping (PRs #194, #200, #204), repeatedly adding the same linters (PRs #209, #211), and repeatedly proposing the same Denoiser rules (PRs #215-#223). Agents must review closed PRs and pivot their approach instead of retrying identical changes.
+**- Files Affected:** All files
