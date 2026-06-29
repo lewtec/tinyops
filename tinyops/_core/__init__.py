@@ -1,6 +1,7 @@
 import numpy as np
 from tinygrad import Tensor
 
+from .error_reporting import report_error
 from .test_utils import assert_one_kernel
 
 

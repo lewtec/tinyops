@@ -95,6 +95,9 @@ These rules are non-negotiable unless a specific exception is recorded with stro
 - All public symbols are re-exported through the appropriate `__init__.py`.
 
 ## Package Structure
+## Operational Memory
+- `tinyops/_core/error_reporting.py` -> Centralized error reporting function `report_error` (to be used instead of empty try/except or direct console.error logs)
+
 ```
 tinyops/
 ├── __init__.py
