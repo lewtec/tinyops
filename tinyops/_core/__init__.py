@@ -1,6 +1,7 @@
 import numpy as np
 from tinygrad import Tensor
 
+from .error_reporting import report_error
 from .test_utils import assert_one_kernel
 
 
@@ -12,3 +13,5 @@ def assert_close(x: Tensor | np.ndarray, y: Tensor | np.ndarray, atol: float = 1
     y_np = y.numpy() if isinstance(y, Tensor) else y
 
     np.testing.assert_allclose(x_np, y_np, atol=atol, rtol=rtol)
+
+__all__ = ["assert_one_kernel", "assert_close", "report_error"]

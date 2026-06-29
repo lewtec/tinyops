@@ -2,6 +2,8 @@ import importlib
 
 import pytest
 
+from tinyops._core import report_error
+
 # Lista de bibliotecas de referência extraídas de CHECKLIST.md
 LIBRARIES = [
     "numpy",
@@ -23,7 +25,8 @@ def test_import_libraries(library):
     """Testa se cada biblioteca de referência pode ser importada."""
     try:
         importlib.import_module(library)
-    except ImportError:
+    except ImportError as e:
+        report_error(e, {"context": f"Failed to import reference library '{library}'."})
         pytest.fail(f"A biblioteca de referência '{library}' não está instalada. Adicione-a ao pyproject.toml.")
 
 
@@ -40,7 +43,8 @@ def test_cv2_headless_mode():
         # Este teste apenas confirma que o import funciona. A configuração do pacote
         # no pyproject.toml é a verdadeira garantia.
         assert cv2.__version__ is not None
-    except ImportError:
+    except ImportError as e:
+        report_error(e, {"context": "Failed to import cv2 for headless mode test."})
         pytest.fail("A biblioteca 'cv2' não está instalada.")
     except Exception as e:
         # Se um erro de GUI acontecer, ele será capturado aqui.
@@ -52,4 +56,5 @@ def test_cv2_headless_mode():
         elif "display" in str(e).lower():  # Erros comuns em ambientes sem servidor X
             pass
         else:
+            report_error(e, {"context": "Unexpected error while testing cv2 headless mode."})
             pytest.fail(f"Erro inesperado ao importar ou verificar o cv2: {e}")
