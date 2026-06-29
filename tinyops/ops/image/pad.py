@@ -71,7 +71,9 @@ def pad_image(
         except ValueError:
             try:
                 padding_mode = PaddingMode[padding_mode.upper()]
-            except KeyError:
+            except KeyError as e:
+                from tinyops._core import report_error
+                report_error(e, f"Invalid padding mode string: {padding_mode}")
                 raise ValueError(f"Padding mode '{padding_mode}' is not supported.") from None
 
     if padding_mode == PaddingMode.CONSTANT:
