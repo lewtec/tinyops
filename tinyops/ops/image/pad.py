@@ -2,6 +2,8 @@ from enum import Enum
 
 from tinygrad import Tensor
 
+from tinyops._core import report_error
+
 
 class PaddingMode(Enum):
     """Image padding modes."""
@@ -71,7 +73,8 @@ def pad_image(
         except ValueError:
             try:
                 padding_mode = PaddingMode[padding_mode.upper()]
-            except KeyError:
+            except KeyError as e_inner:
+                report_error(e_inner, {"context": f"Failed to parse padding_mode '{padding_mode}' via upper()."})
                 raise ValueError(f"Padding mode '{padding_mode}' is not supported.") from None
 
     if padding_mode == PaddingMode.CONSTANT:

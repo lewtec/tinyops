@@ -47,3 +47,4 @@
 **Pattern:** Replace magic numbers with `IntEnum` where applicable, especially in `match` statements, to improve code self-documentation and safety.
 
 - 2026-02-07: Support arbitrary dimensions in padding functions to avoid hardcoded constraints.
+- 2026-06-29: Added centralized error reporting (report_error) to tinyops/_core and routed bare exceptions in pad.py and libs_test.py through it.
