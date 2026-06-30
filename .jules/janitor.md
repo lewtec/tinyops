@@ -47,3 +47,4 @@
 **Pattern:** Replace magic numbers with `IntEnum` where applicable, especially in `match` statements, to improve code self-documentation and safety.
 
 - 2026-02-07: Support arbitrary dimensions in padding functions to avoid hardcoded constraints.
+- 2026-06-30: Refactor duplicated classification metric logic into a shared utility to reduce redundancy and computational cost.

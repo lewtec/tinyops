@@ -1,7 +1,6 @@
 from tinygrad import Tensor
 
-from tinyops.ops.machine_learning.precision_score import precision_score
-from tinyops.ops.machine_learning.recall_score import recall_score
+from tinyops.ops.machine_learning._classification_utils import calculate_binary_components
 
 
 def f1_score(true_labels: Tensor, predicted_labels: Tensor) -> Tensor:
@@ -14,7 +13,10 @@ def f1_score(true_labels: Tensor, predicted_labels: Tensor) -> Tensor:
     Returns:
         F1 score.
     """
-    precision = precision_score(true_labels, predicted_labels)
-    recall = recall_score(true_labels, predicted_labels)
+    true_positives, predicted_positives, actual_positives = calculate_binary_components(true_labels, predicted_labels)
+
+    precision = true_positives / Tensor.where(predicted_positives == 0, 1, predicted_positives)
+    recall = true_positives / Tensor.where(actual_positives == 0, 1, actual_positives)
+
     denominator = precision + recall
     return 2 * (precision * recall) / Tensor.where(denominator == 0, 1, denominator)
