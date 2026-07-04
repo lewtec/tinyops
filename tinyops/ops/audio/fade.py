@@ -15,6 +15,16 @@ class FadeShape(Enum):
 
 
 def _build_fade_in(waveform_length: int, fade_length: int, shape: FadeShape) -> Tensor:
+    """Build the envelope tensor for a fade-in effect.
+
+    Args:
+        waveform_length: Total length of the waveform.
+        fade_length: Length of the fade effect.
+        shape: Shape of the fade envelope.
+
+    Returns:
+        Tensor containing the fade envelope.
+    """
     if fade_length <= 0:
         return Tensor.ones(waveform_length, dtype=dtypes.float32)
 
@@ -38,6 +48,16 @@ def _build_fade_in(waveform_length: int, fade_length: int, shape: FadeShape) -> 
 
 
 def _build_fade_out(waveform_length: int, fade_length: int, shape: FadeShape) -> Tensor:
+    """Build the envelope tensor for a fade-out effect.
+
+    Args:
+        waveform_length: Total length of the waveform.
+        fade_length: Length of the fade effect.
+        shape: Shape of the fade envelope.
+
+    Returns:
+        Tensor containing the fade envelope.
+    """
     if fade_length <= 0:
         return Tensor.ones(waveform_length, dtype=dtypes.float32)
 

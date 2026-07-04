@@ -11,6 +11,14 @@ class PaddingMode(Enum):
 
 
 def _parse_padding(padding) -> tuple[int, int, int, int]:
+    """Parse padding argument into a tuple of 4 integers.
+
+    Args:
+        padding: Padding amount. Can be an int or a tuple of length 2 or 4.
+
+    Returns:
+        Tuple of (left, top, right, bottom) padding.
+    """
     if isinstance(padding, int):
         return padding, padding, padding, padding
     elif isinstance(padding, tuple) and len(padding) == 2:
@@ -22,6 +30,16 @@ def _parse_padding(padding) -> tuple[int, int, int, int]:
 
 
 def _pad_constant(image: Tensor, padding: tuple, fill_value: float) -> Tensor:
+    """Pad an image with a constant value.
+
+    Args:
+        image: Input image tensor.
+        padding: Padding amount.
+        fill_value: Value to use for padding.
+
+    Returns:
+        Padded image tensor.
+    """
     left, top, right, bottom = _parse_padding(padding)
     pad_widths = ((top, bottom), (left, right))
     if image.ndim > 2:
@@ -30,6 +48,15 @@ def _pad_constant(image: Tensor, padding: tuple, fill_value: float) -> Tensor:
 
 
 def _pad_reflect(image: Tensor, padding: tuple) -> Tensor:
+    """Pad an image using reflection padding.
+
+    Args:
+        image: Input image tensor.
+        padding: Padding amount.
+
+    Returns:
+        Padded image tensor.
+    """
     left, top, right, bottom = _parse_padding(padding)
 
     # Reflect padding (exclude edge pixel, OpenCV BORDER_REFLECT_101 style)

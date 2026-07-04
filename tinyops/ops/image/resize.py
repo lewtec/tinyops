@@ -19,6 +19,20 @@ def _resize_nearest(
     row_coords: Tensor,
     column_coords: Tensor,
 ) -> Tensor:
+    """Resize an image using nearest neighbor interpolation.
+
+    Args:
+        image: Input image tensor.
+        output_height: Target height.
+        output_width: Target width.
+        input_height: Original height.
+        input_width: Original width.
+        row_coords: Precomputed row coordinates grid.
+        column_coords: Precomputed column coordinates grid.
+
+    Returns:
+        Resized image tensor.
+    """
     scale_y = input_height / output_height
     scale_x = input_width / output_width
     source_y = (row_coords.cast(dtypes.float32) * scale_y).floor().cast(dtypes.int32).clip(0, input_height - 1)
@@ -35,6 +49,20 @@ def _resize_bilinear(
     row_coords: Tensor,
     column_coords: Tensor,
 ) -> Tensor:
+    """Resize an image using bilinear interpolation.
+
+    Args:
+        image: Input image tensor.
+        output_height: Target height.
+        output_width: Target width.
+        input_height: Original height.
+        input_width: Original width.
+        row_coords: Precomputed row coordinates grid.
+        column_coords: Precomputed column coordinates grid.
+
+    Returns:
+        Resized image tensor.
+    """
     scale_y = input_height / output_height
     scale_x = input_width / output_width
     source_y = ((row_coords.cast(dtypes.float32) + 0.5) * scale_y - 0.5).clip(0, input_height - 1)

@@ -47,3 +47,4 @@
 **Pattern:** Replace magic numbers with `IntEnum` where applicable, especially in `match` statements, to improve code self-documentation and safety.
 
 - 2026-02-07: Support arbitrary dimensions in padding functions to avoid hardcoded constraints.
+- 2026-07-04: When acting as Janitor, avoid large scale refactors and instead focus on one scoped tech-debt remediation per PR to adhere to size limits and scope boundaries.
