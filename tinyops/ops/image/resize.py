@@ -12,13 +12,14 @@ class InterpolationMethod(Enum):
 
 def _resize_nearest(
     image: Tensor,
-    output_height: int,
-    output_width: int,
-    input_height: int,
-    input_width: int,
-    row_coords: Tensor,
-    column_coords: Tensor,
+    output_size: tuple[int, int],
+    input_size: tuple[int, int],
+    coords: tuple[Tensor, Tensor],
 ) -> Tensor:
+    output_height, output_width = output_size
+    input_height, input_width = input_size
+    row_coords, column_coords = coords
+
     scale_y = input_height / output_height
     scale_x = input_width / output_width
     source_y = (row_coords.cast(dtypes.float32) * scale_y).floor().cast(dtypes.int32).clip(0, input_height - 1)
@@ -28,13 +29,14 @@ def _resize_nearest(
 
 def _resize_bilinear(
     image: Tensor,
-    output_height: int,
-    output_width: int,
-    input_height: int,
-    input_width: int,
-    row_coords: Tensor,
-    column_coords: Tensor,
+    output_size: tuple[int, int],
+    input_size: tuple[int, int],
+    coords: tuple[Tensor, Tensor],
 ) -> Tensor:
+    output_height, output_width = output_size
+    input_height, input_width = input_size
+    row_coords, column_coords = coords
+
     scale_y = input_height / output_height
     scale_x = input_width / output_width
     source_y = ((row_coords.cast(dtypes.float32) + 0.5) * scale_y - 0.5).clip(0, input_height - 1)
@@ -89,11 +91,11 @@ def resize_image(
 
     if method == InterpolationMethod.NEAREST_NEIGHBOR:
         result = _resize_nearest(
-            image, output_height, output_width, input_height, input_width, row_coords, column_coords
+            image, (output_height, output_width), (input_height, input_width), (row_coords, column_coords)
         )
     elif method == InterpolationMethod.BILINEAR:
         result = _resize_bilinear(
-            image, output_height, output_width, input_height, input_width, row_coords, column_coords
+            image, (output_height, output_width), (input_height, input_width), (row_coords, column_coords)
         )
     else:
         raise NotImplementedError(f"Interpolation method {method} is not supported.")
