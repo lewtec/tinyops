@@ -47,3 +47,4 @@
 **Pattern:** Replace magic numbers with `IntEnum` where applicable, especially in `match` statements, to improve code self-documentation and safety.
 
 - 2026-02-07: Support arbitrary dimensions in padding functions to avoid hardcoded constraints.
+- 2026-07-06: Extracted duplicated `(true_labels * predicted_labels).sum()` into `_metrics._true_positives` to reduce code duplication in precision/recall calculation.
