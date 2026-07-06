@@ -14,7 +14,8 @@ from .decision_tree_classifier import decision_tree_classifier
 from .decision_tree_regressor import decision_tree_regressor
 from .f1_score import f1_score
 from .gradient_boosting_regressor import gradient_boosting_regressor
-from .kernel_support_vector_classifier import KernelType, kernel_support_vector_classifier
+from ._svm_kernel import KernelType
+from .kernel_support_vector_classifier import kernel_support_vector_classifier
 from .kernel_support_vector_regressor import kernel_support_vector_regressor
 from .label_encoder import label_encoder
 

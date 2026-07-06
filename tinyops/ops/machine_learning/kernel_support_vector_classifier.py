@@ -1,15 +1,6 @@
-from enum import Enum
-
 from tinygrad import Tensor
 
-
-class KernelType(Enum):
-    """Kernel functions for SVM."""
-
-    LINEAR = "linear"
-    POLYNOMIAL = "polynomial"
-    RADIAL_BASIS_FUNCTION = "radial_basis_function"
-    SIGMOID = "sigmoid"
+from tinyops.ops.machine_learning._svm_kernel import KernelType, _compute_kernel_matrix
 
 
 def kernel_support_vector_classifier(
@@ -37,20 +28,12 @@ def kernel_support_vector_classifier(
     Returns:
         Decision function values.
     """
-    if gamma == "scale":
-        gamma = 1.0 / (samples.shape[1] * samples.var()) if samples.shape[1] > 0 else 1.0
-    elif gamma == "auto":
-        gamma = 1.0 / samples.shape[1] if samples.shape[1] > 0 else 1.0
-
-    if kernel == KernelType.LINEAR:
-        kernel_matrix = samples @ support_vectors.T
-    elif kernel == KernelType.POLYNOMIAL:
-        kernel_matrix = ((samples @ support_vectors.T) * gamma + coefficient_zero).pow(polynomial_degree)
-    elif kernel == KernelType.RADIAL_BASIS_FUNCTION:
-        kernel_matrix = (-gamma * (samples.unsqueeze(1) - support_vectors.unsqueeze(0)).pow(2).sum(-1)).exp()
-    elif kernel == KernelType.SIGMOID:
-        kernel_matrix = ((samples @ support_vectors.T) * gamma + coefficient_zero).tanh()
-    else:
-        raise ValueError(f"Unsupported kernel: {kernel}")
-
+    kernel_matrix = _compute_kernel_matrix(
+        samples=samples,
+        support_vectors=support_vectors,
+        kernel=kernel,
+        polynomial_degree=polynomial_degree,
+        gamma=gamma,
+        coefficient_zero=coefficient_zero,
+    )
     return kernel_matrix @ dual_coefficients.T + intercept
