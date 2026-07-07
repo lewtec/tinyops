@@ -1,5 +1,7 @@
 from tinygrad import Tensor
 
+from tinyops.ops.audio._masking import _spectrogram_mask
+
 
 def frequency_mask(
     spectrogram: Tensor,
@@ -22,38 +24,12 @@ def frequency_mask(
     Returns:
         Masked spectrogram tensor.
     """
-    if spectrogram.ndim < 2:
-        raise ValueError("Input spectrogram must be at least 2D.")
-    if maximum_mask_length < 0:
-        raise ValueError("maximum_mask_length must be non-negative.")
-
-    frequency_count = spectrogram.shape[-2]
-    if maximum_mask_length > frequency_count:
-        raise ValueError(f"maximum_mask_length ({maximum_mask_length}) must be <= frequency_count ({frequency_count})")
-
-    if maximum_mask_length == 0:
-        return spectrogram
-
-    if independent_masks and spectrogram.ndim > 2:
-        random_shape = spectrogram.shape[:-2] + (1, 1)
-    else:
-        random_shape = (1,) * spectrogram.ndim
-
-    if _random_values is not None:
-        random_length, random_start = _random_values
-    else:
-        random_length = Tensor.rand(*random_shape)
-        random_start = Tensor.rand(*random_shape)
-
-    mask_length = (random_length * maximum_mask_length).floor()
-    mask_start = (random_start * (frequency_count - mask_length)).floor()
-
-    if _frequency_indices is None:
-        index_shape = [1] * spectrogram.ndim
-        index_shape[-2] = frequency_count
-        frequency_indices = Tensor.arange(frequency_count, dtype=spectrogram.dtype).reshape(index_shape)
-    else:
-        frequency_indices = _frequency_indices
-
-    mask = (frequency_indices >= mask_start) & (frequency_indices < mask_start + mask_length)
-    return spectrogram.where(mask.logical_not(), mask_value)
+    return _spectrogram_mask(
+        spectrogram=spectrogram,
+        maximum_mask_length=maximum_mask_length,
+        axis=-2,
+        mask_value=mask_value,
+        independent_masks=independent_masks,
+        _random_values=_random_values,
+        _indices=_frequency_indices,
+    )
