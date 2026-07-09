@@ -3,21 +3,11 @@ from collections.abc import Sequence
 from tinygrad import Tensor
 
 
-def tensor_dot_product(
+def _validate_tensor_dot_axes(
     first: Tensor,
     second: Tensor,
-    axes: int | Sequence[int | Sequence[int]] = 2,
-) -> Tensor:
-    """Compute tensor dot product along specified axes.
-
-    Args:
-        first: First input tensor.
-        second: Second input tensor.
-        axes: Number of axes to contract, or explicit axes specification.
-
-    Returns:
-        Tensor dot product result.
-    """
+    axes: int | Sequence[int | Sequence[int]],
+) -> tuple[list[int], list[int], list[int], list[int]]:
     if isinstance(axes, int):
         first_axes = list(range(len(first.shape) - axes, len(first.shape)))
         second_axes = list(range(0, axes))
@@ -39,6 +29,26 @@ def tensor_dot_product(
 
     free_first = [i for i in range(first_dimensions) if i not in first_axes]
     free_second = [i for i in range(second_dimensions) if i not in second_axes]
+
+    return first_axes, second_axes, free_first, free_second
+
+
+def tensor_dot_product(
+    first: Tensor,
+    second: Tensor,
+    axes: int | Sequence[int | Sequence[int]] = 2,
+) -> Tensor:
+    """Compute tensor dot product along specified axes.
+
+    Args:
+        first: First input tensor.
+        second: Second input tensor.
+        axes: Number of axes to contract, or explicit axes specification.
+
+    Returns:
+        Tensor dot product result.
+    """
+    first_axes, second_axes, free_first, free_second = _validate_tensor_dot_axes(first, second, axes)
 
     permuted_first = first.permute(free_first + first_axes)
     permuted_second = second.permute(second_axes + free_second)
