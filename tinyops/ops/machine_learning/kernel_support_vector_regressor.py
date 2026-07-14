@@ -1,6 +1,6 @@
 from tinygrad import Tensor
 
-from tinyops.ops.machine_learning._svm_kernel import KernelType, _compute_kernel_matrix
+from tinyops.ops.machine_learning._svm_kernel import KernelType, _kernel_support_vector_decision
 
 
 def kernel_support_vector_regressor(
@@ -28,12 +28,13 @@ def kernel_support_vector_regressor(
     Returns:
         Predicted values.
     """
-    kernel_matrix = _compute_kernel_matrix(
+    return _kernel_support_vector_decision(
         samples=samples,
         support_vectors=support_vectors,
+        dual_coefficients=dual_coefficients,
+        intercept=intercept,
         kernel=kernel,
         polynomial_degree=polynomial_degree,
         gamma=gamma,
         coefficient_zero=coefficient_zero,
     )
-    return kernel_matrix @ dual_coefficients.T + intercept
