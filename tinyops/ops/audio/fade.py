@@ -14,50 +14,41 @@ class FadeShape(Enum):
     HALF_SINE = "half_sine"
 
 
-def _build_fade_in(waveform_length: int, fade_length: int, shape: FadeShape) -> Tensor:
+def _fade_shape_curve(positions: Tensor, shape: FadeShape) -> Tensor:
+    """Map unit-interval positions to a fade-in amplitude curve."""
+    if shape == FadeShape.LINEAR:
+        return positions
+    if shape == FadeShape.EXPONENTIAL:
+        return Tensor(2, dtype=dtypes.float32).pow(positions - 1) * positions
+    if shape == FadeShape.LOGARITHMIC:
+        return (Tensor(0.1, dtype=dtypes.float32) + positions).log() / math.log(10) + 1
+    if shape == FadeShape.QUARTER_SINE:
+        return (positions * math.pi / 2).sin()
+    if shape == FadeShape.HALF_SINE:
+        return (positions * math.pi - math.pi / 2).sin() / 2 + 0.5
+    raise ValueError(f"Unknown fade shape: {shape}")
+
+
+def _build_fade_envelope(
+    waveform_length: int,
+    fade_length: int,
+    shape: FadeShape,
+    *,
+    fade_out: bool,
+) -> Tensor:
     if fade_length <= 0:
         return Tensor.ones(waveform_length, dtype=dtypes.float32)
 
     positions = Tensor.linspace(0, 1, fade_length, dtype=dtypes.float32)
     ones = Tensor.ones(waveform_length - fade_length, dtype=dtypes.float32)
 
-    if shape == FadeShape.LINEAR:
-        curve = positions
-    elif shape == FadeShape.EXPONENTIAL:
-        curve = Tensor(2, dtype=dtypes.float32).pow(positions - 1) * positions
-    elif shape == FadeShape.LOGARITHMIC:
-        curve = (Tensor(0.1, dtype=dtypes.float32) + positions).log() / math.log(10) + 1
-    elif shape == FadeShape.QUARTER_SINE:
-        curve = (positions * math.pi / 2).sin()
-    elif shape == FadeShape.HALF_SINE:
-        curve = (positions * math.pi - math.pi / 2).sin() / 2 + 0.5
-    else:
-        raise ValueError(f"Unknown fade shape: {shape}")
+    # Fade-out curves match fade-in evaluated at reversed positions (1 - t).
+    curve_positions = (1 - positions) if fade_out else positions
+    curve = _fade_shape_curve(curve_positions, shape).clip(0, 1)
 
-    return Tensor.cat(curve, ones).clip(0, 1)
-
-
-def _build_fade_out(waveform_length: int, fade_length: int, shape: FadeShape) -> Tensor:
-    if fade_length <= 0:
-        return Tensor.ones(waveform_length, dtype=dtypes.float32)
-
-    positions = Tensor.linspace(0, 1, fade_length, dtype=dtypes.float32)
-    ones = Tensor.ones(waveform_length - fade_length, dtype=dtypes.float32)
-
-    if shape == FadeShape.LINEAR:
-        curve = -positions + 1
-    elif shape == FadeShape.EXPONENTIAL:
-        curve = Tensor(2, dtype=dtypes.float32).pow(-positions) * (1 - positions)
-    elif shape == FadeShape.LOGARITHMIC:
-        curve = (Tensor(1.1, dtype=dtypes.float32) - positions).log() / math.log(10) + 1
-    elif shape == FadeShape.QUARTER_SINE:
-        curve = (positions * math.pi / 2 + math.pi / 2).sin()
-    elif shape == FadeShape.HALF_SINE:
-        curve = (positions * math.pi + math.pi / 2).sin() / 2 + 0.5
-    else:
-        raise ValueError(f"Unknown fade shape: {shape}")
-
-    return Tensor.cat(ones, curve).clip(0, 1)
+    if fade_out:
+        return Tensor.cat(ones, curve)
+    return Tensor.cat(curve, ones)
 
 
 def fade(
@@ -86,7 +77,7 @@ def fade(
     if fade_in_length > waveform_length or fade_out_length > waveform_length:
         raise ValueError("Fade length cannot be greater than waveform length.")
 
-    fade_in_envelope = _build_fade_in(waveform_length, fade_in_length, shape)
-    fade_out_envelope = _build_fade_out(waveform_length, fade_out_length, shape)
+    fade_in_envelope = _build_fade_envelope(waveform_length, fade_in_length, shape, fade_out=False)
+    fade_out_envelope = _build_fade_envelope(waveform_length, fade_out_length, shape, fade_out=True)
 
     return waveform * fade_in_envelope * fade_out_envelope
