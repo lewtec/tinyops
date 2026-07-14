@@ -1,6 +1,6 @@
-import math
-
 from tinygrad import Tensor
+
+from tinyops.ops.signal._window import HANNING_COEFFICIENTS, cosine_sum_window
 
 
 def hanning_window(length: int, symmetric: bool = True) -> Tensor:
@@ -14,11 +14,4 @@ def hanning_window(length: int, symmetric: bool = True) -> Tensor:
     Returns:
         Tensor containing the window values.
     """
-    if length < 1:
-        return Tensor([])
-    if length == 1:
-        return Tensor.ones(1)
-
-    denominator = length - 1 if symmetric else length
-    indices = Tensor.arange(length)
-    return 0.5 - 0.5 * (2 * math.pi * indices / denominator).cos()
+    return cosine_sum_window(length, HANNING_COEFFICIENTS, symmetric=symmetric)
