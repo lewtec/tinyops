@@ -38,3 +38,26 @@ def _compute_kernel_matrix(
         raise ValueError(f"Unsupported kernel: {kernel}")
 
     return kernel_matrix
+
+
+
+def _kernel_support_vector_decision(
+    samples: Tensor,
+    support_vectors: Tensor,
+    dual_coefficients: Tensor,
+    intercept: Tensor,
+    kernel: KernelType = KernelType.RADIAL_BASIS_FUNCTION,
+    polynomial_degree: int = 3,
+    gamma: float | str = "scale",
+    coefficient_zero: float = 0.0,
+) -> Tensor:
+    """Shared decision path for kernel SVM classifier and regressor."""
+    kernel_matrix = _compute_kernel_matrix(
+        samples=samples,
+        support_vectors=support_vectors,
+        kernel=kernel,
+        polynomial_degree=polynomial_degree,
+        gamma=gamma,
+        coefficient_zero=coefficient_zero,
+    )
+    return kernel_matrix @ dual_coefficients.T + intercept
