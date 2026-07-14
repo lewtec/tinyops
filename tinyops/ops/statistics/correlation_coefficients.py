@@ -2,6 +2,8 @@ from tinygrad import Tensor
 
 from tinyops.ops.statistics.covariance_matrix import covariance_matrix
 
+NUMERICAL_STABILITY_EPSILON = 1e-10
+
 
 def correlation_coefficients(
     observations: Tensor,
@@ -22,4 +24,4 @@ def correlation_coefficients(
     diagonal_elements = covariance.diagonal()
     standard_deviations = diagonal_elements.sqrt()
     normalization = standard_deviations.unsqueeze(1) @ standard_deviations.unsqueeze(0)
-    return covariance / (normalization + 1e-10)
+    return covariance / (normalization + NUMERICAL_STABILITY_EPSILON)
