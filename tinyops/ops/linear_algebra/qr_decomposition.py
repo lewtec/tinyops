@@ -1,5 +1,7 @@
 from tinygrad import Tensor
 
+NUMERICAL_STABILITY_EPSILON = 1e-7
+
 
 def qr_decomposition(matrix: Tensor) -> tuple[Tensor, Tensor]:
     """Compute the reduced QR decomposition using the Gram-Schmidt process.
@@ -27,7 +29,7 @@ def qr_decomposition(matrix: Tensor) -> tuple[Tensor, Tensor]:
 
         vector_norm = vector.pow(2).sum().sqrt()
         orthogonal_vector = Tensor.where(
-            vector_norm > 1e-7,
+            vector_norm > NUMERICAL_STABILITY_EPSILON,
             vector / vector_norm,
             Tensor.zeros(*vector.shape, dtype=vector.dtype),
         )
