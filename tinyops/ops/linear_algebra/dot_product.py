@@ -1,3 +1,5 @@
+import math
+
 from tinygrad import Tensor
 
 
@@ -32,13 +34,9 @@ def dot_product(first: Tensor, second: Tensor) -> Tensor:
     permutation = [second_dimensions - 2] + list(range(second_dimensions - 2)) + [second_dimensions - 1]
     second_permuted = second.permute(permutation)
 
-    product_first = 1
-    for size in first.shape[:-1]:
-        product_first *= size
+    product_first = math.prod(first.shape[:-1])
 
-    product_second = 1
-    for size in second.shape[:-2]:
-        product_second *= size
+    product_second = math.prod(second.shape[:-2])
 
     output_columns = second.shape[-1]
 

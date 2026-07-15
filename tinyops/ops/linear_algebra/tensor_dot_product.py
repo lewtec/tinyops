@@ -1,3 +1,4 @@
+import math
 from collections.abc import Sequence
 
 from tinygrad import Tensor
@@ -53,15 +54,9 @@ def tensor_dot_product(
     permuted_first = first.permute(free_first + first_axes)
     permuted_second = second.permute(second_axes + free_second)
 
-    product_free_first = 1
-    for i in free_first:
-        product_free_first *= first.shape[i]
-    product_contract = 1
-    for i in first_axes:
-        product_contract *= first.shape[i]
-    product_free_second = 1
-    for i in free_second:
-        product_free_second *= second.shape[i]
+    product_free_first = math.prod(first.shape[i] for i in free_first)
+    product_contract = math.prod(first.shape[i] for i in first_axes)
+    product_free_second = math.prod(second.shape[i] for i in free_second)
 
     flat_first = permuted_first.reshape(product_free_first, product_contract)
     flat_second = permuted_second.reshape(product_contract, product_free_second)

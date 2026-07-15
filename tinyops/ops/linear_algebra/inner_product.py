@@ -1,3 +1,5 @@
+import math
+
 from tinygrad import Tensor
 
 
@@ -24,13 +26,9 @@ def inner_product(first: Tensor, second: Tensor) -> Tensor:
 
     contraction_size = first.shape[-1]
 
-    product_first = 1
-    for size in first.shape[:-1]:
-        product_first *= size
+    product_first = math.prod(first.shape[:-1])
 
-    product_second = 1
-    for size in second.shape[:-1]:
-        product_second *= size
+    product_second = math.prod(second.shape[:-1])
 
     flat_first = first.reshape(product_first, contraction_size)
     flat_second = second.reshape(product_second, contraction_size)
