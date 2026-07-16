@@ -1,6 +1,9 @@
-from tinygrad import Tensor, dtypes
+from tinygrad import Tensor
 
-from tinyops.ops._tensor_utils import unique_sorted_values
+from tinyops.ops.machine_learning._naive_bayes import (
+    _class_labels_from_posterior_scores,
+    _prepare_naive_bayes_training,
+)
 
 
 def multinomial_naive_bayes(
@@ -22,19 +25,13 @@ def multinomial_naive_bayes(
     Returns:
         Predicted labels for test samples.
     """
-    if _classes is None:
-        classes = Tensor(unique_sorted_values(training_labels), dtype=training_labels.dtype)
-    else:
-        classes = _classes
-
-    class_indices = Tensor.arange(classes.shape[0])
+    classes, _class_counts, log_class_priors, feature_counts = _prepare_naive_bayes_training(
+        training_features,
+        training_labels,
+        classes=_classes,
+    )
     feature_count = training_features.shape[1]
 
-    label_one_hot = (training_labels.reshape(-1, 1) == classes).cast(dtypes.float32)
-    class_counts = label_one_hot.sum(0)
-    log_class_priors = (class_counts / training_labels.shape[0]).log()
-
-    feature_counts = label_one_hot.T @ training_features
     total_features_per_class = feature_counts.sum(1).reshape(-1, 1)
     log_feature_probabilities = (feature_counts + smoothing).log() - (
         total_features_per_class + smoothing * feature_count
@@ -42,8 +39,4 @@ def multinomial_naive_bayes(
 
     log_likelihoods = test_features @ log_feature_probabilities.T
     posteriors = log_likelihoods + log_class_priors.unsqueeze(0)
-    predicted_indices = posteriors.argmax(1)
-
-    predicted_one_hot = (class_indices.reshape(1, -1) == predicted_indices.reshape(-1, 1)).cast(dtypes.float32)
-    predictions = (predicted_one_hot @ classes.cast(dtypes.float32).reshape(-1, 1)).flatten()
-    return predictions.cast(classes.dtype)
+    return _class_labels_from_posterior_scores(posteriors, classes)

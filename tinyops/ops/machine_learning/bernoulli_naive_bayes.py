@@ -1,6 +1,10 @@
 from tinygrad import Tensor, dtypes
 
-from tinyops.ops._tensor_utils import unique_sorted_values
+from tinyops.ops.machine_learning._naive_bayes import (
+    BERNOULLI_OUTCOME_COUNT,
+    _class_labels_from_posterior_scores,
+    _prepare_naive_bayes_training,
+)
 
 
 def bernoulli_naive_bayes(
@@ -24,24 +28,18 @@ def bernoulli_naive_bayes(
     Returns:
         Predicted labels for test samples.
     """
-    if _classes is None:
-        classes = Tensor(unique_sorted_values(training_labels), dtype=training_labels.dtype)
-    else:
-        classes = _classes
-
-    class_indices = Tensor.arange(classes.shape[0])
-
     if binarize_threshold is not None:
         training_features = (training_features > binarize_threshold).cast(dtypes.float32)
         test_features = (test_features > binarize_threshold).cast(dtypes.float32)
 
-    label_one_hot = (training_labels.reshape(-1, 1) == classes).cast(dtypes.float32)
-    class_counts = label_one_hot.sum(0)
-    log_class_priors = (class_counts / training_labels.shape[0]).log()
+    classes, class_counts, log_class_priors, feature_counts = _prepare_naive_bayes_training(
+        training_features,
+        training_labels,
+        classes=_classes,
+    )
 
-    feature_counts = label_one_hot.T @ training_features
     smoothed_counts = feature_counts + smoothing
-    smoothed_class_counts = class_counts + 2 * smoothing
+    smoothed_class_counts = class_counts + BERNOULLI_OUTCOME_COUNT * smoothing
 
     log_feature_probs = smoothed_counts.log() - smoothed_class_counts.reshape(-1, 1).log()
     log_complement_probs = (
@@ -52,8 +50,4 @@ def bernoulli_naive_bayes(
     joint_log_likelihood += log_complement_probs.sum(1).reshape(1, -1)
 
     posteriors = joint_log_likelihood + log_class_priors.unsqueeze(0)
-    predicted_indices = posteriors.argmax(1)
-
-    predicted_one_hot = (class_indices.reshape(1, -1) == predicted_indices.reshape(-1, 1)).cast(dtypes.float32)
-    predictions = (predicted_one_hot @ classes.cast(dtypes.float32).reshape(-1, 1)).flatten()
-    return predictions.cast(classes.dtype)
+    return _class_labels_from_posterior_scores(posteriors, classes)
