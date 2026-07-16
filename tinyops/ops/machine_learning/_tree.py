@@ -1,5 +1,6 @@
 from tinygrad import Tensor, dtypes
 
+
 def _traverse_tree(samples: Tensor, tree: dict) -> Tensor:
     """Traverse a decision tree and return the leaf node indices for each sample.
 
