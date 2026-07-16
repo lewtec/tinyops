@@ -1,6 +1,6 @@
 from tinygrad import Tensor
 
-from tinyops.ops.machine_learning._metrics import _true_positives
+from tinyops.ops.machine_learning._metrics import _safe_divide, _true_positives
 
 
 def recall_score(true_labels: Tensor, predicted_labels: Tensor) -> Tensor:
@@ -15,4 +15,4 @@ def recall_score(true_labels: Tensor, predicted_labels: Tensor) -> Tensor:
     """
     true_positives = _true_positives(true_labels, predicted_labels)
     actual_positives = true_labels.sum()
-    return true_positives / Tensor.where(actual_positives == 0, 1, actual_positives)
+    return _safe_divide(true_positives, actual_positives)
