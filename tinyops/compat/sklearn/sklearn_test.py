@@ -16,6 +16,7 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 from sklearn.metrics.pairwise import pairwise_distances
+from sklearn.naive_bayes import BernoulliNB, MultinomialNB
 from sklearn.preprocessing import (
     Binarizer,
     MaxAbsScaler,
@@ -257,3 +258,133 @@ class TestTfidfVectorizer:
         result = tsk.feature_extraction.text.TfidfVectorizer().fit_transform(corpus)
         expected = TfidfVectorizer().fit_transform(corpus).toarray()
         assert_close(result, expected.astype(np.float32), atol=1e-4)
+
+
+# ============================================================================
+# Naive Bayes
+# ============================================================================
+
+
+class TestMultinomialNB:
+    def test_basic_counts(self):
+        # Use clearly separable count vectors so predictions are not pure ties
+        # (equal posteriors leave argmax order implementation-defined).
+        x_train = np.array(
+            [
+                [5, 4, 0, 0],
+                [4, 5, 0, 0],
+                [0, 0, 5, 4],
+                [0, 0, 4, 5],
+            ],
+            dtype=np.float32,
+        )
+        y_train = np.array([0, 0, 1, 1], dtype=np.int64)
+        x_test = np.array([[3, 2, 0, 0], [0, 0, 2, 3], [4, 0, 0, 0], [0, 0, 0, 4]], dtype=np.float32)
+
+        result = tsk.naive_bayes.MultinomialNB(alpha=1.0).fit_predict(Tensor(x_train), Tensor(y_train), Tensor(x_test))
+        expected = MultinomialNB(alpha=1.0).fit(x_train, y_train).predict(x_test)
+        assert_close(result, expected.astype(np.float32))
+
+    def test_custom_alpha_and_string_labels(self):
+        x_train = np.array(
+            [
+                [3, 0, 1],
+                [2, 0, 0],
+                [0, 3, 1],
+                [0, 2, 2],
+                [1, 1, 0],
+            ],
+            dtype=np.float32,
+        )
+        # numeric labels only — ops map via float math; string labels are out of scope
+        y_train = np.array([2, 2, 5, 5, 2], dtype=np.int64)
+        x_test = np.array([[3, 0, 0], [0, 3, 2], [1, 1, 1]], dtype=np.float32)
+
+        result = tsk.naive_bayes.MultinomialNB(alpha=0.5).fit_predict(Tensor(x_train), Tensor(y_train), Tensor(x_test))
+        expected = MultinomialNB(alpha=0.5).fit(x_train, y_train).predict(x_test)
+        assert_close(result, expected.astype(np.float32))
+
+    def test_single_feature_edge(self):
+        x_train = np.array([[0], [1], [2], [5]], dtype=np.float32)
+        y_train = np.array([0, 0, 1, 1], dtype=np.int64)
+        x_test = np.array([[0], [4], [1]], dtype=np.float32)
+
+        result = tsk.naive_bayes.MultinomialNB().fit_predict(Tensor(x_train), Tensor(y_train), Tensor(x_test))
+        expected = MultinomialNB().fit(x_train, y_train).predict(x_test)
+        assert_close(result, expected.astype(np.float32))
+
+
+class TestBernoulliNB:
+    def test_basic_binary(self):
+        x_train = np.array(
+            [
+                [1, 0, 1, 0],
+                [1, 1, 0, 0],
+                [0, 0, 1, 1],
+                [0, 1, 1, 1],
+            ],
+            dtype=np.float32,
+        )
+        y_train = np.array([0, 0, 1, 1], dtype=np.int64)
+        x_test = np.array([[1, 0, 1, 0], [0, 1, 1, 1], [1, 1, 1, 1]], dtype=np.float32)
+
+        result = tsk.naive_bayes.BernoulliNB(alpha=1.0).fit_predict(Tensor(x_train), Tensor(y_train), Tensor(x_test))
+        expected = BernoulliNB(alpha=1.0).fit(x_train, y_train).predict(x_test)
+        assert_close(result, expected.astype(np.float32))
+
+    def test_binarize_threshold(self):
+        x_train = np.array(
+            [
+                [0.2, 0.8, 0.1],
+                [0.9, 0.7, 0.0],
+                [0.1, 0.2, 0.9],
+                [0.0, 0.3, 0.8],
+            ],
+            dtype=np.float32,
+        )
+        y_train = np.array([0, 0, 1, 1], dtype=np.int64)
+        x_test = np.array([[0.9, 0.9, 0.1], [0.1, 0.1, 0.9]], dtype=np.float32)
+
+        result = tsk.naive_bayes.BernoulliNB(alpha=1.0, binarize=0.5).fit_predict(
+            Tensor(x_train), Tensor(y_train), Tensor(x_test)
+        )
+        expected = BernoulliNB(alpha=1.0, binarize=0.5).fit(x_train, y_train).predict(x_test)
+        assert_close(result, expected.astype(np.float32))
+
+    def test_no_binarize_and_custom_alpha(self):
+        x_train = np.array(
+            [
+                [1, 0, 1],
+                [1, 1, 0],
+                [0, 0, 1],
+                [0, 1, 1],
+            ],
+            dtype=np.float32,
+        )
+        y_train = np.array([0, 0, 1, 1], dtype=np.int64)
+        x_test = np.array([[1, 0, 0], [0, 1, 1]], dtype=np.float32)
+
+        result = tsk.naive_bayes.BernoulliNB(alpha=0.1, binarize=None).fit_predict(
+            Tensor(x_train), Tensor(y_train), Tensor(x_test)
+        )
+        expected = BernoulliNB(alpha=0.1, binarize=None).fit(x_train, y_train).predict(x_test)
+        assert_close(result, expected.astype(np.float32))
+
+    def test_multiclass(self):
+        x_train = np.array(
+            [
+                [1, 0, 0, 0],
+                [1, 1, 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 1, 1],
+                [0, 1, 0, 1],
+                [0, 1, 1, 1],
+            ],
+            dtype=np.float32,
+        )
+        y_train = np.array([0, 0, 1, 1, 2, 2], dtype=np.int64)
+        x_test = np.array([[1, 0, 0, 0], [0, 0, 1, 1], [0, 1, 0, 1]], dtype=np.float32)
+
+        result = tsk.naive_bayes.BernoulliNB().fit_predict(Tensor(x_train), Tensor(y_train), Tensor(x_test))
+        expected = BernoulliNB().fit(x_train, y_train).predict(x_test)
+        assert_close(result, expected.astype(np.float32))
