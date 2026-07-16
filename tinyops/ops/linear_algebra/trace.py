@@ -1,4 +1,5 @@
 from tinygrad import Tensor
+
 from tinyops.ops.linear_algebra.diagonal import diagonal
 
 
