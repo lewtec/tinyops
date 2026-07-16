@@ -2,6 +2,7 @@
 
 # Preprocessing / Scaling
 # Classification metrics
+from ._svm_kernel import KernelType
 from .accuracy_score import accuracy_score
 from .adaboost_classifier import adaboost_classifier
 from .bernoulli_naive_bayes import bernoulli_naive_bayes
@@ -14,7 +15,6 @@ from .decision_tree_classifier import decision_tree_classifier
 from .decision_tree_regressor import decision_tree_regressor
 from .f1_score import f1_score
 from .gradient_boosting_regressor import gradient_boosting_regressor
-from ._svm_kernel import KernelType
 from .kernel_support_vector_classifier import kernel_support_vector_classifier
 from .kernel_support_vector_regressor import kernel_support_vector_regressor
 from .label_encoder import label_encoder
