@@ -1,6 +1,6 @@
 from tinygrad import Tensor
 
-from tinyops.ops.machine_learning._metrics import _true_positives
+from tinyops.ops.machine_learning._metrics import _safe_divide, _true_positives
 
 
 def precision_score(true_labels: Tensor, predicted_labels: Tensor) -> Tensor:
@@ -15,4 +15,4 @@ def precision_score(true_labels: Tensor, predicted_labels: Tensor) -> Tensor:
     """
     true_positives = _true_positives(true_labels, predicted_labels)
     predicted_positives = predicted_labels.sum()
-    return true_positives / Tensor.where(predicted_positives == 0, 1, predicted_positives)
+    return _safe_divide(true_positives, predicted_positives)
