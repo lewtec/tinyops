@@ -2,6 +2,8 @@ from enum import Enum
 
 from tinygrad import Tensor
 
+from tinyops.ops.machine_learning._scaling import replace_zero_scale_with_one
+
 
 class NormType(Enum):
     """Normalization types for the normalizer."""
@@ -35,5 +37,5 @@ def normalizer(
     else:
         raise ValueError(f"Unsupported norm type: {norm_type}")
 
-    safe_norms = Tensor.where(norms == 0, 1.0, norms)
+    safe_norms = replace_zero_scale_with_one(norms)
     return features / safe_norms

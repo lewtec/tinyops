@@ -1,5 +1,7 @@
 from tinygrad import Tensor
 
+from tinyops.ops.machine_learning._scaling import replace_zero_scale_with_one
+
 
 def min_max_scaler(
     features: Tensor,
@@ -18,6 +20,6 @@ def min_max_scaler(
     data_min = features.min(axis=0)
     data_max = features.max(axis=0)
     data_range = data_max - data_min
-    safe_range = Tensor.where(data_range == 0, 1.0, data_range)
+    safe_range = replace_zero_scale_with_one(data_range)
     scale = (range_max - range_min) / safe_range
     return (features - data_min) * scale + range_min
