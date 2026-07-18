@@ -1,5 +1,6 @@
 from tinygrad import Tensor, dtypes
 
+from tinyops.ops.statistics._histogram import resolve_histogram_range
 from tinyops.ops.statistics.bin_count import bin_count
 
 
@@ -30,21 +31,10 @@ def histogram_2d(
     else:
         bins_x, bins_y = number_of_bins[0], number_of_bins[1]
 
-    if value_range is None:
-        if x_flat.numel() == 0:
-            range_x, range_y = [0.0, 1.0], [0.0, 1.0]
-        else:
-            range_x = [x_flat.min().item(), x_flat.max().item()]
-            range_y = [y_flat.min().item(), y_flat.max().item()]
-    else:
-        range_x, range_y = list(value_range[0]), list(value_range[1])
-
-    if range_x[0] == range_x[1]:
-        range_x[0] -= 0.5
-        range_x[1] += 0.5
-    if range_y[0] == range_y[1]:
-        range_y[0] -= 0.5
-        range_y[1] += 0.5
+    explicit_x_range = None if value_range is None else value_range[0]
+    explicit_y_range = None if value_range is None else value_range[1]
+    range_x = list(resolve_histogram_range(x_flat, explicit_x_range))
+    range_y = list(resolve_histogram_range(y_flat, explicit_y_range))
 
     x_edges = Tensor.linspace(range_x[0], range_x[1], bins_x + 1)
     y_edges = Tensor.linspace(range_y[0], range_y[1], bins_y + 1)

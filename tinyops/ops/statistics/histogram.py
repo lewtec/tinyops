@@ -1,5 +1,6 @@
 from tinygrad import Tensor, dtypes
 
+from tinyops.ops.statistics._histogram import resolve_histogram_range
 from tinyops.ops.statistics.bin_count import bin_count
 
 
@@ -24,19 +25,7 @@ def histogram(
         ``number_of_bins + 1``.
     """
     flat = tensor.flatten()
-
-    if value_range is None:
-        if flat.numel() == 0:
-            minimum_value, maximum_value = 0.0, 1.0
-        else:
-            minimum_value = flat.min().item()
-            maximum_value = flat.max().item()
-    else:
-        minimum_value, maximum_value = value_range
-
-    if minimum_value == maximum_value:
-        minimum_value -= 0.5
-        maximum_value += 0.5
+    minimum_value, maximum_value = resolve_histogram_range(flat, value_range)
 
     edges = Tensor.linspace(minimum_value, maximum_value, number_of_bins + 1)
 
