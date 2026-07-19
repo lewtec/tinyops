@@ -403,6 +403,35 @@ class TestBlackman:
         assert_close(tnp.blackman(10), np.blackman(10).astype(np.float32), atol=1e-5)
 
 
+class TestKaiser:
+    def test_basic(self):
+        assert_close(tnp.kaiser(10, 14), np.kaiser(10, 14).astype(np.float32), atol=1e-5)
+
+    def test_single(self):
+        assert_close(tnp.kaiser(1, 5), np.kaiser(1, 5).astype(np.float32), atol=1e-5)
+
+    def test_empty(self):
+        assert tnp.kaiser(0, 5).shape == (0,)
+        assert np.kaiser(0, 5).shape == (0,)
+
+    def test_beta_zero_is_rectangular(self):
+        assert_close(tnp.kaiser(8, 0), np.kaiser(8, 0).astype(np.float32), atol=1e-5)
+
+    def test_odd_length_peak_one(self):
+        expected = np.kaiser(11, 8.6).astype(np.float32)
+        assert_close(tnp.kaiser(11, 8.6), expected, atol=1e-5)
+        # Center sample is 1 for odd length (numpy contract).
+        assert abs(float(expected[5]) - 1.0) < 1e-5
+
+    def test_various_beta(self):
+        for length, beta in [(5, 0.5), (12, 5), (16, 8.6), (32, 14), (7, 20)]:
+            assert_close(
+                tnp.kaiser(length, beta),
+                np.kaiser(length, beta).astype(np.float32),
+                atol=1e-5,
+            )
+
+
 # ============================================================================
 # np.fft
 # ============================================================================

@@ -44,7 +44,7 @@
 - [x] `np.hanning`
 - [x] `np.hamming`
 - [x] `np.blackman`
-- [ ] `np.kaiser`
+- [x] `np.kaiser`
 - [x] `np.fft.fft`
 - [x] `np.fft.ifft`
 - [ ] `np.fft.fft2`
