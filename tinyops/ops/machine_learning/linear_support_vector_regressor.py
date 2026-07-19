@@ -1,5 +1,7 @@
 from tinygrad import Tensor
 
+from tinyops.ops.machine_learning._linear_support_vector import _linear_support_vector_decision
+
 
 def linear_support_vector_regressor(
     samples: Tensor,
@@ -16,4 +18,4 @@ def linear_support_vector_regressor(
     Returns:
         Predicted values (n_samples,).
     """
-    return (samples @ coefficients.T + intercept).flatten()
+    return _linear_support_vector_decision(samples, coefficients, intercept).flatten()
