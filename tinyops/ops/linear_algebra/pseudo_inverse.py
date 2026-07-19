@@ -1,7 +1,10 @@
 from tinygrad import Tensor
 
-NEWTON_SCHULZ_ITERATIONS = 20
-NUMERICAL_STABILITY_EPSILON = 1e-12
+from tinyops.ops.linear_algebra._newton_schulz import (
+    NEWTON_SCHULZ_ITERATIONS,
+    NUMERICAL_STABILITY_EPSILON,
+    _initial_scaled_transpose_approximation,
+)
 
 
 def pseudo_inverse(matrix: Tensor) -> Tensor:
@@ -20,19 +23,10 @@ def pseudo_inverse(matrix: Tensor) -> Tensor:
         raise ValueError("Must be >= 2D")
 
     rows, columns = matrix.shape[-2], matrix.shape[-1]
-    transpose_permutation = list(range(len(matrix.shape)))
-    transpose_permutation[-1], transpose_permutation[-2] = transpose_permutation[-2], transpose_permutation[-1]
-    transposed = matrix.permute(transpose_permutation)
-
-    absolute_values = matrix.abs()
-    column_norm = absolute_values.sum(axis=-2).max(axis=-1)
-    row_norm = absolute_values.sum(axis=-1).max(axis=-1)
-    broadcast_shape = list(column_norm.shape) + [1, 1]
-    column_norm = column_norm.reshape(broadcast_shape)
-    row_norm = row_norm.reshape(broadcast_shape)
-
-    denominator = column_norm * row_norm
-    approximation = transposed / (denominator + NUMERICAL_STABILITY_EPSILON)
+    approximation = _initial_scaled_transpose_approximation(
+        matrix,
+        numerical_stability_epsilon=NUMERICAL_STABILITY_EPSILON,
+    )
 
     if rows >= columns:
         identity = Tensor.eye(columns)
