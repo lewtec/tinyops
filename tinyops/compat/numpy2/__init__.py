@@ -34,7 +34,11 @@ from tinyops.ops.signal.fourier_frequencies import fourier_frequencies as _fouri
 from tinyops.ops.signal.hamming_window import hamming_window as _hamming_window
 from tinyops.ops.signal.hanning_window import hanning_window as _hanning_window
 from tinyops.ops.signal.inverse_discrete_fourier_transform import inverse_discrete_fourier_transform as _idft
+from tinyops.ops.signal.inverse_real_discrete_fourier_transform import (
+    inverse_real_discrete_fourier_transform as _irdft,
+)
 from tinyops.ops.signal.kaiser_window import kaiser_window as _kaiser_window
+from tinyops.ops.signal.real_discrete_fourier_transform import real_discrete_fourier_transform as _rdft
 from tinyops.ops.statistics.arithmetic_mean import arithmetic_mean as _arithmetic_mean
 from tinyops.ops.statistics.bin_count import bin_count as _bin_count
 from tinyops.ops.statistics.correlation_coefficients import correlation_coefficients as _correlation_coefficients
@@ -280,6 +284,14 @@ class _FFT:
     @staticmethod
     def ifft(x: Tensor) -> Tensor:
         return _idft(x)
+
+    @staticmethod
+    def rfft(x: Tensor) -> Tensor:
+        return _rdft(x)
+
+    @staticmethod
+    def irfft(x: Tensor, n: int | None = None) -> Tensor:
+        return _irdft(x, length=n)
 
     @staticmethod
     def fftfreq(n: int, d: float = 1.0) -> Tensor:

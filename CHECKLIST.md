@@ -49,8 +49,8 @@
 - [x] `np.fft.ifft`
 - [ ] `np.fft.fft2`
 - [ ] `np.fft.ifft2`
-- [ ] `np.fft.rfft`
-- [ ] `np.fft.irfft`
+- [x] `np.fft.rfft`
+- [x] `np.fft.irfft`
 - [x] `np.fft.fftfreq`
 - [x] `filterpy.kalman.MerweScaledSigmaPoints`
 - [x] `filterpy.common.Q_discrete_white_noise`

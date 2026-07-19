@@ -467,3 +467,66 @@ class TestFFTFreq:
         result = tnp.fft.fftfreq(10, d=0.5)
         expected = np.fft.fftfreq(10, d=0.5).astype(np.float32)
         assert_close(result, expected, atol=1e-5)
+
+
+class TestRFFT:
+    def test_even_length(self):
+        data = np.random.randn(8).astype(np.float32)
+        result = tnp.fft.rfft(Tensor(data))
+        expected = np.fft.rfft(data)
+        assert result.shape == (5, 2)
+        assert_close(result[:, 0], expected.real.astype(np.float32), atol=1e-3)
+        assert_close(result[:, 1], expected.imag.astype(np.float32), atol=1e-3)
+
+    def test_odd_length(self):
+        data = np.random.randn(7).astype(np.float32)
+        result = tnp.fft.rfft(Tensor(data))
+        expected = np.fft.rfft(data)
+        assert result.shape == (4, 2)
+        assert_close(result[:, 0], expected.real.astype(np.float32), atol=1e-3)
+        assert_close(result[:, 1], expected.imag.astype(np.float32), atol=1e-3)
+
+    def test_matches_fft_prefix(self):
+        data = np.random.randn(4).astype(np.float32)
+        complex_input = Tensor(np.stack([data, np.zeros_like(data)], axis=1))
+        full = tnp.fft.fft(complex_input)
+        half = tnp.fft.rfft(Tensor(data))
+        assert_close(half, full[:3], atol=1e-5)
+
+    def test_single_and_two_samples(self):
+        for length in (1, 2):
+            data = np.random.randn(length).astype(np.float32)
+            result = tnp.fft.rfft(Tensor(data))
+            expected = np.fft.rfft(data)
+            assert_close(result[:, 0], expected.real.astype(np.float32), atol=1e-4)
+            assert_close(result[:, 1], expected.imag.astype(np.float32), atol=1e-4)
+
+
+class TestIRFFT:
+    def test_roundtrip_even(self):
+        data = np.random.randn(8).astype(np.float32)
+        spectrum = tnp.fft.rfft(Tensor(data))
+        recovered = tnp.fft.irfft(spectrum)
+        assert_close(recovered, data, atol=1e-3)
+
+    def test_roundtrip_odd_with_n(self):
+        data = np.random.randn(7).astype(np.float32)
+        spectrum = tnp.fft.rfft(Tensor(data))
+        recovered = tnp.fft.irfft(spectrum, n=7)
+        assert_close(recovered, data, atol=1e-3)
+
+    def test_matches_numpy(self):
+        data = np.random.randn(6).astype(np.float32)
+        spectrum = np.fft.rfft(data)
+        packed = Tensor(np.stack([spectrum.real, spectrum.imag], axis=1).astype(np.float32))
+        result = tnp.fft.irfft(packed, n=6)
+        expected = np.fft.irfft(spectrum, n=6).astype(np.float32)
+        assert_close(result, expected, atol=1e-3)
+
+    def test_default_n_is_even(self):
+        spectrum = np.fft.rfft(np.array([1, 2, 3, 4], dtype=np.float32))
+        packed = Tensor(np.stack([spectrum.real, spectrum.imag], axis=1).astype(np.float32))
+        result = tnp.fft.irfft(packed)
+        expected = np.fft.irfft(spectrum).astype(np.float32)
+        assert result.shape == (4,)
+        assert_close(result, expected, atol=1e-3)
