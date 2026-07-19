@@ -34,6 +34,7 @@ from tinyops.ops.signal.fourier_frequencies import fourier_frequencies as _fouri
 from tinyops.ops.signal.hamming_window import hamming_window as _hamming_window
 from tinyops.ops.signal.hanning_window import hanning_window as _hanning_window
 from tinyops.ops.signal.inverse_discrete_fourier_transform import inverse_discrete_fourier_transform as _idft
+from tinyops.ops.signal.kaiser_window import kaiser_window as _kaiser_window
 from tinyops.ops.statistics.arithmetic_mean import arithmetic_mean as _arithmetic_mean
 from tinyops.ops.statistics.bin_count import bin_count as _bin_count
 from tinyops.ops.statistics.correlation_coefficients import correlation_coefficients as _correlation_coefficients
@@ -209,6 +210,11 @@ def hamming(M: int) -> Tensor:
 def blackman(M: int) -> Tensor:
     """Return the Blackman window."""
     return _blackman_window(M, symmetric=True)
+
+
+def kaiser(M: int, beta: float) -> Tensor:
+    """Return the Kaiser window."""
+    return _kaiser_window(M, beta)
 
 
 # --- np.linalg sub-namespace ---
