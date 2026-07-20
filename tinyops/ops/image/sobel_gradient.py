@@ -21,8 +21,7 @@ _SOBEL_VERTICAL_3x3 = [[-1, -2, -1], [0, 0, 0], [1, 2, 1]]
 def _apply_directional_gradient(
     image: Tensor,
     direction: GradientDirection,
-    horizontal_kernel: list[list[float | int]],
-    vertical_kernel: list[list[float | int]],
+    kernels: tuple[list[list[float | int]], list[list[float | int]]],
     scale: float = 1.0,
     delta: float = 0.0,
     border_mode: PaddingMode = PaddingMode.REFLECT,
@@ -37,8 +36,7 @@ def _apply_directional_gradient(
     Args:
         image: Input image tensor.
         direction: Gradient direction (HORIZONTAL or VERTICAL).
-        horizontal_kernel: 2D kernel for horizontal derivatives.
-        vertical_kernel: 2D kernel for vertical derivatives.
+        kernels: Tuple containing (horizontal_kernel, vertical_kernel) for derivatives.
         scale: Scale factor for output.
         delta: Value added to output.
         border_mode: Padding strategy at image borders.
@@ -51,6 +49,8 @@ def _apply_directional_gradient(
     """
     input_dtype = image.dtype
     compute_dtype = dtypes.float32 if input_dtype == dtypes.uint8 else input_dtype
+
+    horizontal_kernel, vertical_kernel = kernels
 
     if direction == GradientDirection.HORIZONTAL:
         kernel = Tensor(horizontal_kernel, dtype=compute_dtype)
@@ -91,8 +91,7 @@ def sobel_gradient(
     return _apply_directional_gradient(
         image,
         direction,
-        _SOBEL_HORIZONTAL_3x3,
-        _SOBEL_VERTICAL_3x3,
+        kernels=(_SOBEL_HORIZONTAL_3x3, _SOBEL_VERTICAL_3x3),
         scale=scale,
         delta=delta,
         border_mode=PaddingMode.CONSTANT,
