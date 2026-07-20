@@ -9,6 +9,12 @@ from .hamming_window import hamming_window
 from .hanning_window import hanning_window
 from .inverse_discrete_fourier_transform import inverse_discrete_fourier_transform
 from .inverse_real_discrete_fourier_transform import inverse_real_discrete_fourier_transform
+from .inverse_two_dimensional_discrete_fourier_transform import (
+    inverse_two_dimensional_discrete_fourier_transform,
+)
 from .kaiser_window import kaiser_window
 from .merwe_scaled_sigma_points import merwe_scaled_sigma_points
 from .real_discrete_fourier_transform import real_discrete_fourier_transform
+from .two_dimensional_discrete_fourier_transform import (
+    two_dimensional_discrete_fourier_transform,
+)

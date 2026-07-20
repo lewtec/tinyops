@@ -47,8 +47,8 @@
 - [x] `np.kaiser`
 - [x] `np.fft.fft`
 - [x] `np.fft.ifft`
-- [ ] `np.fft.fft2`
-- [ ] `np.fft.ifft2`
+- [x] `np.fft.fft2`
+- [x] `np.fft.ifft2`
 - [x] `np.fft.rfft`
 - [x] `np.fft.irfft`
 - [x] `np.fft.fftfreq`

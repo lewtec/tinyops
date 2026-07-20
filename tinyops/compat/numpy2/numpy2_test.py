@@ -457,6 +457,44 @@ class TestIFFT:
         assert_close(recovered[:, 0], data, atol=1e-3)
 
 
+class TestFFT2:
+    def test_matches_numpy_small(self):
+        # Tiny sizes keep clang kernel compile time under the host memory budget.
+        data = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]], dtype=np.float32)
+        packed = Tensor(np.stack([data, np.zeros_like(data)], axis=-1))
+        result = tnp.fft.fft2(packed)
+        expected = np.fft.fft2(data)
+        assert result.shape == (2, 3, 2)
+        assert_close(result[:, :, 0], expected.real.astype(np.float32), atol=1e-3)
+        assert_close(result[:, :, 1], expected.imag.astype(np.float32), atol=1e-3)
+
+    def test_power_of_two_square(self):
+        data = np.random.randn(4, 2).astype(np.float32)
+        packed = Tensor(np.stack([data, np.zeros_like(data)], axis=-1))
+        result = tnp.fft.fft2(packed)
+        expected = np.fft.fft2(data)
+        assert_close(result[:, :, 0], expected.real.astype(np.float32), atol=1e-3)
+        assert_close(result[:, :, 1], expected.imag.astype(np.float32), atol=1e-3)
+
+
+class TestIFFT2:
+    def test_roundtrip(self):
+        data = np.random.randn(2, 3).astype(np.float32)
+        packed = Tensor(np.stack([data, np.zeros_like(data)], axis=-1))
+        spectrum = tnp.fft.fft2(packed)
+        recovered = tnp.fft.ifft2(spectrum)
+        assert_close(recovered[:, :, 0], data, atol=1e-3)
+        assert_close(recovered[:, :, 1], np.zeros_like(data), atol=1e-3)
+
+    def test_matches_numpy(self):
+        data = np.random.randn(3, 2).astype(np.float32) + 1j * np.random.randn(3, 2).astype(np.float32)
+        packed = Tensor(np.stack([data.real.astype(np.float32), data.imag.astype(np.float32)], axis=-1))
+        result = tnp.fft.ifft2(packed)
+        expected = np.fft.ifft2(data)
+        assert_close(result[:, :, 0], expected.real.astype(np.float32), atol=1e-3)
+        assert_close(result[:, :, 1], expected.imag.astype(np.float32), atol=1e-3)
+
+
 class TestFFTFreq:
     def test_basic(self):
         result = tnp.fft.fftfreq(8, d=1.0)
