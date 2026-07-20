@@ -37,8 +37,14 @@ from tinyops.ops.signal.inverse_discrete_fourier_transform import inverse_discre
 from tinyops.ops.signal.inverse_real_discrete_fourier_transform import (
     inverse_real_discrete_fourier_transform as _irdft,
 )
+from tinyops.ops.signal.inverse_two_dimensional_discrete_fourier_transform import (
+    inverse_two_dimensional_discrete_fourier_transform as _idft2,
+)
 from tinyops.ops.signal.kaiser_window import kaiser_window as _kaiser_window
 from tinyops.ops.signal.real_discrete_fourier_transform import real_discrete_fourier_transform as _rdft
+from tinyops.ops.signal.two_dimensional_discrete_fourier_transform import (
+    two_dimensional_discrete_fourier_transform as _dft2,
+)
 from tinyops.ops.statistics.arithmetic_mean import arithmetic_mean as _arithmetic_mean
 from tinyops.ops.statistics.bin_count import bin_count as _bin_count
 from tinyops.ops.statistics.correlation_coefficients import correlation_coefficients as _correlation_coefficients
@@ -284,6 +290,14 @@ class _FFT:
     @staticmethod
     def ifft(x: Tensor) -> Tensor:
         return _idft(x)
+
+    @staticmethod
+    def fft2(x: Tensor) -> Tensor:
+        return _dft2(x)
+
+    @staticmethod
+    def ifft2(x: Tensor) -> Tensor:
+        return _idft2(x)
 
     @staticmethod
     def rfft(x: Tensor) -> Tensor:
