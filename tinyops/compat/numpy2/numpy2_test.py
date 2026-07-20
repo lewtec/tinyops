@@ -185,6 +185,72 @@ class TestHistogram2d:
         assert_close(counts, expected_counts.astype(np.float32), atol=1)
 
 
+class TestHistogramdd:
+    def test_basic_3d(self):
+        rng = np.random.RandomState(0)
+        sample = rng.randn(200, 3).astype(np.float32)
+        counts, edges = tnp.histogramdd(Tensor(sample), bins=5)
+        expected_counts, expected_edges = np.histogramdd(sample, bins=5)
+        assert_close(counts, expected_counts.astype(np.float32), atol=1)
+        assert len(edges) == 3
+        for edge, expected_edge in zip(edges, expected_edges, strict=True):
+            assert_close(edge, expected_edge.astype(np.float32), atol=1e-4)
+
+    def test_per_axis_bins_and_range(self):
+        rng = np.random.RandomState(1)
+        sample = rng.randn(150, 3).astype(np.float32)
+        bins = [3, 4, 5]
+        value_range = [(-2.0, 2.0), (-1.5, 1.5), (-2.5, 2.5)]
+        counts, edges = tnp.histogramdd(Tensor(sample), bins=bins, range=value_range)
+        expected_counts, expected_edges = np.histogramdd(sample, bins=bins, range=value_range)
+        assert counts.shape == tuple(bins)
+        assert_close(counts, expected_counts.astype(np.float32), atol=1)
+        for edge, expected_edge in zip(edges, expected_edges, strict=True):
+            assert_close(edge, expected_edge.astype(np.float32), atol=1e-4)
+
+    def test_density(self):
+        rng = np.random.RandomState(2)
+        sample = rng.randn(100, 2).astype(np.float32)
+        counts, _ = tnp.histogramdd(Tensor(sample), bins=4, density=True)
+        expected_counts, _ = np.histogramdd(sample, bins=4, density=True)
+        assert_close(counts, expected_counts.astype(np.float32), atol=1e-3)
+
+    def test_weights(self):
+        rng = np.random.RandomState(3)
+        sample = rng.randn(80, 2).astype(np.float32)
+        weights = rng.rand(80).astype(np.float32)
+        counts, _ = tnp.histogramdd(Tensor(sample), bins=4, weights=Tensor(weights))
+        expected_counts, _ = np.histogramdd(sample, bins=4, weights=weights)
+        assert_close(counts, expected_counts.astype(np.float32), atol=1e-3)
+
+    def test_empty_samples(self):
+        sample = np.zeros((0, 2), dtype=np.float32)
+        counts, edges = tnp.histogramdd(Tensor(sample), bins=3)
+        expected_counts, expected_edges = np.histogramdd(sample, bins=3)
+        assert_close(counts, expected_counts.astype(np.float32), atol=0)
+        assert counts.shape == (3, 3)
+        for edge, expected_edge in zip(edges, expected_edges, strict=True):
+            assert_close(edge, expected_edge.astype(np.float32), atol=1e-4)
+
+    def test_one_dimensional_samples(self):
+        sample = np.array([0.0, 0.5, 1.0, 1.5, 2.0], dtype=np.float32)
+        counts, edges = tnp.histogramdd(Tensor(sample), bins=2, range=[(0.0, 2.0)])
+        expected_counts, expected_edges = np.histogramdd(sample, bins=2, range=[(0.0, 2.0)])
+        assert_close(counts, expected_counts.astype(np.float32), atol=0)
+        assert_close(edges[0], expected_edges[0].astype(np.float32), atol=1e-4)
+
+    def test_matches_histogram2d_layout(self):
+        rng = np.random.RandomState(4)
+        sample = rng.randn(120, 2).astype(np.float32)
+        counts_dd, edges_dd = tnp.histogramdd(Tensor(sample), bins=[5, 6])
+        counts_2d, x_edges, y_edges = tnp.histogram2d(
+            Tensor(sample[:, 0]), Tensor(sample[:, 1]), bins=[5, 6]
+        )
+        assert_close(counts_dd, counts_2d, atol=0)
+        assert_close(edges_dd[0], x_edges, atol=1e-5)
+        assert_close(edges_dd[1], y_edges, atol=1e-5)
+
+
 # ============================================================================
 # Linear Algebra (top-level)
 # ============================================================================
