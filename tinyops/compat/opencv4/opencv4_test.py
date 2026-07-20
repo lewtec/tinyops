@@ -129,6 +129,33 @@ class TestBlur:
         assert_close(result.numpy()[2:-2, 2:-2], expected[2:-2, 2:-2], atol=1)
 
 
+class TestBoxFilter:
+    def test_normalized_matches_blur(self):
+        img = _make_grayscale().astype(np.float32)
+        result = tcv.boxFilter(Tensor(img), -1, (3, 3), normalize=True)
+        expected = cv2.boxFilter(img, -1, (3, 3), normalize=True)
+        assert_close(result.numpy()[1:-1, 1:-1], expected[1:-1, 1:-1], atol=1)
+
+    def test_unnormalized_sum(self):
+        img = _make_grayscale().astype(np.float32)
+        result = tcv.boxFilter(Tensor(img), -1, (3, 3), normalize=False)
+        expected = cv2.boxFilter(img, -1, (3, 3), normalize=False)
+        assert_close(result.numpy()[1:-1, 1:-1], expected[1:-1, 1:-1], atol=1)
+
+    def test_color_and_larger_kernel(self):
+        img = _make_color().astype(np.float32)
+        result = tcv.boxFilter(Tensor(img), -1, (5, 5), normalize=True)
+        expected = cv2.boxFilter(img, -1, (5, 5), normalize=True)
+        assert_close(result.numpy()[2:-2, 2:-2], expected[2:-2, 2:-2], atol=2)
+
+    def test_asymmetric_kernel(self):
+        # OpenCV ksize is (width, height); exclude border of floor(k/2) per axis.
+        img = _make_grayscale(height=32, width=40).astype(np.float32)
+        result = tcv.boxFilter(Tensor(img), -1, (3, 5), normalize=True)
+        expected = cv2.boxFilter(img, -1, (3, 5), normalize=True)
+        assert_close(result.numpy()[2:-2, 1:-1], expected[2:-2, 1:-1], atol=1)
+
+
 class TestGaussianBlur:
     def test_basic(self):
         img = _make_grayscale().astype(np.float32)
