@@ -39,7 +39,7 @@
 - [x] `np.cov`
 - [x] `np.histogram`
 - [x] `np.histogram2d`
-- [ ] `np.histogramdd`
+- [x] `np.histogramdd`
 - [x] `np.convolve`
 - [x] `np.hanning`
 - [x] `np.hamming`

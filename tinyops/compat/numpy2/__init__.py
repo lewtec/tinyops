@@ -54,6 +54,7 @@ from tinyops.ops.statistics.cross_correlation import cross_correlation as _cross
 from tinyops.ops.statistics.digitize import digitize as _digitize
 from tinyops.ops.statistics.histogram import histogram as _histogram
 from tinyops.ops.statistics.histogram_2d import histogram_2d as _histogram_2d
+from tinyops.ops.statistics.histogram_dd import histogram_dd as _histogram_dd
 from tinyops.ops.statistics.median import median as _median
 from tinyops.ops.statistics.peak_to_peak import peak_to_peak as _peak_to_peak
 from tinyops.ops.statistics.percentile import percentile as _percentile
@@ -143,6 +144,17 @@ def histogram(a: Tensor, bins: int = 10, range: tuple[float, float] | None = Non
 def histogram2d(x: Tensor, y: Tensor, bins=10, range=None, density: bool = False):
     """Compute the bi-dimensional histogram of two data samples."""
     return _histogram_2d(x, y, number_of_bins=bins, value_range=range, compute_density=density)
+
+
+def histogramdd(sample: Tensor, bins=10, range=None, density: bool = False, weights: Tensor | None = None):
+    """Compute the multidimensional histogram of some data."""
+    return _histogram_dd(
+        sample,
+        number_of_bins=bins,
+        value_ranges=range,
+        compute_density=bool(density),
+        weights=weights,
+    )
 
 
 # --- Linear Algebra (top-level) ---
