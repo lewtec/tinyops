@@ -31,8 +31,7 @@ def scharr_gradient(
     return _apply_directional_gradient(
         image,
         direction,
-        _SCHARR_HORIZONTAL,
-        _SCHARR_VERTICAL,
+        kernels=(_SCHARR_HORIZONTAL, _SCHARR_VERTICAL),
         scale=scale,
         delta=delta,
     )
