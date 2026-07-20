@@ -105,13 +105,23 @@ def flip(src: Tensor, flipCode: int) -> Tensor:
 
 
 def blur(src: Tensor, ksize: tuple[int, int]) -> Tensor:
-    """Blur an image using a normalized box filter."""
-    return _box_blur(src, kernel_size=ksize)
+    """Blur an image using a normalized box filter.
+
+    ``ksize`` is OpenCV ``(width, height)``; ops uses ``(height, width)``.
+    """
+    width, height = ksize
+    return _box_blur(src, kernel_size=(height, width))
 
 
 def boxFilter(src: Tensor, ddepth: int, ksize: tuple[int, int], normalize: bool = True) -> Tensor:
-    """Blur an image using a box filter."""
-    return _box_blur(src, kernel_size=ksize)
+    """Blur an image using a box filter.
+
+    ``ksize`` is OpenCV ``(width, height)``. ``ddepth`` is accepted for signature
+    compatibility; filtering stays on the source dtype path used by ``ops``
+    (same transitional pattern as ``filter2D``).
+    """
+    width, height = ksize
+    return _box_blur(src, kernel_size=(height, width), normalize=normalize)
 
 
 def GaussianBlur(src: Tensor, ksize: tuple[int, int], sigmaX: float, sigmaY: float = 0) -> Tensor:

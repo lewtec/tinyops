@@ -67,7 +67,7 @@
 - [ ] `cv2.warpAffine`
 - [ ] `cv2.warpPerspective`
 - [x] `cv2.blur`
-- [ ] `cv2.boxFilter`
+- [x] `cv2.boxFilter`
 - [x] `cv2.GaussianBlur`
 - [ ] `cv2.medianBlur`
 - [ ] `cv2.bilateralFilter`
