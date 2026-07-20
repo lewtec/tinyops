@@ -15,7 +15,7 @@
 - [x] `np.linalg.pinv`
 - [x] `np.linalg.solve`
 - [x] `np.linalg.lstsq`
-- [x] `np.linalg.cond`
+- [ ] `np.linalg.cond`
 - [x] `np.linalg.matrix_rank`
 - [x] `np.linalg.cholesky`
 - [x] `np.linalg.qr`
@@ -29,8 +29,8 @@
 - [x] `np.std`
 - [x] `np.var`
 - [x] `np.average`
-- [x] `np.percentile`
-- [x] `np.quantile`
+- [ ] `np.percentile`
+- [ ] `np.quantile`
 - [x] `np.ptp`
 - [x] `np.bincount`
 - [x] `np.digitize`
@@ -67,13 +67,13 @@
 - [ ] `cv2.warpAffine`
 - [ ] `cv2.warpPerspective`
 - [x] `cv2.blur`
-- [x] `cv2.boxFilter`
+- [ ] `cv2.boxFilter`
 - [x] `cv2.GaussianBlur`
 - [ ] `cv2.medianBlur`
 - [ ] `cv2.bilateralFilter`
 - [x] `cv2.filter2D`
-- [x] `cv2.Sobel`
-- [x] `cv2.Scharr`
+- [ ] `cv2.Sobel`
+- [ ] `cv2.Scharr`
 - [x] `cv2.Laplacian`
 - [ ] `cv2.Canny`
 - [x] `cv2.dilate`
@@ -83,7 +83,7 @@
 - [ ] `cv2.adaptiveThreshold`
 - [x] `cv2.cvtColor`
 - [x] `cv2.equalizeHist`
-- [x] `cv2.normalize`
+- [ ] `cv2.normalize`
 - [x] `torchvision.transforms.CenterCrop`
 - [x] `torchvision.transforms.Pad`
 - [ ] `torchvision.transforms.ColorJitter`
@@ -105,7 +105,7 @@
 - [ ] `jellyfish.levenshtein_distance`
 - [ ] `nltk.edit_distance`
 - [ ] `jellyfish.jaro_winkler_similarity`
-- [x] `sklearn.metrics.pairwise_distances(metric='hamming')`
+- [ ] `sklearn.metrics.pairwise_distances(metric='hamming')`
 - [x] `sklearn.feature_extraction.text.CountVectorizer`
 - [x] `sklearn.feature_extraction.text.TfidfVectorizer`
 - [x] `sklearn.preprocessing.StandardScaler`
@@ -114,8 +114,8 @@
 - [x] `sklearn.preprocessing.RobustScaler`
 - [x] `sklearn.preprocessing.Normalizer`
 - [x] `sklearn.preprocessing.Binarizer`
-- [x] `sklearn.preprocessing.OneHotEncoder`
-- [x] `sklearn.preprocessing.LabelEncoder`
+- [ ] `sklearn.preprocessing.OneHotEncoder`
+- [ ] `sklearn.preprocessing.LabelEncoder`
 - [x] `sklearn.preprocessing.PolynomialFeatures`
 - [x] `sklearn.metrics.accuracy_score`
 - [x] `sklearn.metrics.precision_score`
@@ -127,7 +127,7 @@
 - [x] `sklearn.metrics.mean_absolute_error`
 - [x] `sklearn.metrics.r2_score`
 - [ ] `sklearn.metrics.silhouette_score`
-- [x] `sklearn.neighbors.NearestNeighbors`
+- [ ] `sklearn.neighbors.NearestNeighbors`
 - [ ] `sklearn.neighbors.KNeighborsClassifier`
 - [ ] `sklearn.neighbors.KNeighborsRegressor`
 - [ ] `sklearn.naive_bayes.GaussianNB`
@@ -154,7 +154,7 @@
 - [ ] `sklearn.cluster.SpectralClustering`
 - [ ] `sklearn.decomposition.PCA`
 - [ ] `sklearn.decomposition.TruncatedSVD`
-- [x] `sklearn.decomposition.NMF`
+- [ ] `sklearn.decomposition.NMF`
 - [ ] `sklearn.decomposition.FastICA`
 - [ ] `sklearn.decomposition.FactorAnalysis`
 - [ ] `sklearn.manifold.MDS`
