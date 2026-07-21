@@ -29,8 +29,8 @@
 - [x] `np.std`
 - [x] `np.var`
 - [x] `np.average`
-- [ ] `np.percentile`
-- [ ] `np.quantile`
+- [x] `np.percentile`
+- [x] `np.quantile`
 - [x] `np.ptp`
 - [x] `np.bincount`
 - [x] `np.digitize`
