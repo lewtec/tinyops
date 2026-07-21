@@ -1,7 +1,6 @@
-from tinygrad import Tensor, dtypes
+from tinygrad import Tensor
 
-from tinyops.ops.statistics._histogram import resolve_histogram_range
-from tinyops.ops.statistics.bin_count import bin_count
+from tinyops.ops.statistics.histogram_dd import histogram_dd
 
 
 def histogram_2d(
@@ -27,43 +26,18 @@ def histogram_2d(
     y_flat = y_values.flatten()
 
     if isinstance(number_of_bins, int):
-        bins_x, bins_y = number_of_bins, number_of_bins
+        number_of_bins = [number_of_bins, number_of_bins]
+
+    if x_flat.numel() == 0 and y_flat.numel() == 0:
+        samples = Tensor.empty((0, 2), dtype=x_values.dtype, device=x_values.device)
     else:
-        bins_x, bins_y = number_of_bins[0], number_of_bins[1]
+        samples = Tensor.stack([x_flat, y_flat], dim=1)
 
-    explicit_x_range = None if value_range is None else value_range[0]
-    explicit_y_range = None if value_range is None else value_range[1]
-    range_x = list(resolve_histogram_range(x_flat, explicit_x_range))
-    range_y = list(resolve_histogram_range(y_flat, explicit_y_range))
+    hist, edges = histogram_dd(
+        samples=samples,
+        number_of_bins=number_of_bins,
+        value_ranges=value_range,
+        compute_density=compute_density,
+    )
 
-    x_edges = Tensor.linspace(range_x[0], range_x[1], bins_x + 1)
-    y_edges = Tensor.linspace(range_y[0], range_y[1], bins_y + 1)
-
-    if x_flat.numel() == 0:
-        return Tensor.zeros(bins_x, bins_y), x_edges, y_edges
-
-    width_x = (range_x[1] - range_x[0]) / bins_x
-    width_y = (range_y[1] - range_y[0]) / bins_y
-
-    idx_x = ((x_flat - range_x[0]) / width_x).floor().cast(dtypes.int32)
-    idx_y = ((y_flat - range_y[0]) / width_y).floor().cast(dtypes.int32)
-
-    idx_x = (x_flat == range_x[1]).where(bins_x - 1, idx_x)
-    idx_y = (y_flat == range_y[1]).where(bins_y - 1, idx_y)
-
-    valid_mask = (x_flat >= range_x[0]) & (x_flat <= range_x[1]) & (y_flat >= range_y[0]) & (y_flat <= range_y[1])
-
-    total_bins = bins_x * bins_y
-    flat_indices = (idx_x * bins_y + idx_y).cast(dtypes.int32)
-    final_indices = valid_mask.where(flat_indices, total_bins)
-
-    counts_flat = bin_count(final_indices, minimum_output_length=total_bins + 1)
-    histogram_result = counts_flat[:total_bins].reshape(bins_x, bins_y)
-
-    if compute_density:
-        area = width_x * width_y
-        total = histogram_result.sum()
-        if total.item() > 0:
-            histogram_result = histogram_result / (total * area)
-
-    return histogram_result, x_edges, y_edges
+    return hist, edges[0], edges[1]

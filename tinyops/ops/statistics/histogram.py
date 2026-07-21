@@ -1,7 +1,6 @@
-from tinygrad import Tensor, dtypes
+from tinygrad import Tensor
 
-from tinyops.ops.statistics._histogram import resolve_histogram_range
-from tinyops.ops.statistics.bin_count import bin_count
+from tinyops.ops.statistics.histogram_dd import histogram_dd
 
 
 def histogram(
@@ -25,24 +24,12 @@ def histogram(
         ``number_of_bins + 1``.
     """
     flat = tensor.flatten()
-    minimum_value, maximum_value = resolve_histogram_range(flat, value_range)
+    val_range = [value_range] if value_range is not None else None
 
-    edges = Tensor.linspace(minimum_value, maximum_value, number_of_bins + 1)
-
-    if flat.numel() == 0:
-        return Tensor.zeros(number_of_bins), edges
-
-    bin_width = (maximum_value - minimum_value) / number_of_bins
-    indices = ((flat - minimum_value) / bin_width).floor().cast(dtypes.int32)
-
-    valid_mask = (flat >= minimum_value) & (flat <= maximum_value)
-    indices = valid_mask.where(indices, number_of_bins + 1)
-    indices = (indices == number_of_bins).where(number_of_bins - 1, indices)
-
-    counts = bin_count(indices, minimum_output_length=number_of_bins + 2)
-    histogram_counts = counts[:number_of_bins]
-
-    if compute_density:
-        histogram_counts = histogram_counts / (histogram_counts.sum() * bin_width)
-
-    return histogram_counts, edges
+    hist, edges = histogram_dd(
+        samples=flat,
+        number_of_bins=[number_of_bins],
+        value_ranges=val_range,
+        compute_density=compute_density,
+    )
+    return hist, edges[0]
