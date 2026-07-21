@@ -4,6 +4,7 @@ Compares tinyops.compat.numpy2 against actual numpy.
 """
 
 import numpy as np
+import pytest
 from tinygrad import Tensor
 
 from tinyops._core import assert_close
@@ -108,6 +109,86 @@ class TestPercentile:
         data = np.arange(1, 101, dtype=np.float32)
         assert_close(tnp.percentile(Tensor(data), 0), np.percentile(data, 0), atol=1e-4)
         assert_close(tnp.percentile(Tensor(data), 100), np.percentile(data, 100), atol=1e-4)
+
+    def test_axis(self):
+        data = np.random.randn(4, 5).astype(np.float32)
+        assert_close(
+            tnp.percentile(Tensor(data), 25, axis=0),
+            np.percentile(data, 25, axis=0),
+            atol=1e-4,
+        )
+        assert_close(
+            tnp.percentile(Tensor(data), 75, axis=1),
+            np.percentile(data, 75, axis=1),
+            atol=1e-4,
+        )
+
+    def test_keepdims(self):
+        data = np.random.randn(3, 6).astype(np.float32)
+        result = tnp.percentile(Tensor(data), 50, axis=1, keepdims=True)
+        expected = np.percentile(data, 50, axis=1, keepdims=True)
+        assert_close(result, expected, atol=1e-4)
+        assert result.shape == expected.shape
+
+    def test_multiple_percentiles(self):
+        data = np.random.randn(5, 4).astype(np.float32)
+        qs = [10, 50, 90]
+        result = tnp.percentile(Tensor(data), qs, axis=0)
+        expected = np.percentile(data, qs, axis=0)
+        assert_close(result, expected.astype(np.float32), atol=1e-4)
+        assert result.shape == expected.shape
+
+    def test_negative_axis(self):
+        data = np.random.randn(3, 4, 5).astype(np.float32)
+        assert_close(
+            tnp.percentile(Tensor(data), 40, axis=-1),
+            np.percentile(data, 40, axis=-1),
+            atol=1e-4,
+        )
+
+    def test_unsupported_method(self):
+        data = np.arange(1, 6, dtype=np.float32)
+        with pytest.raises(NotImplementedError):
+            tnp.percentile(Tensor(data), 50, method="nearest")
+
+
+class TestQuantile:
+    def test_median(self):
+        data = np.arange(1, 11, dtype=np.float32)
+        assert_close(tnp.quantile(Tensor(data), 0.5), np.quantile(data, 0.5), atol=1e-4)
+
+    def test_boundaries(self):
+        data = np.arange(1, 51, dtype=np.float32)
+        assert_close(tnp.quantile(Tensor(data), 0.0), np.quantile(data, 0.0), atol=1e-4)
+        assert_close(tnp.quantile(Tensor(data), 1.0), np.quantile(data, 1.0), atol=1e-4)
+
+    def test_axis_and_multiple(self):
+        data = np.random.randn(4, 5).astype(np.float32)
+        qs = [0.25, 0.5, 0.75]
+        result = tnp.quantile(Tensor(data), qs, axis=0)
+        expected = np.quantile(data, qs, axis=0)
+        assert_close(result, expected.astype(np.float32), atol=1e-4)
+        assert result.shape == expected.shape
+
+    def test_keepdims(self):
+        data = np.random.randn(3, 6).astype(np.float32)
+        result = tnp.quantile(Tensor(data), 0.5, axis=0, keepdims=True)
+        expected = np.quantile(data, 0.5, axis=0, keepdims=True)
+        assert_close(result, expected, atol=1e-4)
+        assert result.shape == expected.shape
+
+    def test_matches_percentile(self):
+        data = np.random.randn(20).astype(np.float32)
+        assert_close(
+            tnp.quantile(Tensor(data), 0.3),
+            tnp.percentile(Tensor(data), 30),
+            atol=1e-5,
+        )
+
+    def test_unsupported_method(self):
+        data = np.arange(1, 6, dtype=np.float32)
+        with pytest.raises(NotImplementedError):
+            tnp.quantile(Tensor(data), 0.5, method="higher")
 
 
 class TestPtp:
