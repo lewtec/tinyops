@@ -1,3 +1,5 @@
+import math
+
 from tinygrad import Tensor
 
 
@@ -27,15 +29,11 @@ def weighted_average(
         average = tensor.mean(axis=axis)
         if return_sum_of_weights:
             if axis is None:
-                count = 1
-                for size in tensor.shape:
-                    count *= size
+                count = math.prod(tensor.shape)
             elif isinstance(axis, int):
                 count = tensor.shape[axis]
             else:
-                count = 1
-                for ax in axis:
-                    count *= tensor.shape[ax]
+                count = math.prod(tensor.shape[ax] for ax in axis)
             return average, Tensor(count, dtype=tensor.dtype, device=tensor.device)
         return average
 

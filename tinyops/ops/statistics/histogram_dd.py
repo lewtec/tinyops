@@ -1,5 +1,6 @@
 """N-dimensional histogram (numpy.histogramdd equivalent)."""
 
+import math
 from collections.abc import Sequence
 
 from tinygrad import Tensor, dtypes
@@ -83,9 +84,7 @@ def histogram_dd(
         edges.append(Tensor.linspace(minimum_value, maximum_value, bin_count_for_axis + 1))
         bin_widths.append((maximum_value - minimum_value) / bin_count_for_axis)
 
-    total_bins = 1
-    for bin_count_for_axis in bins_per_dimension:
-        total_bins *= bin_count_for_axis
+    total_bins = math.prod(bins_per_dimension)
 
     if sample_count == 0:
         return Tensor.zeros(*bins_per_dimension), edges
@@ -128,9 +127,7 @@ def histogram_dd(
     histogram_result = counts_flat[:total_bins].reshape(*bins_per_dimension)
 
     if compute_density:
-        volume = 1.0
-        for bin_width in bin_widths:
-            volume *= bin_width
+        volume = math.prod(bin_widths)
         total = histogram_result.sum()
         if float(total.item()) > 0.0:
             histogram_result = histogram_result / (total * volume)
