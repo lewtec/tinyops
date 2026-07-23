@@ -19,9 +19,11 @@ from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.naive_bayes import BernoulliNB, MultinomialNB
 from sklearn.preprocessing import (
     Binarizer,
+    LabelEncoder,
     MaxAbsScaler,
     MinMaxScaler,
     Normalizer,
+    OneHotEncoder,
     PolynomialFeatures,
     RobustScaler,
     StandardScaler,
@@ -138,6 +140,60 @@ class TestPolynomialFeatures:
         result = tsk.preprocessing.PolynomialFeatures(degree=2, include_bias=False).fit_transform(Tensor(data))
         expected = PolynomialFeatures(degree=2, include_bias=False).fit_transform(data)
         assert_close(result, expected.astype(np.float32))
+
+
+class TestOneHotEncoder:
+    def test_multi_feature(self):
+        data = np.array([[0, 1], [1, 2], [0, 0], [2, 1]], dtype=np.float32)
+        result = tsk.preprocessing.OneHotEncoder().fit_transform(Tensor(data))
+        expected = OneHotEncoder(sparse_output=False).fit_transform(data)
+        assert_close(result, expected.astype(np.float32))
+
+    def test_single_column_vector(self):
+        data = np.array([[3], [1], [2], [1]], dtype=np.float32)
+        result = tsk.preprocessing.OneHotEncoder().fit_transform(Tensor(data))
+        expected = OneHotEncoder(sparse_output=False).fit_transform(data)
+        assert_close(result, expected.astype(np.float32))
+
+    def test_one_dimensional_input(self):
+        # ops promote 1-D features to a single column, matching reshape(-1, 1).
+        data = np.array([1, 2, 1, 3], dtype=np.float32)
+        result = tsk.preprocessing.OneHotEncoder().fit_transform(Tensor(data))
+        expected = OneHotEncoder(sparse_output=False).fit_transform(data.reshape(-1, 1))
+        assert_close(result, expected.astype(np.float32))
+
+    def test_binary_features(self):
+        data = np.array([[1, 0], [2, 1], [1, 1]], dtype=np.float32)
+        result = tsk.preprocessing.OneHotEncoder().fit_transform(Tensor(data))
+        expected = OneHotEncoder(sparse_output=False).fit_transform(data)
+        assert_close(result, expected.astype(np.float32))
+
+
+class TestLabelEncoder:
+    def test_integer_labels(self):
+        labels = np.array([2, 1, 2, 0, 1], dtype=np.int64)
+        result = tsk.preprocessing.LabelEncoder().fit_transform(Tensor(labels))
+        expected = LabelEncoder().fit_transform(labels)
+        assert_close(result, expected)
+
+    def test_float_labels_return_integer_codes(self):
+        labels = np.array([10.0, 20.0, 10.0, 30.0], dtype=np.float32)
+        result = tsk.preprocessing.LabelEncoder().fit_transform(Tensor(labels))
+        expected = LabelEncoder().fit_transform(labels)
+        assert_close(result, expected)
+        assert result.numpy().dtype.kind in "iu"
+
+    def test_single_class(self):
+        labels = np.array([7, 7, 7], dtype=np.int64)
+        result = tsk.preprocessing.LabelEncoder().fit_transform(Tensor(labels))
+        expected = LabelEncoder().fit_transform(labels)
+        assert_close(result, expected)
+
+    def test_already_contiguous(self):
+        labels = np.array([0, 1, 2, 1, 0], dtype=np.int64)
+        result = tsk.preprocessing.LabelEncoder().fit_transform(Tensor(labels))
+        expected = LabelEncoder().fit_transform(labels)
+        assert_close(result, expected)
 
 
 # ============================================================================
