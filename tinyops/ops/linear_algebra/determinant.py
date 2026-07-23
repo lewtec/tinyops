@@ -1,6 +1,21 @@
 from tinygrad import Tensor
 
 
+def _get_minor(matrix: Tensor, column: int, size: int) -> Tensor:
+    """Extract the submatrix by removing the first row and the specified column."""
+    sub_matrix_parts = []
+    if column > 0:
+        sub_matrix_parts.append(matrix[1:, :column])
+    if column < size - 1:
+        sub_matrix_parts.append(matrix[1:, column + 1 :])
+
+    if len(sub_matrix_parts) > 1:
+        return sub_matrix_parts[0].cat(sub_matrix_parts[1], dim=1)
+    if len(sub_matrix_parts) == 1:
+        return sub_matrix_parts[0]
+    return Tensor([])
+
+
 def determinant(matrix: Tensor) -> Tensor:
     """Compute the determinant of a square matrix via Laplace expansion.
 
@@ -29,19 +44,7 @@ def determinant(matrix: Tensor) -> Tensor:
     total = Tensor(0.0)
     for column in range(size):
         sign = (-1) ** column
-        sub_matrix_parts = []
-        if column > 0:
-            sub_matrix_parts.append(matrix[1:, :column])
-        if column < size - 1:
-            sub_matrix_parts.append(matrix[1:, column + 1 :])
-
-        if len(sub_matrix_parts) > 1:
-            sub_matrix = sub_matrix_parts[0].cat(sub_matrix_parts[1], dim=1)
-        elif len(sub_matrix_parts) == 1:
-            sub_matrix = sub_matrix_parts[0]
-        else:
-            sub_matrix = Tensor([])
-
+        sub_matrix = _get_minor(matrix, column, size)
         total += sign * matrix[0, column] * determinant(sub_matrix)
 
     return total
