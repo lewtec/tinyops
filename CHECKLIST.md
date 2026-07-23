@@ -114,8 +114,8 @@
 - [x] `sklearn.preprocessing.RobustScaler`
 - [x] `sklearn.preprocessing.Normalizer`
 - [x] `sklearn.preprocessing.Binarizer`
-- [ ] `sklearn.preprocessing.OneHotEncoder`
-- [ ] `sklearn.preprocessing.LabelEncoder`
+- [x] `sklearn.preprocessing.OneHotEncoder`
+- [x] `sklearn.preprocessing.LabelEncoder`
 - [x] `sklearn.preprocessing.PolynomialFeatures`
 - [x] `sklearn.metrics.accuracy_score`
 - [x] `sklearn.metrics.precision_score`
