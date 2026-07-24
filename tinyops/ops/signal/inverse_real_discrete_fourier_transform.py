@@ -2,6 +2,7 @@
 
 from tinygrad import Tensor, dtypes
 
+from tinyops.ops.signal._fourier import complex_conjugate
 from tinyops.ops.signal.inverse_discrete_fourier_transform import inverse_discrete_fourier_transform
 
 
@@ -61,7 +62,7 @@ def inverse_real_discrete_fourier_transform(
         # full[k] = conj(spectrum[N - k]) for k = M .. N-1
         # → reverse of spectrum[1 : negative_frequency_count + 1], imag negated.
         mirrored = spectrum[1 : negative_frequency_count + 1].flip(0)
-        conjugate_mirror = Tensor.stack([mirrored[:, 0], -mirrored[:, 1]], dim=1)
+        conjugate_mirror = complex_conjugate(mirrored)
         full_spectrum = Tensor.cat(spectrum, conjugate_mirror, dim=0)
 
     recovered = inverse_discrete_fourier_transform(full_spectrum)

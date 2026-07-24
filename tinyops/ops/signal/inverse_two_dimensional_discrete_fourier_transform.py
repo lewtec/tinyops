@@ -2,6 +2,7 @@
 
 from tinygrad import Tensor
 
+from tinyops.ops.signal._fourier import separable_two_dimensional_transform
 from tinyops.ops.signal.inverse_discrete_fourier_transform import (
     inverse_discrete_fourier_transform,
 )
@@ -24,26 +25,7 @@ def inverse_two_dimensional_discrete_fourier_transform(complex_spectrum: Tensor)
     Raises:
         ValueError: If ``complex_spectrum`` is not shaped ``(H, W, 2)``.
     """
-    if complex_spectrum.ndim != 3 or complex_spectrum.shape[-1] != 2:
-        raise ValueError(
-            f"complex_spectrum must have shape (H, W, 2), got {complex_spectrum.shape}"
-        )
-
-    height, width, _ = complex_spectrum.shape
-    if height == 0 or width == 0:
-        return complex_spectrum
-
-    after_width = Tensor.stack(
-        [
-            inverse_discrete_fourier_transform(complex_spectrum[row_index])
-            for row_index in range(height)
-        ],
-        dim=0,
-    )
-    return Tensor.stack(
-        [
-            inverse_discrete_fourier_transform(after_width[:, column_index, :])
-            for column_index in range(width)
-        ],
-        dim=1,
+    return separable_two_dimensional_transform(
+        complex_spectrum,
+        inverse_discrete_fourier_transform,
     )
