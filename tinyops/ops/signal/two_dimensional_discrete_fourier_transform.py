@@ -2,6 +2,7 @@
 
 from tinygrad import Tensor
 
+from tinyops.ops.signal._fourier import separable_two_dimensional_transform
 from tinyops.ops.signal.discrete_fourier_transform import discrete_fourier_transform
 
 
@@ -21,23 +22,4 @@ def two_dimensional_discrete_fourier_transform(complex_image: Tensor) -> Tensor:
     Raises:
         ValueError: If ``complex_image`` is not shaped ``(H, W, 2)``.
     """
-    if complex_image.ndim != 3 or complex_image.shape[-1] != 2:
-        raise ValueError(
-            f"complex_image must have shape (H, W, 2), got {complex_image.shape}"
-        )
-
-    height, width, _ = complex_image.shape
-    if height == 0 or width == 0:
-        return complex_image
-
-    after_width = Tensor.stack(
-        [discrete_fourier_transform(complex_image[row_index]) for row_index in range(height)],
-        dim=0,
-    )
-    return Tensor.stack(
-        [
-            discrete_fourier_transform(after_width[:, column_index, :])
-            for column_index in range(width)
-        ],
-        dim=1,
-    )
+    return separable_two_dimensional_transform(complex_image, discrete_fourier_transform)

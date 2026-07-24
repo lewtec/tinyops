@@ -1,5 +1,6 @@
 from tinygrad import Tensor
 
+from tinyops.ops.signal._fourier import complex_conjugate
 from tinyops.ops.signal.discrete_fourier_transform import discrete_fourier_transform
 
 
@@ -14,7 +15,5 @@ def inverse_discrete_fourier_transform(complex_signal: Tensor) -> Tensor:
         Inverse DFT result tensor of shape (N, 2).
     """
     sample_count = complex_signal.shape[0]
-    conjugate = Tensor.stack([complex_signal[:, 0], -complex_signal[:, 1]], dim=1)
-    transformed = discrete_fourier_transform(conjugate)
-    result_conjugate = Tensor.stack([transformed[:, 0], -transformed[:, 1]], dim=1)
-    return result_conjugate / sample_count
+    transformed = discrete_fourier_transform(complex_conjugate(complex_signal))
+    return complex_conjugate(transformed) / sample_count
