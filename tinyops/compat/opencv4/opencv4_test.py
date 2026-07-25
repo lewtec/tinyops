@@ -170,6 +170,32 @@ class TestGaussianBlur:
         expected = cv2.GaussianBlur(img, (3, 3), 0.5)
         assert_close(result.numpy()[1:-1, 1:-1], expected[1:-1, 1:-1], atol=2)
 
+    def test_auto_sigma_small_kernel(self):
+        # OpenCV sigmaX=0 uses fixed getGaussianKernel tables for ksize <= 9.
+        img = _make_grayscale().astype(np.float32)
+        result = tcv.GaussianBlur(Tensor(img), (5, 5), sigmaX=0)
+        expected = cv2.GaussianBlur(img, (5, 5), 0)
+        assert_close(result.numpy()[2:-2, 2:-2], expected[2:-2, 2:-2], atol=1)
+
+    def test_auto_sigma_large_kernel(self):
+        # For ksize > 9, sigma is derived as 0.15*ksize + 0.35.
+        img = _make_grayscale(height=32, width=32).astype(np.float32)
+        result = tcv.GaussianBlur(Tensor(img), (11, 11), sigmaX=0)
+        expected = cv2.GaussianBlur(img, (11, 11), 0)
+        assert_close(result.numpy()[5:-5, 5:-5], expected[5:-5, 5:-5], atol=1)
+
+    def test_auto_sigma_asymmetric(self):
+        img = _make_grayscale(height=32, width=40).astype(np.float32)
+        result = tcv.GaussianBlur(Tensor(img), (3, 7), sigmaX=0)
+        expected = cv2.GaussianBlur(img, (3, 7), 0)
+        assert_close(result.numpy()[3:-3, 1:-1], expected[3:-3, 1:-1], atol=1)
+
+    def test_sigma_y_inherits_explicit_sigma_x(self):
+        img = _make_grayscale().astype(np.float32)
+        result = tcv.GaussianBlur(Tensor(img), (5, 5), sigmaX=1.5, sigmaY=0)
+        expected = cv2.GaussianBlur(img, (5, 5), 1.5, sigmaY=0)
+        assert_close(result.numpy()[2:-2, 2:-2], expected[2:-2, 2:-2], atol=1)
+
 
 class TestFilter2D:
     def test_custom_kernel(self):
