@@ -3,6 +3,38 @@ from tinygrad import Tensor
 from tinyops.ops.linear_algebra.kronecker_product import kronecker_product
 
 
+def _build_base_matrix(dimension: int, dt: Tensor) -> Tensor:
+    """Construct the base block for the discrete white noise matrix."""
+    one = Tensor(1.0, dtype=dt.dtype, device=dt.device)
+    dt2, dt3, dt4 = dt**2, dt**3, dt**4
+
+    if dimension == 2:
+        return Tensor.stack(
+            [
+                Tensor.stack([dt4 / 4, dt3 / 2]),
+                Tensor.stack([dt3 / 2, dt2]),
+            ]
+        )
+    if dimension == 3:
+        return Tensor.stack(
+            [
+                Tensor.stack([dt4 / 4, dt3 / 2, dt2 / 2]),
+                Tensor.stack([dt3 / 2, dt2, dt]),
+                Tensor.stack([dt2 / 2, dt, one]),
+            ]
+        )
+
+    dt5, dt6 = dt**5, dt**6
+    return Tensor.stack(
+        [
+            Tensor.stack([dt6 / 36, dt5 / 12, dt4 / 6, dt3 / 6]),
+            Tensor.stack([dt5 / 12, dt4 / 4, dt3 / 2, dt2 / 2]),
+            Tensor.stack([dt4 / 6, dt3 / 2, dt2, dt]),
+            Tensor.stack([dt3 / 6, dt2 / 2, dt, one]),
+        ]
+    )
+
+
 def discrete_white_noise_matrix(
     dimension: int,
     time_step: float | Tensor = 1.0,
@@ -31,38 +63,7 @@ def discrete_white_noise_matrix(
     time_step_tensor = time_step if isinstance(time_step, Tensor) else Tensor(time_step)
     variance_tensor = noise_variance if isinstance(noise_variance, Tensor) else Tensor(noise_variance)
 
-    one = Tensor(1.0, dtype=time_step_tensor.dtype, device=time_step_tensor.device)
-
-    dt2 = time_step_tensor**2
-    dt3 = time_step_tensor**3
-    dt4 = time_step_tensor**4
-    dt5 = time_step_tensor**5
-    dt6 = time_step_tensor**6
-
-    if dimension == 2:
-        noise_matrix = Tensor.stack(
-            [
-                Tensor.stack([dt4 / 4, dt3 / 2]),
-                Tensor.stack([dt3 / 2, dt2]),
-            ]
-        )
-    elif dimension == 3:
-        noise_matrix = Tensor.stack(
-            [
-                Tensor.stack([dt4 / 4, dt3 / 2, dt2 / 2]),
-                Tensor.stack([dt3 / 2, dt2, time_step_tensor]),
-                Tensor.stack([dt2 / 2, time_step_tensor, one]),
-            ]
-        )
-    else:
-        noise_matrix = Tensor.stack(
-            [
-                Tensor.stack([dt6 / 36, dt5 / 12, dt4 / 6, dt3 / 6]),
-                Tensor.stack([dt5 / 12, dt4 / 4, dt3 / 2, dt2 / 2]),
-                Tensor.stack([dt4 / 6, dt3 / 2, dt2, time_step_tensor]),
-                Tensor.stack([dt3 / 6, dt2 / 2, time_step_tensor, one]),
-            ]
-        )
+    noise_matrix = _build_base_matrix(dimension, time_step_tensor)
 
     if block_size == 1:
         return noise_matrix * variance_tensor
