@@ -45,21 +45,20 @@ def convolution_1d(
         signal, kernel = kernel, signal
         signal_length, kernel_length = kernel_length, signal_length
 
-    reversed_kernel = kernel.flip(0)
-    padded_signal = signal.pad(((kernel_length - 1, kernel_length - 1),))
-
-    full_length = signal_length + kernel_length - 1
-    segments = [(reversed_kernel * padded_signal[i : i + kernel_length]).sum() for i in range(full_length)]
-    full_result = Tensor.stack(segments)
-
     if mode == ConvolutionMode.FULL:
-        return full_result
+        pad_left = kernel_length - 1
+        pad_right = kernel_length - 1
     elif mode == ConvolutionMode.SAME:
-        start = (kernel_length - 1) // 2
-        return full_result[start : start + signal_length]
+        pad_left = kernel_length // 2
+        pad_right = (kernel_length - 1) // 2
     elif mode == ConvolutionMode.VALID:
-        start = kernel_length - 1
-        end = start + (signal_length - kernel_length + 1)
-        return full_result[start:end]
+        pad_left = 0
+        pad_right = 0
     else:
         raise ValueError(f"Invalid mode '{mode}'")
+
+    x = signal.reshape(1, 1, 1, -1)
+    w = kernel.flip(0).reshape(1, 1, 1, -1)
+
+    out = x.conv2d(w, padding=(pad_left, pad_right, 0, 0))
+    return out.flatten()
