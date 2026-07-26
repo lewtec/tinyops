@@ -30,6 +30,41 @@ def _flatten_audio_rows(rows: Sequence) -> list[float]:
     return [float(value) for value in rows]
 
 
+def _audio_to_layout(audio: Tensor) -> tuple[int, int, list[float]]:
+    """Return (frame_count, channel_count, interleaved float samples)."""
+    rows = audio.tolist()
+    if audio.ndim == 1:
+        frame_count = audio.shape[0]
+        channel_count = 1
+        floats = [float(value) for value in rows] if isinstance(rows, list) else [float(rows)]
+        return frame_count, channel_count, floats
+
+    frame_count, channel_count = audio.shape
+    return frame_count, channel_count, _flatten_audio_rows(rows)
+
+
+def _pack_pcm_samples(floats: list[float], sample_width: int) -> bytes:
+    """Pack float samples in [-1, 1] into PCM frame bytes."""
+    if sample_width == 1:
+        pcm = array.array("B", (max(0, min(255, int(value * 128.0 + 128.0))) for value in floats))
+        return pcm.tobytes()
+
+    if sample_width not in _CLIP_PEAK_BY_SAMPLE_WIDTH:
+        raise ValueError(f"Unsupported sample width: {sample_width}")
+
+    peak = _CLIP_PEAK_BY_SAMPLE_WIDTH[sample_width]
+    max_value = int(peak)
+    clipped = [max(-max_value, min(max_value, int(value * peak))) for value in floats]
+    if sample_width == 2:
+        return array.array("h", clipped).tobytes()
+    if sample_width == 3:
+        packed = bytearray()
+        for sample in clipped:
+            packed.extend(struct.pack("<i", sample)[:3])
+        return bytes(packed)
+    return array.array("i", clipped).tobytes()
+
+
 def encode_wav(audio: Tensor, sample_rate: int, sample_width: int = 2) -> bytes:
     """Encode a tensor as WAV audio bytes.
 
@@ -49,33 +84,8 @@ def encode_wav(audio: Tensor, sample_rate: int, sample_width: int = 2) -> bytes:
     if not (audio.dtype.name == "float32" or audio.dtype.name == "float"):
         raise TypeError(f"Input tensor must be float32, but got {audio.dtype}")
 
-    rows = audio.tolist()
-    if audio.ndim == 1:
-        frame_count = audio.shape[0]
-        channel_count = 1
-        floats = [float(value) for value in rows] if isinstance(rows, list) else [float(rows)]
-    else:
-        frame_count, channel_count = audio.shape
-        floats = _flatten_audio_rows(rows)
-
-    if sample_width == 1:
-        pcm = array.array("B", (max(0, min(255, int(value * 128.0 + 128.0))) for value in floats))
-        frame_bytes = pcm.tobytes()
-    elif sample_width in _CLIP_PEAK_BY_SAMPLE_WIDTH:
-        peak = _CLIP_PEAK_BY_SAMPLE_WIDTH[sample_width]
-        max_value = int(peak)
-        clipped = [max(-max_value, min(max_value, int(value * peak))) for value in floats]
-        if sample_width == 2:
-            frame_bytes = array.array("h", clipped).tobytes()
-        elif sample_width == 3:
-            packed = bytearray()
-            for sample in clipped:
-                packed.extend(struct.pack("<i", sample)[:3])
-            frame_bytes = bytes(packed)
-        else:
-            frame_bytes = array.array("i", clipped).tobytes()
-    else:
-        raise ValueError(f"Unsupported sample width: {sample_width}")
+    frame_count, channel_count, floats = _audio_to_layout(audio)
+    frame_bytes = _pack_pcm_samples(floats, sample_width)
 
     with io.BytesIO() as buffer:
         with wave.open(buffer, "wb") as wav_file:
