@@ -5,6 +5,68 @@ from tinygrad import Tensor, dtypes
 from tinyops.ops.image.pad import PaddingMode, pad_image
 
 
+def _same_size_padding(kernel_height: int, kernel_width: int) -> tuple[int, int, int, int]:
+    """Padding (left, top, right, bottom) that keeps spatial size for a 2D kernel."""
+    pad_top = kernel_height // 2
+    pad_bottom = (kernel_height - 1) // 2
+    pad_left = kernel_width // 2
+    pad_right = (kernel_width - 1) // 2
+    return (pad_left, pad_top, pad_right, pad_bottom)
+
+
+def _pad_for_convolution(
+    image: Tensor,
+    padding: tuple[int, int, int, int],
+    border_mode: PaddingMode,
+) -> tuple[Tensor, tuple[int, int, int, int]]:
+    """Apply border padding; return (padded_image, conv2d_padding).
+
+    ``PaddingMode.CONSTANT`` leaves spatial padding to ``conv2d`` (zero fill).
+    Other modes use :func:`pad_image` and pass zero ``conv2d`` padding.
+    """
+    if border_mode == PaddingMode.CONSTANT:
+        # conv2d padding is (left, right, top, bottom)
+        conv_padding = (padding[0], padding[2], padding[1], padding[3])
+        return image, conv_padding
+
+    if image.ndim == 4:
+        permuted = image.permute(1, 2, 0, 3)
+        padded_permuted = pad_image(permuted, padding, padding_mode=border_mode)
+        padded = padded_permuted.permute(2, 0, 1, 3)
+    else:
+        padded = pad_image(image, padding, padding_mode=border_mode)
+    return padded, (0, 0, 0, 0)
+
+
+def _reshape_for_grouped_convolution(
+    padded: Tensor,
+) -> tuple[Tensor, int, tuple[int, ...] | None]:
+    """Reshape image to ``(N, C, H, W)`` for depthwise grouped conv.
+
+    Returns ``(nchw_input, groups, restore_permutation)``. For 2D grayscale
+    inputs ``restore_permutation`` is ``None`` (restore by reshape only).
+    """
+    if padded.ndim == 2:
+        return padded.reshape(1, 1, *padded.shape), 1, None
+    if padded.ndim == 3:
+        return padded.permute(2, 0, 1).unsqueeze(0), padded.shape[2], (1, 2, 0)
+    if padded.ndim == 4:
+        return padded.permute(0, 3, 1, 2), padded.shape[3], (0, 2, 3, 1)
+    raise ValueError(f"Unsupported input shape: {padded.shape}")
+
+
+def _restore_from_grouped_convolution(
+    output: Tensor,
+    restore_permutation: tuple[int, ...] | None,
+) -> Tensor:
+    """Map conv ``(N, C, H, W)`` output back to the caller's layout."""
+    if restore_permutation is None:
+        return output.reshape(output.shape[2], output.shape[3])
+    if len(restore_permutation) == 3:
+        return output.squeeze(0).permute(*restore_permutation)
+    return output.permute(*restore_permutation)
+
+
 def apply_convolution_filter(
     image: Tensor,
     kernel: Tensor,
@@ -30,57 +92,19 @@ def apply_convolution_filter(
     Returns:
         Filtered image tensor with the same shape as the input.
     """
-    input_dtype = image.dtype
-    if input_dtype == dtypes.uint8:
+    if image.dtype == dtypes.uint8:
         image = image.cast(dtypes.float32)
 
     kernel_height, kernel_width = kernel.shape
-
     if padding is None:
-        pad_top = kernel_height // 2
-        pad_bottom = (kernel_height - 1) // 2
-        pad_left = kernel_width // 2
-        pad_right = (kernel_width - 1) // 2
-        padding = (pad_left, pad_top, pad_right, pad_bottom)
+        padding = _same_size_padding(kernel_height, kernel_width)
 
-    conv_padding = (0, 0, 0, 0)
-    padded = image
-
-    if border_mode == PaddingMode.CONSTANT:
-        conv_padding = (padding[0], padding[2], padding[1], padding[3])
-    else:
-        if image.ndim == 4:
-            permuted = image.permute(1, 2, 0, 3)
-            padded_permuted = pad_image(permuted, padding, padding_mode=border_mode)
-            padded = padded_permuted.permute(2, 0, 1, 3)
-        else:
-            padded = pad_image(image, padding, padding_mode=border_mode)
-
-    if padded.ndim == 2:
-        input_for_conv = padded.reshape(1, 1, *padded.shape)
-        groups = 1
-        original_permutation = None
-    elif padded.ndim == 3:
-        input_for_conv = padded.permute(2, 0, 1).unsqueeze(0)
-        groups = padded.shape[2]
-        original_permutation = (1, 2, 0)
-    elif padded.ndim == 4:
-        input_for_conv = padded.permute(0, 3, 1, 2)
-        groups = padded.shape[3]
-        original_permutation = (0, 2, 3, 1)
-    else:
-        raise ValueError(f"Unsupported input shape: {image.shape}")
+    padded, conv_padding = _pad_for_convolution(image, padding, border_mode)
+    input_for_conv, groups, restore_permutation = _reshape_for_grouped_convolution(padded)
 
     expanded_kernel = kernel.expand(groups, 1, kernel_height, kernel_width)
     output = input_for_conv.conv2d(expanded_kernel, padding=conv_padding, groups=groups)
-
-    if original_permutation:
-        if len(original_permutation) == 3:
-            output = output.squeeze(0).permute(*original_permutation)
-        else:
-            output = output.permute(*original_permutation)
-    else:
-        output = output.reshape(output.shape[2], output.shape[3])
+    output = _restore_from_grouped_convolution(output, restore_permutation)
 
     return output * scale + delta
 
