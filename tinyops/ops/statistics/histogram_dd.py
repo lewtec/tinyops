@@ -9,33 +9,11 @@ from tinyops.ops.statistics._histogram import resolve_histogram_range
 from tinyops.ops.statistics.bin_count import bin_count
 
 
-def histogram_dd(
+def _resolve_axes(
     samples: Tensor,
-    number_of_bins: int | Sequence[int] = 10,
-    value_ranges: Sequence[tuple[float, float] | list[float]] | None = None,
-    compute_density: bool = False,
-    weights: Tensor | None = None,
-) -> tuple[Tensor, list[Tensor]]:
-    """Compute an N-dimensional histogram over the columns of *samples*.
-
-    Args:
-        samples: Sample coordinates of shape ``(n_samples, n_dimensions)``.
-            A 1D tensor of shape ``(n_samples,)`` is treated as one dimension.
-        number_of_bins: Shared bin count, or one integer per dimension.
-        value_ranges: Optional ``(min, max)`` per dimension. When None, each
-            dimension uses the corresponding column extrema (with the same
-            degenerate-range expansion as one-dimensional histograms).
-        compute_density: If True, normalize so the integral over the bin
-            volumes is 1 (probability density).
-        weights: Optional per-sample weights of shape ``(n_samples,)``.
-
-    Returns:
-        ``(histogram, edges)`` where *histogram* has one axis per dimension
-        and *edges* is a list of bin-edge tensors (length ``bins_d + 1`` each).
-
-    Raises:
-        ValueError: On invalid rank, bin counts, ranges, or weight shapes.
-    """
+    number_of_bins: int | Sequence[int],
+    value_ranges: Sequence[tuple[float, float] | list[float]] | None,
+) -> tuple[int, int, list[int], list[tuple[float, float]], list[Tensor], list[float]]:
     if samples.ndim == 1:
         sample_matrix = samples.unsqueeze(1)
     elif samples.ndim == 2:
@@ -65,12 +43,6 @@ def histogram_dd(
             f"value_ranges length {len(value_ranges)} must match dimension count {dimension_count}"
         )
 
-    if weights is not None:
-        if weights.ndim != 1 or weights.shape[0] != sample_count:
-            raise ValueError(
-                f"weights must have shape ({sample_count},), got {weights.shape}"
-            )
-
     resolved_ranges: list[tuple[float, float]] = []
     edges: list[Tensor] = []
     bin_widths: list[float] = []
@@ -84,10 +56,20 @@ def histogram_dd(
         edges.append(Tensor.linspace(minimum_value, maximum_value, bin_count_for_axis + 1))
         bin_widths.append((maximum_value - minimum_value) / bin_count_for_axis)
 
-    total_bins = math.prod(bins_per_dimension)
+    return sample_count, dimension_count, bins_per_dimension, resolved_ranges, edges, bin_widths
 
-    if sample_count == 0:
-        return Tensor.zeros(*bins_per_dimension), edges
+def _compute_flat_indices(
+    samples: Tensor,
+    sample_count: int,
+    dimension_count: int,
+    bins_per_dimension: list[int],
+    resolved_ranges: list[tuple[float, float]],
+    bin_widths: list[float],
+) -> tuple[Tensor, Tensor]:
+    if samples.ndim == 1:
+        sample_matrix = samples.unsqueeze(1)
+    else:
+        sample_matrix = samples
 
     flat_indices = Tensor.zeros(sample_count, dtype=dtypes.int32)
     valid_mask = Tensor.ones(sample_count, dtype=dtypes.bool)
@@ -110,6 +92,55 @@ def histogram_dd(
 
         flat_indices = flat_indices + indices * stride
         stride *= bin_count_for_axis
+
+    return flat_indices, valid_mask
+
+
+def histogram_dd(
+    samples: Tensor,
+    number_of_bins: int | Sequence[int] = 10,
+    value_ranges: Sequence[tuple[float, float] | list[float]] | None = None,
+    compute_density: bool = False,
+    weights: Tensor | None = None,
+) -> tuple[Tensor, list[Tensor]]:
+    """Compute an N-dimensional histogram over the columns of *samples*.
+
+    Args:
+        samples: Sample coordinates of shape ``(n_samples, n_dimensions)``.
+            A 1D tensor of shape ``(n_samples,)`` is treated as one dimension.
+        number_of_bins: Shared bin count, or one integer per dimension.
+        value_ranges: Optional ``(min, max)`` per dimension. When None, each
+            dimension uses the corresponding column extrema (with the same
+            degenerate-range expansion as one-dimensional histograms).
+        compute_density: If True, normalize so the integral over the bin
+            volumes is 1 (probability density).
+        weights: Optional per-sample weights of shape ``(n_samples,)``.
+
+    Returns:
+        ``(histogram, edges)`` where *histogram* has one axis per dimension
+        and *edges* is a list of bin-edge tensors (length ``bins_d + 1`` each).
+
+    Raises:
+        ValueError: On invalid rank, bin counts, ranges, or weight shapes.
+    """
+    sample_count, dimension_count, bins_per_dimension, resolved_ranges, edges, bin_widths = _resolve_axes(
+        samples, number_of_bins, value_ranges
+    )
+
+    if weights is not None:
+        if weights.ndim != 1 or weights.shape[0] != sample_count:
+            raise ValueError(
+                f"weights must have shape ({sample_count},), got {weights.shape}"
+            )
+
+    total_bins = math.prod(bins_per_dimension)
+
+    if sample_count == 0:
+        return Tensor.zeros(*bins_per_dimension), edges
+
+    flat_indices, valid_mask = _compute_flat_indices(
+        samples, sample_count, dimension_count, bins_per_dimension, resolved_ranges, bin_widths
+    )
 
     final_indices = valid_mask.where(flat_indices.cast(dtypes.int32), total_bins)
 
