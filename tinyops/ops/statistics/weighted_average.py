@@ -3,6 +3,41 @@ import math
 from tinygrad import Tensor
 
 
+def _axis_element_count(tensor: Tensor, axis: int | tuple[int, ...] | None) -> int:
+    """Number of elements reduced along *axis* (product of reduced dims)."""
+    if axis is None:
+        return math.prod(tensor.shape)
+    if isinstance(axis, int):
+        return tensor.shape[axis]
+    return math.prod(tensor.shape[ax] for ax in axis)
+
+
+def _broadcast_1d_weights(
+    weights: Tensor,
+    tensor: Tensor,
+    axis: int | tuple[int, ...] | None,
+) -> Tensor:
+    """Reshape length-matching 1D weights onto *axis* for broadcast multiply.
+
+    When *axis* is a single int and *weights* is 1D with matching length,
+    expands to a shape of ones with that axis set. Other layouts are returned
+    unchanged for the caller's multiply + sum.
+    """
+    if axis is None or len(weights.shape) != 1 or not isinstance(axis, int):
+        return weights
+
+    number_of_dimensions = len(tensor.shape)
+    normalized_axis = axis if axis >= 0 else axis + number_of_dimensions
+    if weights.shape[0] != tensor.shape[normalized_axis]:
+        raise ValueError(
+            f"Length of weights ({weights.shape[0]}) not compatible "
+            f"with specified axis ({tensor.shape[normalized_axis]})"
+        )
+    broadcast_shape = [1] * number_of_dimensions
+    broadcast_shape[normalized_axis] = weights.shape[0]
+    return weights.reshape(tuple(broadcast_shape))
+
+
 def weighted_average(
     tensor: Tensor,
     axis: int | tuple[int, ...] | None = None,
@@ -28,33 +63,13 @@ def weighted_average(
     if weights is None:
         average = tensor.mean(axis=axis)
         if return_sum_of_weights:
-            if axis is None:
-                count = math.prod(tensor.shape)
-            elif isinstance(axis, int):
-                count = tensor.shape[axis]
-            else:
-                count = math.prod(tensor.shape[ax] for ax in axis)
+            count = _axis_element_count(tensor, axis)
             return average, Tensor(count, dtype=tensor.dtype, device=tensor.device)
         return average
 
-    adjusted_weights = weights
-    number_of_dimensions = len(tensor.shape)
-
-    if axis is not None and len(adjusted_weights.shape) == 1:
-        if isinstance(axis, int):
-            normalized_axis = axis if axis >= 0 else axis + number_of_dimensions
-            if adjusted_weights.shape[0] != tensor.shape[normalized_axis]:
-                raise ValueError(
-                    f"Length of weights ({adjusted_weights.shape[0]}) not compatible "
-                    f"with specified axis ({tensor.shape[normalized_axis]})"
-                )
-            broadcast_shape = [1] * number_of_dimensions
-            broadcast_shape[normalized_axis] = adjusted_weights.shape[0]
-            adjusted_weights = adjusted_weights.reshape(tuple(broadcast_shape))
-
+    adjusted_weights = _broadcast_1d_weights(weights, tensor, axis)
     sum_of_weights = adjusted_weights.sum(axis=axis)
-    product = tensor * adjusted_weights
-    average = product.sum(axis=axis) / sum_of_weights
+    average = (tensor * adjusted_weights).sum(axis=axis) / sum_of_weights
 
     if return_sum_of_weights:
         return average, sum_of_weights
