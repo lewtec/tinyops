@@ -3,6 +3,31 @@ from tinygrad import Tensor
 from tinyops.ops.linear_algebra.cholesky_decomposition import cholesky_decomposition
 
 
+def _compute_weights(
+    dimension: int,
+    lambda_parameter: float,
+    spread: float,
+    prior_knowledge: float,
+    dtype,
+    device,
+) -> tuple[Tensor, Tensor]:
+    """Compute mean and covariance weights."""
+    weight_rest = 0.5 / (dimension + lambda_parameter)
+    mean_weight_center = lambda_parameter / (dimension + lambda_parameter)
+    covariance_weight_center = lambda_parameter / (dimension + lambda_parameter) + (1 - spread**2 + prior_knowledge)
+
+    rest_weights = Tensor.full((2 * dimension,), weight_rest, dtype=dtype, device=device)
+    mean_weight_center_tensor = Tensor([mean_weight_center], dtype=dtype, device=device)
+    covariance_weight_center_tensor = Tensor(
+        [covariance_weight_center], dtype=dtype, device=device
+    )
+
+    mean_weights = Tensor.cat(mean_weight_center_tensor, rest_weights, dim=0)
+    covariance_weights = Tensor.cat(covariance_weight_center_tensor, rest_weights, dim=0)
+
+    return mean_weights, covariance_weights
+
+
 def merwe_scaled_sigma_points(
     state_mean: Tensor,
     covariance: Tensor,
@@ -41,17 +66,8 @@ def merwe_scaled_sigma_points(
 
     sigma_points = Tensor.cat(state_mean.unsqueeze(0), sigma_plus, sigma_minus, dim=0)
 
-    weight_rest = 0.5 / (dimension + lambda_parameter)
-    mean_weight_center = lambda_parameter / (dimension + lambda_parameter)
-    covariance_weight_center = lambda_parameter / (dimension + lambda_parameter) + (1 - spread**2 + prior_knowledge)
-
-    rest_weights = Tensor.full((2 * dimension,), weight_rest, dtype=state_mean.dtype, device=state_mean.device)
-    mean_weight_center_tensor = Tensor([mean_weight_center], dtype=state_mean.dtype, device=state_mean.device)
-    covariance_weight_center_tensor = Tensor(
-        [covariance_weight_center], dtype=state_mean.dtype, device=state_mean.device
+    mean_weights, covariance_weights = _compute_weights(
+        dimension, lambda_parameter, spread, prior_knowledge, state_mean.dtype, state_mean.device
     )
-
-    mean_weights = Tensor.cat(mean_weight_center_tensor, rest_weights, dim=0)
-    covariance_weights = Tensor.cat(covariance_weight_center_tensor, rest_weights, dim=0)
 
     return sigma_points, mean_weights, covariance_weights
