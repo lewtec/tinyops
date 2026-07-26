@@ -1,6 +1,46 @@
 from tinygrad import Tensor
 
 
+def _move_axis_to_last(tensor: Tensor, axis: int) -> tuple[Tensor, int]:
+    """Normalize *axis* and permute so the reduction axis is last.
+
+    Returns:
+        ``(permuted_tensor, normalized_axis)`` where *normalized_axis* is the
+        non-negative axis index in the original layout.
+    """
+    number_of_dimensions = len(tensor.shape)
+    if axis < 0:
+        axis += number_of_dimensions
+
+    if axis < 0 or axis >= number_of_dimensions:
+        raise ValueError(f"Axis {axis} out of bounds for array of dimension {number_of_dimensions}")
+
+    if axis != number_of_dimensions - 1:
+        permutation = [i for i in range(number_of_dimensions) if i != axis] + [axis]
+        tensor = tensor.permute(permutation)
+
+    return tensor, axis
+
+
+def _median_from_sorted_last_axis(sorted_tensor: Tensor) -> Tensor:
+    """Median values from a tensor already sorted on its last axis.
+
+    Odd length: middle element. Even length: mean of the two central values.
+    Keeps a trailing size-1 dimension for optional keepdims restore.
+    """
+    length = sorted_tensor.shape[-1]
+
+    if length % 2 == 1:
+        middle = (length - 1) // 2
+        return sorted_tensor[..., middle : middle + 1]
+
+    lower_middle = length // 2 - 1
+    upper_middle = length // 2
+    lower_values = sorted_tensor[..., lower_middle : lower_middle + 1]
+    upper_values = sorted_tensor[..., upper_middle : upper_middle + 1]
+    return (lower_values + upper_values) / 2
+
+
 def median(
     tensor: Tensor,
     axis: int | None = None,
@@ -24,29 +64,9 @@ def median(
         axis = 0
 
     number_of_dimensions = len(tensor.shape)
-    if axis < 0:
-        axis += number_of_dimensions
-
-    if axis < 0 or axis >= number_of_dimensions:
-        raise ValueError(f"Axis {axis} out of bounds for array of dimension {number_of_dimensions}")
-
-    # Move target axis to last position for sorting
-    if axis != number_of_dimensions - 1:
-        permutation = [i for i in range(number_of_dimensions) if i != axis] + [axis]
-        tensor = tensor.permute(permutation)
-
+    tensor, axis = _move_axis_to_last(tensor, axis)
     sorted_tensor, _ = tensor.sort()
-    length = sorted_tensor.shape[-1]
-
-    if length % 2 == 1:
-        middle = (length - 1) // 2
-        result = sorted_tensor[..., middle : middle + 1]
-    else:
-        lower_middle = length // 2 - 1
-        upper_middle = length // 2
-        lower_values = sorted_tensor[..., lower_middle : lower_middle + 1]
-        upper_values = sorted_tensor[..., upper_middle : upper_middle + 1]
-        result = (lower_values + upper_values) / 2
+    result = _median_from_sorted_last_axis(sorted_tensor)
 
     if keep_dimensions:
         if axis != number_of_dimensions - 1:
