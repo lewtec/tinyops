@@ -57,11 +57,14 @@ from tinyops.ops.statistics.histogram_2d import histogram_2d as _histogram_2d
 from tinyops.ops.statistics.histogram_dd import histogram_dd as _histogram_dd
 from tinyops.ops.statistics.median import median as _median
 from tinyops.ops.statistics.peak_to_peak import peak_to_peak as _peak_to_peak
+from tinyops.ops.statistics.percentile import PercentileMethod as _PercentileMethod
 from tinyops.ops.statistics.percentile import percentile as _percentile
 from tinyops.ops.statistics.quantile import quantile as _quantile
 from tinyops.ops.statistics.standard_deviation import standard_deviation as _standard_deviation
 from tinyops.ops.statistics.variance import variance as _variance
 from tinyops.ops.statistics.weighted_average import weighted_average as _weighted_average
+
+_PERCENTILE_METHODS = {member.value: member for member in _PercentileMethod}
 
 # --- Statistics ---
 
@@ -91,18 +94,88 @@ def average(a: Tensor, axis=None, weights: Tensor | None = None, returned: bool 
     return _weighted_average(a, axis=axis, weights=weights, return_sum_of_weights=returned)
 
 
-def percentile(a: Tensor, q, axis=None, keepdims: bool = False, method: str = "linear") -> Tensor:
-    """Compute the q-th percentile of the data along the specified axis."""
-    if method != "linear":
-        raise NotImplementedError("Only 'linear' interpolation is supported")
-    return _percentile(a, q, axis=axis, keep_dimensions=keepdims)
+def _as_tensor(value) -> Tensor:
+    return value if isinstance(value, Tensor) else Tensor(value)
 
 
-def quantile(a: Tensor, q, axis=None, keepdims: bool = False, method: str = "linear") -> Tensor:
-    """Compute the q-th quantile of the data along the specified axis."""
-    if method != "linear":
-        raise NotImplementedError("Only 'linear' interpolation is supported")
-    return _quantile(a, q, axis=axis, keep_dimensions=keepdims)
+def _normalize_query(q):
+    """Accept scalar, sequence, Tensor, or array-like for percentile/quantile queries."""
+    if isinstance(q, Tensor):
+        return q
+    if hasattr(q, "tolist") and not isinstance(q, (list, tuple)):
+        return q.tolist()
+    return q
+
+
+def _write_out(result: Tensor, out):
+    """Copy result into ``out`` when provided (NumPy ``out`` parameter)."""
+    if out is None:
+        return result
+    realized = result.numpy()
+    out[...] = realized
+    return out
+
+
+def percentile(
+    a,
+    q,
+    axis=None,
+    out=None,
+    overwrite_input: bool = False,
+    method: str = "linear",
+    keepdims: bool = False,
+    *,
+    weights=None,
+):
+    """Compute the q-th percentile of the data along the specified axis.
+
+    Signature matches ``numpy.percentile``. ``overwrite_input`` is accepted for
+    API compatibility and does not change the returned values.
+    """
+    del overwrite_input  # result is independent of this flag
+    if method not in _PERCENTILE_METHODS:
+        raise ValueError(f"{method!r} is not a valid method. Use one of: {sorted(_PERCENTILE_METHODS)}")
+    weight_tensor = None if weights is None else _as_tensor(weights)
+    result = _percentile(
+        _as_tensor(a),
+        _normalize_query(q),
+        axis=axis,
+        keep_dimensions=keepdims,
+        method=_PERCENTILE_METHODS[method],
+        weights=weight_tensor,
+    )
+    return _write_out(result, out)
+
+
+def quantile(
+    a,
+    q,
+    axis=None,
+    out=None,
+    overwrite_input: bool = False,
+    method: str = "linear",
+    keepdims: bool = False,
+    *,
+    weights=None,
+):
+    """Compute the q-th quantile of the data along the specified axis.
+
+    Signature matches ``numpy.quantile``. ``overwrite_input`` is accepted for
+    API compatibility and does not change the returned values.
+    """
+    del overwrite_input
+    if method not in _PERCENTILE_METHODS:
+        raise ValueError(f"{method!r} is not a valid method. Use one of: {sorted(_PERCENTILE_METHODS)}")
+    weight_tensor = None if weights is None else _as_tensor(weights)
+    result = _quantile(
+        _as_tensor(a),
+        _normalize_query(q),
+        axis=axis,
+        keep_dimensions=keepdims,
+        method=_PERCENTILE_METHODS[method],
+        weights=weight_tensor,
+    )
+    return _write_out(result, out)
 
 
 def ptp(a: Tensor, axis=None, keepdims: bool = False) -> Tensor:

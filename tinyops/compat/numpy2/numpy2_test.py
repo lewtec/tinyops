@@ -4,7 +4,6 @@ Compares tinyops.compat.numpy2 against actual numpy.
 """
 
 import numpy as np
-import pytest
 from tinygrad import Tensor
 
 from tinyops._core import assert_close
@@ -100,6 +99,23 @@ class TestAverage:
         assert_close(result_wsum, expected_wsum)
 
 
+_PERCENTILE_METHODS = [
+    "inverted_cdf",
+    "averaged_inverted_cdf",
+    "closest_observation",
+    "interpolated_inverted_cdf",
+    "hazen",
+    "weibull",
+    "linear",
+    "median_unbiased",
+    "normal_unbiased",
+    "lower",
+    "higher",
+    "midpoint",
+    "nearest",
+]
+
+
 class TestPercentile:
     def test_50th(self):
         data = np.arange(1, 11, dtype=np.float32)
@@ -110,85 +126,205 @@ class TestPercentile:
         assert_close(tnp.percentile(Tensor(data), 0), np.percentile(data, 0), atol=1e-4)
         assert_close(tnp.percentile(Tensor(data), 100), np.percentile(data, 100), atol=1e-4)
 
-    def test_axis(self):
-        data = np.random.randn(4, 5).astype(np.float32)
+    def test_multiple_percentages(self):
+        data = np.arange(1, 11, dtype=np.float32)
+        qs = [0, 25, 50, 75, 100]
+        assert_close(tnp.percentile(Tensor(data), qs), np.percentile(data, qs), atol=1e-4)
+
+    def test_q_as_array(self):
+        data = np.arange(1, 11, dtype=np.float32)
+        qs = np.array([10.0, 90.0], dtype=np.float32)
+        assert_close(tnp.percentile(Tensor(data), qs), np.percentile(data, qs), atol=1e-4)
+
+    def test_axis_and_keepdims(self):
+        rng = np.random.default_rng(0)
+        data = rng.standard_normal((5, 7)).astype(np.float32)
         assert_close(
-            tnp.percentile(Tensor(data), 25, axis=0),
-            np.percentile(data, 25, axis=0),
+            tnp.percentile(Tensor(data), 40, axis=0),
+            np.percentile(data, 40, axis=0),
             atol=1e-4,
         )
         assert_close(
-            tnp.percentile(Tensor(data), 75, axis=1),
-            np.percentile(data, 75, axis=1),
+            tnp.percentile(Tensor(data), [10, 50, 90], axis=1, keepdims=True),
+            np.percentile(data, [10, 50, 90], axis=1, keepdims=True),
             atol=1e-4,
         )
 
-    def test_keepdims(self):
-        data = np.random.randn(3, 6).astype(np.float32)
-        result = tnp.percentile(Tensor(data), 50, axis=1, keepdims=True)
-        expected = np.percentile(data, 50, axis=1, keepdims=True)
-        assert_close(result, expected, atol=1e-4)
-        assert result.shape == expected.shape
-
-    def test_multiple_percentiles(self):
-        data = np.random.randn(5, 4).astype(np.float32)
-        qs = [10, 50, 90]
-        result = tnp.percentile(Tensor(data), qs, axis=0)
-        expected = np.percentile(data, qs, axis=0)
-        assert_close(result, expected.astype(np.float32), atol=1e-4)
-        assert result.shape == expected.shape
-
-    def test_negative_axis(self):
-        data = np.random.randn(3, 4, 5).astype(np.float32)
+    def test_multi_axis(self):
+        data = np.arange(24, dtype=np.float32).reshape(2, 3, 4)
         assert_close(
-            tnp.percentile(Tensor(data), 40, axis=-1),
-            np.percentile(data, 40, axis=-1),
+            tnp.percentile(Tensor(data), 50, axis=(0, 2)),
+            np.percentile(data, 50, axis=(0, 2)),
+            atol=1e-4,
+        )
+        assert_close(
+            tnp.percentile(Tensor(data), [25, 75], axis=(0, 1), keepdims=True),
+            np.percentile(data, [25, 75], axis=(0, 1), keepdims=True),
             atol=1e-4,
         )
 
-    def test_unsupported_method(self):
-        data = np.arange(1, 6, dtype=np.float32)
-        with pytest.raises(NotImplementedError):
-            tnp.percentile(Tensor(data), 50, method="nearest")
+    def test_all_methods(self):
+        data = np.arange(1, 11, dtype=np.float32)
+        qs = [0, 10, 25, 50, 75, 90, 100]
+        for method in _PERCENTILE_METHODS:
+            assert_close(
+                tnp.percentile(Tensor(data), qs, method=method),
+                np.percentile(data, qs, method=method),
+                atol=1e-4,
+            )
+
+    def test_nan_propagation(self):
+        data = np.array([1.0, np.nan, 3.0], dtype=np.float32)
+        got = tnp.percentile(Tensor(data), 50).numpy()
+        expected = np.percentile(data, 50)
+        assert np.isnan(got) and np.isnan(expected)
+
+        data2 = np.array([[1.0, np.nan], [3.0, 4.0]], dtype=np.float32)
+        got2 = tnp.percentile(Tensor(data2), 50, axis=0).numpy()
+        expected2 = np.percentile(data2, 50, axis=0)
+        assert_close(got2[0], expected2[0], atol=1e-4)
+        assert np.isnan(got2[1]) and np.isnan(expected2[1])
+
+    def test_weights_inverted_cdf(self):
+        data = np.array([1.0, 2.0, 3.0, 4.0, 5.0], dtype=np.float32)
+        weights = np.array([1.0, 1.0, 1.0, 1.0, 10.0], dtype=np.float32)
+        qs = [0, 25, 50, 75, 100]
+        assert_close(
+            tnp.percentile(Tensor(data), qs, method="inverted_cdf", weights=Tensor(weights)),
+            np.percentile(data, qs, method="inverted_cdf", weights=weights),
+            atol=1e-4,
+        )
+
+    def test_weights_require_inverted_cdf(self):
+        data = np.array([1.0, 2.0, 3.0], dtype=np.float32)
+        weights = np.array([1.0, 1.0, 1.0], dtype=np.float32)
+        try:
+            tnp.percentile(Tensor(data), 50, method="linear", weights=Tensor(weights))
+            raise AssertionError("expected ValueError")
+        except ValueError:
+            pass
+
+    def test_out_parameter(self):
+        data = np.arange(1, 11, dtype=np.float32)
+        out = np.empty((), dtype=np.float32)
+        returned = tnp.percentile(Tensor(data), 50, out=out)
+        expected = np.percentile(data, 50)
+        assert returned is out
+        assert_close(out, expected, atol=1e-4)
+
+        out_multi = np.empty((2,), dtype=np.float32)
+        returned_multi = tnp.percentile(Tensor(data), [25, 75], out=out_multi)
+        assert returned_multi is out_multi
+        assert_close(out_multi, np.percentile(data, [25, 75]), atol=1e-4)
+
+    def test_overwrite_input_does_not_change_result(self):
+        data = np.arange(1, 11, dtype=np.float32)
+        assert_close(
+            tnp.percentile(Tensor(data), 40, overwrite_input=True),
+            np.percentile(data, 40, overwrite_input=True),
+            atol=1e-4,
+        )
+
+    def test_invalid_percentile_range(self):
+        data = np.arange(1, 5, dtype=np.float32)
+        try:
+            tnp.percentile(Tensor(data), 101)
+            raise AssertionError("expected ValueError")
+        except ValueError:
+            pass
+
+    def test_invalid_method(self):
+        data = np.arange(1, 5, dtype=np.float32)
+        try:
+            tnp.percentile(Tensor(data), 50, method="not_a_method")
+            raise AssertionError("expected ValueError")
+        except ValueError:
+            pass
+
+    def test_empty_raises(self):
+        data = np.array([], dtype=np.float32)
+        try:
+            tnp.percentile(Tensor(data), 50)
+            raise AssertionError("expected ValueError")
+        except ValueError:
+            pass
 
 
 class TestQuantile:
-    def test_median(self):
+    def test_median_probability(self):
         data = np.arange(1, 11, dtype=np.float32)
         assert_close(tnp.quantile(Tensor(data), 0.5), np.quantile(data, 0.5), atol=1e-4)
 
     def test_boundaries(self):
-        data = np.arange(1, 51, dtype=np.float32)
+        data = np.arange(1, 101, dtype=np.float32)
         assert_close(tnp.quantile(Tensor(data), 0.0), np.quantile(data, 0.0), atol=1e-4)
         assert_close(tnp.quantile(Tensor(data), 1.0), np.quantile(data, 1.0), atol=1e-4)
 
-    def test_axis_and_multiple(self):
-        data = np.random.randn(4, 5).astype(np.float32)
-        qs = [0.25, 0.5, 0.75]
-        result = tnp.quantile(Tensor(data), qs, axis=0)
-        expected = np.quantile(data, qs, axis=0)
-        assert_close(result, expected.astype(np.float32), atol=1e-4)
-        assert result.shape == expected.shape
+    def test_multiple_probabilities(self):
+        data = np.arange(1, 11, dtype=np.float32)
+        qs = [0.0, 0.25, 0.5, 0.75, 1.0]
+        assert_close(tnp.quantile(Tensor(data), qs), np.quantile(data, qs), atol=1e-4)
 
-    def test_keepdims(self):
-        data = np.random.randn(3, 6).astype(np.float32)
-        result = tnp.quantile(Tensor(data), 0.5, axis=0, keepdims=True)
-        expected = np.quantile(data, 0.5, axis=0, keepdims=True)
-        assert_close(result, expected, atol=1e-4)
-        assert result.shape == expected.shape
+    def test_axis_and_keepdims(self):
+        rng = np.random.default_rng(1)
+        data = rng.standard_normal((4, 6)).astype(np.float32)
+        assert_close(
+            tnp.quantile(Tensor(data), 0.4, axis=0),
+            np.quantile(data, 0.4, axis=0),
+            atol=1e-4,
+        )
+        assert_close(
+            tnp.quantile(Tensor(data), [0.25, 0.75], axis=1, keepdims=True),
+            np.quantile(data, [0.25, 0.75], axis=1, keepdims=True),
+            atol=1e-4,
+        )
 
-    def test_matches_percentile(self):
-        data = np.random.randn(20).astype(np.float32)
+    def test_matches_percentile_scale(self):
+        data = np.arange(1, 21, dtype=np.float32)
         assert_close(
             tnp.quantile(Tensor(data), 0.3),
             tnp.percentile(Tensor(data), 30),
             atol=1e-5,
         )
 
-    def test_unsupported_method(self):
-        data = np.arange(1, 6, dtype=np.float32)
-        with pytest.raises(NotImplementedError):
-            tnp.quantile(Tensor(data), 0.5, method="higher")
+    def test_all_methods(self):
+        data = np.arange(1, 11, dtype=np.float32)
+        qs = [0.0, 0.1, 0.25, 0.5, 0.75, 0.9, 1.0]
+        for method in _PERCENTILE_METHODS:
+            assert_close(
+                tnp.quantile(Tensor(data), qs, method=method),
+                np.quantile(data, qs, method=method),
+                atol=1e-4,
+            )
+
+    def test_nan_propagation(self):
+        data = np.array([1.0, np.nan, 3.0], dtype=np.float32)
+        got = tnp.quantile(Tensor(data), 0.5).numpy()
+        assert np.isnan(got) and np.isnan(np.quantile(data, 0.5))
+
+    def test_weights_inverted_cdf(self):
+        data = np.array([1.0, 2.0, 3.0, 4.0, 5.0], dtype=np.float32)
+        weights = np.array([1.0, 1.0, 1.0, 1.0, 10.0], dtype=np.float32)
+        assert_close(
+            tnp.quantile(Tensor(data), 0.5, method="inverted_cdf", weights=Tensor(weights)),
+            np.quantile(data, 0.5, method="inverted_cdf", weights=weights),
+            atol=1e-4,
+        )
+
+    def test_out_parameter(self):
+        data = np.arange(1, 11, dtype=np.float32)
+        out = np.empty((2,), dtype=np.float32)
+        returned = tnp.quantile(Tensor(data), [0.25, 0.75], out=out)
+        assert returned is out
+        assert_close(out, np.quantile(data, [0.25, 0.75]), atol=1e-4)
+
+    def test_invalid_method(self):
+        data = np.arange(1, 5, dtype=np.float32)
+        try:
+            tnp.quantile(Tensor(data), 0.5, method="not_a_method")
+            raise AssertionError("expected ValueError")
+        except ValueError:
+            pass
 
 
 class TestPtp:

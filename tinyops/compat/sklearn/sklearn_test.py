@@ -17,6 +17,7 @@ from sklearn.metrics import (
 )
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.naive_bayes import BernoulliNB, MultinomialNB
+from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import (
     Binarizer,
     LabelEncoder,
@@ -293,6 +294,57 @@ class TestPairwiseDistances:
         result = tsk.metrics.pairwise.pairwise_distances(Tensor(data), metric="hamming")
         expected = pairwise_distances(data, metric="hamming")
         assert_close(result, expected.astype(np.float32), atol=1e-4)
+
+
+# ============================================================================
+# Neighbors
+# ============================================================================
+
+
+class TestNearestNeighbors:
+    def test_kneighbors_self(self):
+        data = np.array(
+            [[0.0, 0.0], [1.0, 0.0], [0.0, 1.0], [1.0, 1.0], [0.5, 0.5]],
+            dtype=np.float32,
+        )
+        result_dist, result_idx = tsk.neighbors.NearestNeighbors(n_neighbors=3).fit(Tensor(data)).kneighbors()
+        expected_dist, _ = NearestNeighbors(n_neighbors=3).fit(data).kneighbors()
+        # Distances must match; equal-distance index order is algorithm-defined.
+        assert_close(result_dist, expected_dist.astype(np.float32), atol=1e-4)
+        assert result_idx.shape == expected_dist.shape
+
+    def test_kneighbors_query(self):
+        train = np.array([[0.0, 0.0], [2.0, 0.0], [0.0, 2.0], [2.0, 2.0]], dtype=np.float32)
+        query = np.array([[0.1, 0.0], [1.9, 2.0]], dtype=np.float32)
+        result_dist, result_idx = (
+            tsk.neighbors.NearestNeighbors(n_neighbors=2).fit(Tensor(train)).kneighbors(Tensor(query))
+        )
+        expected_dist, expected_idx = NearestNeighbors(n_neighbors=2).fit(train).kneighbors(query)
+        assert_close(result_dist, expected_dist.astype(np.float32), atol=1e-4)
+        assert_close(result_idx, expected_idx.astype(np.int32))
+
+    def test_return_distance_false(self):
+        data = np.array([[0.0, 0.0], [1.0, 0.0], [0.0, 1.0]], dtype=np.float32)
+        result_idx = (
+            tsk.neighbors.NearestNeighbors(n_neighbors=2)
+            .fit(Tensor(data))
+            .kneighbors(return_distance=False)
+        )
+        expected_idx = NearestNeighbors(n_neighbors=2).fit(data).kneighbors(return_distance=False)
+        assert result_idx.shape == expected_idx.shape
+        # Self is excluded when X is omitted.
+        result_np = result_idx.numpy()
+        for row_index, row in enumerate(result_np):
+            assert row_index not in set(row.tolist())
+
+    def test_override_n_neighbors(self):
+        data = np.array([[0.0], [1.0], [2.0], [3.0]], dtype=np.float32)
+        result_dist, result_idx = (
+            tsk.neighbors.NearestNeighbors(n_neighbors=3).fit(Tensor(data)).kneighbors(n_neighbors=2)
+        )
+        expected_dist, _ = NearestNeighbors(n_neighbors=3).fit(data).kneighbors(n_neighbors=2)
+        assert_close(result_dist, expected_dist.astype(np.float32), atol=1e-4)
+        assert result_idx.shape == expected_dist.shape
 
 
 # ============================================================================

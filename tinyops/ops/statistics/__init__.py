@@ -11,7 +11,7 @@ from .histogram_2d import histogram_2d
 from .histogram_dd import histogram_dd
 from .median import median
 from .peak_to_peak import peak_to_peak
-from .percentile import percentile
+from .percentile import PercentileMethod, percentile
 from .quantile import quantile
 from .standard_deviation import standard_deviation
 from .variance import variance

@@ -225,6 +225,21 @@ class TestSobel:
         assert_close(result.numpy()[1:-1, 1:-1], expected[1:-1, 1:-1], atol=1)
 
 
+    def test_scale_and_delta(self):
+        img = _make_grayscale().astype(np.float32)
+        result = tcv.Sobel(Tensor(img), -1, 1, 0, ksize=3, scale=2.0, delta=1.0)
+        expected = cv2.Sobel(img, cv2.CV_32F, 1, 0, ksize=3, scale=2.0, delta=1.0)
+        assert_close(result.numpy()[1:-1, 1:-1], expected[1:-1, 1:-1], atol=1)
+
+    def test_invalid_derivative_order(self):
+        img = _make_grayscale().astype(np.float32)
+        try:
+            tcv.Sobel(Tensor(img), -1, 1, 1, ksize=3)
+            raise AssertionError("expected ValueError")
+        except ValueError:
+            pass
+
+
 class TestScharr:
     def test_dx(self):
         img = _make_grayscale().astype(np.float32)
@@ -237,6 +252,15 @@ class TestScharr:
         result = tcv.Scharr(Tensor(img), -1, 0, 1)
         expected = cv2.Scharr(img, cv2.CV_32F, 0, 1)
         assert_close(result.numpy()[1:-1, 1:-1], expected[1:-1, 1:-1], atol=1)
+
+
+    def test_invalid_derivative_order(self):
+        img = _make_grayscale().astype(np.float32)
+        try:
+            tcv.Scharr(Tensor(img), -1, 1, 1)
+            raise AssertionError("expected ValueError")
+        except ValueError:
+            pass
 
 
 class TestLaplacian:
@@ -369,3 +393,18 @@ class TestNormalize:
         expected = np.zeros_like(img)
         cv2.normalize(img, expected, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX)
         assert_close(result, expected, atol=1e-4)
+
+    def test_constant_image(self):
+        img = np.full((8, 8), 5.0, dtype=np.float32)
+        result = tcv.normalize(Tensor(img), None, alpha=0, beta=1, norm_type=tcv.NORM_MINMAX)
+        expected = np.zeros_like(img)
+        cv2.normalize(img, expected, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX)
+        assert_close(result, expected, atol=1e-4)
+
+    def test_unsupported_norm_type(self):
+        img = np.random.randn(4, 4).astype(np.float32)
+        try:
+            tcv.normalize(Tensor(img), None, norm_type=cv2.NORM_L2)
+            raise AssertionError("expected NotImplementedError")
+        except NotImplementedError:
+            pass

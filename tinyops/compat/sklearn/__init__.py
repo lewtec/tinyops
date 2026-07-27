@@ -200,10 +200,29 @@ class _Neighbors:
             self._X = X
             return self
 
-        def kneighbors(self, X: Tensor | None = None) -> Tensor:
-            if X is None:
-                X = self._X
-            return _nearest_neighbors(X, neighbor_count=self.n_neighbors)
+        def kneighbors(
+            self,
+            X: Tensor | None = None,
+            n_neighbors: int | None = None,
+            return_distance: bool = True,
+        ):
+            if self._X is None:
+                raise ValueError("NearestNeighbors instance is not fitted yet.")
+            neighbor_count = self.n_neighbors if n_neighbors is None else n_neighbors
+            # sklearn excludes self-neighbors when querying the training set
+            # via X=None (see NearestNeighbors.kneighbors docs / behavior).
+            exclude_self = X is None
+            query = self._X if exclude_self else X
+            fetch_count = neighbor_count + 1 if exclude_self else neighbor_count
+            distances, indices = _nearest_neighbors(
+                query, self._X, neighbor_count=fetch_count
+            )
+            if exclude_self:
+                distances = distances[:, 1:]
+                indices = indices[:, 1:]
+            if return_distance:
+                return distances, indices
+            return indices
 
 
 # ============================================================================
