@@ -1,6 +1,45 @@
 from tinygrad import Tensor
 
 
+def _prepare_observation_matrix(
+    observations: Tensor,
+    second_observations: Tensor | None,
+    rows_are_variables: bool,
+) -> Tensor:
+    """Stack optional second observations and orient variables as rows."""
+    matrix = observations
+    if second_observations is not None:
+        matrix = Tensor.stack([matrix, second_observations])
+
+    if not rows_are_variables and matrix.shape[0] != 1:
+        matrix = matrix.permute(1, 0)
+
+    return matrix
+
+
+def _sample_covariance(matrix: Tensor, degrees_of_freedom: int) -> Tensor:
+    """Centered sample covariance for a variables-by-observations matrix."""
+    if matrix.shape[0] == 0:
+        return Tensor([])
+
+    if matrix.ndim > 2:
+        raise ValueError("observations has more than 2 dimensions")
+
+    row_means = matrix.mean(axis=1, keepdim=True)
+    centered = matrix - row_means
+    sample_count = matrix.shape[1]
+
+    if degrees_of_freedom == 0:
+        divisor = sample_count
+    else:
+        divisor = sample_count - degrees_of_freedom
+
+    if divisor == 0:
+        return Tensor.full(matrix.shape[0], matrix.shape[0], float("nan"))
+
+    return (centered @ centered.T) / divisor
+
+
 def covariance_matrix(
     observations: Tensor,
     second_observations: Tensor | None = None,
@@ -22,29 +61,9 @@ def covariance_matrix(
     Returns:
         Covariance matrix tensor.
     """
-    matrix = observations
-    if second_observations is not None:
-        matrix = Tensor.stack([matrix, second_observations])
-
-    if not rows_are_variables and matrix.shape[0] != 1:
-        matrix = matrix.permute(1, 0)
-
-    if matrix.shape[0] == 0:
-        return Tensor([])
-
-    if matrix.ndim > 2:
-        raise ValueError("observations has more than 2 dimensions")
-
-    row_means = matrix.mean(axis=1, keepdim=True)
-    centered = matrix - row_means
-    sample_count = matrix.shape[1]
-
-    if degrees_of_freedom == 0:
-        divisor = sample_count
-    else:
-        divisor = sample_count - degrees_of_freedom
-
-    if divisor == 0:
-        return Tensor.full(matrix.shape[0], matrix.shape[0], float("nan"))
-
-    return (centered @ centered.T) / divisor
+    matrix = _prepare_observation_matrix(
+        observations,
+        second_observations,
+        rows_are_variables,
+    )
+    return _sample_covariance(matrix, degrees_of_freedom)
