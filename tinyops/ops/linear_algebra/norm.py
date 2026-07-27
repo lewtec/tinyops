@@ -19,6 +19,25 @@ def _vector_norm(
         return (tensor.abs() ** order).sum(axis=axis, keepdim=keep_dimensions) ** (1 / order)
 
 
+def _induced_matrix_norm(
+    tensor: Tensor,
+    sum_axis: int,
+    extremum_axis: int,
+    *,
+    use_maximum: bool,
+) -> Tensor:
+    """Induced p-norm for p in {1, inf}: sum absolute values, then max or min.
+
+    Shared path for matrix orders ``1``, ``-1``, ``inf``, and ``-inf``, which
+    only differ by which axis is reduced by summation and whether the remaining
+    axis uses max (positive orders) or min (negative orders).
+    """
+    intermediate = tensor.abs().sum(axis=sum_axis, keepdim=True)
+    if use_maximum:
+        return intermediate.max(axis=extremum_axis, keepdim=True)
+    return intermediate.min(axis=extremum_axis, keepdim=True)
+
+
 def _matrix_norm(
     tensor: Tensor,
     order: int | float | str | None,
@@ -36,17 +55,13 @@ def _matrix_norm(
         return (tensor.abs() ** 2).sum(axis=axis, keepdim=keep_dimensions).sqrt()
 
     if order == float("inf"):
-        intermediate = tensor.abs().sum(axis=column_axis, keepdim=True)
-        result = intermediate.max(axis=row_axis, keepdim=True)
+        result = _induced_matrix_norm(tensor, column_axis, row_axis, use_maximum=True)
     elif order == float("-inf"):
-        intermediate = tensor.abs().sum(axis=column_axis, keepdim=True)
-        result = intermediate.min(axis=row_axis, keepdim=True)
+        result = _induced_matrix_norm(tensor, column_axis, row_axis, use_maximum=False)
     elif order == 1:
-        intermediate = tensor.abs().sum(axis=row_axis, keepdim=True)
-        result = intermediate.max(axis=column_axis, keepdim=True)
+        result = _induced_matrix_norm(tensor, row_axis, column_axis, use_maximum=True)
     elif order == -1:
-        intermediate = tensor.abs().sum(axis=row_axis, keepdim=True)
-        result = intermediate.min(axis=column_axis, keepdim=True)
+        result = _induced_matrix_norm(tensor, row_axis, column_axis, use_maximum=False)
     elif order == 2:
         raise NotImplementedError("Spectral norm (order=2) not supported.")
     else:
