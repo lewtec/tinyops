@@ -11,6 +11,36 @@ class ConvolutionMode(Enum):
     SAME = "same"
 
 
+def _order_longer_signal_first(
+    signal: Tensor,
+    kernel: Tensor,
+) -> tuple[Tensor, Tensor, int, int]:
+    """Return (signal, kernel, signal_length, kernel_length) with signal longer.
+
+    Discrete linear convolution is commutative; swapping keeps the longer
+    sequence as the conv input so padding math stays kernel-relative.
+    """
+    signal_length = signal.shape[0]
+    kernel_length = kernel.shape[0]
+    if kernel_length > signal_length:
+        return kernel, signal, kernel_length, signal_length
+    return signal, kernel, signal_length, kernel_length
+
+
+def _convolution_1d_padding(
+    mode: ConvolutionMode,
+    kernel_length: int,
+) -> tuple[int, int]:
+    """Left/right spatial padding for the 1D signal given *mode* and kernel size."""
+    if mode == ConvolutionMode.FULL:
+        return kernel_length - 1, kernel_length - 1
+    if mode == ConvolutionMode.SAME:
+        return kernel_length // 2, (kernel_length - 1) // 2
+    if mode == ConvolutionMode.VALID:
+        return 0, 0
+    raise ValueError(f"Invalid mode '{mode}'")
+
+
 def convolution_1d(
     signal: Tensor,
     kernel: Tensor,
@@ -32,30 +62,13 @@ def convolution_1d(
     if signal.ndim != 1 or kernel.ndim != 1:
         raise ValueError("Input tensors must be one-dimensional.")
 
-    signal_length = signal.shape[0]
-    kernel_length = kernel.shape[0]
-
-    if signal_length == 0:
+    if signal.shape[0] == 0:
         raise ValueError("signal cannot be empty")
-    if kernel_length == 0:
+    if kernel.shape[0] == 0:
         raise ValueError("kernel cannot be empty")
 
-    # Ensure signal is the longer tensor
-    if kernel_length > signal_length:
-        signal, kernel = kernel, signal
-        signal_length, kernel_length = kernel_length, signal_length
-
-    if mode == ConvolutionMode.FULL:
-        pad_left = kernel_length - 1
-        pad_right = kernel_length - 1
-    elif mode == ConvolutionMode.SAME:
-        pad_left = kernel_length // 2
-        pad_right = (kernel_length - 1) // 2
-    elif mode == ConvolutionMode.VALID:
-        pad_left = 0
-        pad_right = 0
-    else:
-        raise ValueError(f"Invalid mode '{mode}'")
+    signal, kernel, _signal_length, kernel_length = _order_longer_signal_first(signal, kernel)
+    pad_left, pad_right = _convolution_1d_padding(mode, kernel_length)
 
     x = signal.reshape(1, 1, 1, -1)
     w = kernel.flip(0).reshape(1, 1, 1, -1)
