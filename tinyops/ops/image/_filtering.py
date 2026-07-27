@@ -109,6 +109,58 @@ def apply_convolution_filter(
     return output * scale + delta
 
 
+def _pad_for_morphology(
+    image: Tensor,
+    kernel_height: int,
+    kernel_width: int,
+    fill_value: float,
+) -> tuple[Tensor, int, int]:
+    """Pad image so a sliding kernel can run at every original pixel.
+
+    Returns ``(padded_image, original_height, original_width)``.
+    """
+    pad_y = (kernel_height - 1) // 2
+    pad_x = (kernel_width - 1) // 2
+    original_height, original_width = image.shape[:2]
+
+    if image.ndim == 2:
+        pad_config = ((pad_y, pad_y), (pad_x, pad_x))
+    elif image.ndim == 3:
+        pad_config = ((pad_y, pad_y), (pad_x, pad_x), (0, 0))
+    else:
+        raise NotImplementedError(f"Morphological filter not implemented for ndim={image.ndim}")
+
+    return image.pad(pad_config, value=fill_value), original_height, original_width
+
+
+def _masked_morphology_windows(
+    padded: Tensor,
+    kernel: Tensor,
+    original_height: int,
+    original_width: int,
+    fill_value: float,
+) -> Tensor:
+    """Stack kernel-offset windows and zero-out positions outside the SE.
+
+    Inactive structuring-element sites are set to ``fill_value`` so they do not
+    affect a subsequent min (erosion) or max (dilation) reduce.
+    """
+    kernel_height, kernel_width = kernel.shape
+    views = []
+    for row in range(kernel_height):
+        for column in range(kernel_width):
+            if padded.ndim == 2:
+                view = padded[row : row + original_height, column : column + original_width]
+            else:
+                view = padded[row : row + original_height, column : column + original_width, :]
+            views.append(view.unsqueeze(0))
+
+    stacked = Tensor.cat(*views, dim=0)
+    mask_shape = (kernel_height * kernel_width,) + (1,) * (padded.ndim)
+    kernel_mask = kernel.flatten().reshape(mask_shape) > 0
+    return Tensor.where(kernel_mask, stacked, fill_value)
+
+
 def apply_morphological_filter(image: Tensor, kernel: Tensor, operation: str) -> Tensor:
     """Apply a morphological filter (erosion/dilation) using sliding window.
 
@@ -120,39 +172,21 @@ def apply_morphological_filter(image: Tensor, kernel: Tensor, operation: str) ->
     Returns:
         Filtered image tensor.
     """
-    kernel_height, kernel_width = kernel.shape
-    pad_y = (kernel_height - 1) // 2
-    pad_x = (kernel_width - 1) // 2
-
-    original_height, original_width = image.shape[:2]
-
-    if image.ndim == 2:
-        pad_config = ((pad_y, pad_y), (pad_x, pad_x))
-    elif image.ndim == 3:
-        pad_config = ((pad_y, pad_y), (pad_x, pad_x), (0, 0))
+    if operation == "min":
+        fill_value = float("inf")
+    elif operation == "max":
+        fill_value = float("-inf")
     else:
-        raise NotImplementedError(f"Morphological filter not implemented for ndim={image.ndim}")
+        raise ValueError(f"Invalid operation: {operation}")
 
-    fill_value = float("inf") if operation == "min" else float("-inf")
-    padded = image.pad(pad_config, value=fill_value)
-
-    views = []
-    for row in range(kernel_height):
-        for column in range(kernel_width):
-            if image.ndim == 2:
-                view = padded[row : row + original_height, column : column + original_width]
-            else:
-                view = padded[row : row + original_height, column : column + original_width, :]
-            views.append(view.unsqueeze(0))
-
-    stacked = Tensor.cat(*views, dim=0)
-    mask_shape = (kernel_height * kernel_width,) + (1,) * image.ndim
-    kernel_mask = kernel.flatten().reshape(mask_shape) > 0
-    masked = Tensor.where(kernel_mask, stacked, fill_value)
+    kernel_height, kernel_width = kernel.shape
+    padded, original_height, original_width = _pad_for_morphology(
+        image, kernel_height, kernel_width, fill_value
+    )
+    masked = _masked_morphology_windows(
+        padded, kernel, original_height, original_width, fill_value
+    )
 
     if operation == "min":
         return masked.min(axis=0)
-    elif operation == "max":
-        return masked.max(axis=0)
-    else:
-        raise ValueError(f"Invalid operation: {operation}")
+    return masked.max(axis=0)
