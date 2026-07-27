@@ -51,6 +51,41 @@ def _unpack_pcm_samples(raw_frames: bytes, sample_width: int, sample_count: int)
     raise ValueError(f"Unsupported sample width: {sample_width}")
 
 
+def _read_wav_pcm(wav_bytes: bytes) -> tuple[int, int, int, int, bytes]:
+    """Read WAV container fields and raw PCM frames.
+
+    Returns:
+        (channel_count, sample_width, sample_rate, frame_count, raw_frames)
+    """
+    with io.BytesIO(wav_bytes) as buffer:
+        with wave.open(buffer, "rb") as wav_file:
+            channel_count = wav_file.getnchannels()
+            sample_width = wav_file.getsampwidth()
+            sample_rate = wav_file.getframerate()
+            frame_count = wav_file.getnframes()
+
+            if frame_count > MAXIMUM_FRAME_COUNT:
+                raise ValueError(
+                    f"WAV file frame count {frame_count} exceeds limit of {MAXIMUM_FRAME_COUNT}."
+                )
+
+            raw_frames = wav_file.readframes(frame_count)
+
+    return channel_count, sample_width, sample_rate, frame_count, raw_frames
+
+
+def _interleaved_samples_to_frames(
+    floats: list[float],
+    frame_count: int,
+    channel_count: int,
+) -> list[list[float]]:
+    """Reshape interleaved PCM floats into (frames, channels) nested lists."""
+    if channel_count == 1:
+        return [[value] for value in floats]
+    sample_count = frame_count * channel_count
+    return [floats[index : index + channel_count] for index in range(0, sample_count, channel_count)]
+
+
 def decode_wav(wav_bytes: bytes) -> tuple[int, Tensor]:
     """Decode WAV audio bytes into a tensor.
 
@@ -67,17 +102,7 @@ def decode_wav(wav_bytes: bytes) -> tuple[int, Tensor]:
     Raises:
         ValueError: For malformed or excessively large WAV files.
     """
-    with io.BytesIO(wav_bytes) as buffer:
-        with wave.open(buffer, "rb") as wav_file:
-            channel_count = wav_file.getnchannels()
-            sample_width = wav_file.getsampwidth()
-            sample_rate = wav_file.getframerate()
-            frame_count = wav_file.getnframes()
-
-            if frame_count > MAXIMUM_FRAME_COUNT:
-                raise ValueError(f"WAV file frame count {frame_count} exceeds limit of {MAXIMUM_FRAME_COUNT}.")
-
-            raw_frames = wav_file.readframes(frame_count)
+    channel_count, sample_width, sample_rate, frame_count, raw_frames = _read_wav_pcm(wav_bytes)
 
     expected_size = frame_count * channel_count * sample_width
     if len(raw_frames) < expected_size:
@@ -90,10 +115,6 @@ def decode_wav(wav_bytes: bytes) -> tuple[int, Tensor]:
 
     sample_count = frame_count * channel_count
     floats = _unpack_pcm_samples(raw_frames, sample_width, sample_count)
-
-    if channel_count == 1:
-        shaped = [[value] for value in floats]
-    else:
-        shaped = [floats[index : index + channel_count] for index in range(0, sample_count, channel_count)]
+    shaped = _interleaved_samples_to_frames(floats, frame_count, channel_count)
 
     return sample_rate, Tensor(shaped, dtype=dtypes.float32)
