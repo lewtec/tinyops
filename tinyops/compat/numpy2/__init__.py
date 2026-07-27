@@ -116,6 +116,33 @@ def _write_out(result: Tensor, out):
     return out
 
 
+def _percentile_like(
+    operation,
+    a,
+    q,
+    axis,
+    out,
+    overwrite_input: bool,
+    method: str,
+    keepdims: bool,
+    weights,
+):
+    """Shared NumPy-shaped wrapper for ``percentile`` / ``quantile`` ops."""
+    del overwrite_input  # result is independent of this flag
+    if method not in _PERCENTILE_METHODS:
+        raise ValueError(f"{method!r} is not a valid method. Use one of: {sorted(_PERCENTILE_METHODS)}")
+    weight_tensor = None if weights is None else _as_tensor(weights)
+    result = operation(
+        _as_tensor(a),
+        _normalize_query(q),
+        axis=axis,
+        keep_dimensions=keepdims,
+        method=_PERCENTILE_METHODS[method],
+        weights=weight_tensor,
+    )
+    return _write_out(result, out)
+
+
 def percentile(
     a,
     q,
@@ -132,19 +159,9 @@ def percentile(
     Signature matches ``numpy.percentile``. ``overwrite_input`` is accepted for
     API compatibility and does not change the returned values.
     """
-    del overwrite_input  # result is independent of this flag
-    if method not in _PERCENTILE_METHODS:
-        raise ValueError(f"{method!r} is not a valid method. Use one of: {sorted(_PERCENTILE_METHODS)}")
-    weight_tensor = None if weights is None else _as_tensor(weights)
-    result = _percentile(
-        _as_tensor(a),
-        _normalize_query(q),
-        axis=axis,
-        keep_dimensions=keepdims,
-        method=_PERCENTILE_METHODS[method],
-        weights=weight_tensor,
+    return _percentile_like(
+        _percentile, a, q, axis, out, overwrite_input, method, keepdims, weights
     )
-    return _write_out(result, out)
 
 
 def quantile(
@@ -163,19 +180,9 @@ def quantile(
     Signature matches ``numpy.quantile``. ``overwrite_input`` is accepted for
     API compatibility and does not change the returned values.
     """
-    del overwrite_input
-    if method not in _PERCENTILE_METHODS:
-        raise ValueError(f"{method!r} is not a valid method. Use one of: {sorted(_PERCENTILE_METHODS)}")
-    weight_tensor = None if weights is None else _as_tensor(weights)
-    result = _quantile(
-        _as_tensor(a),
-        _normalize_query(q),
-        axis=axis,
-        keep_dimensions=keepdims,
-        method=_PERCENTILE_METHODS[method],
-        weights=weight_tensor,
+    return _percentile_like(
+        _quantile, a, q, axis, out, overwrite_input, method, keepdims, weights
     )
-    return _write_out(result, out)
 
 
 def ptp(a: Tensor, axis=None, keepdims: bool = False) -> Tensor:
