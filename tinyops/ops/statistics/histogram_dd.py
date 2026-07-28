@@ -9,6 +9,61 @@ from tinyops.ops.statistics._histogram import resolve_histogram_range
 from tinyops.ops.statistics.bin_count import bin_count
 
 
+def _compute_flat_indices(
+    sample_matrix: Tensor,
+    dimension_count: int,
+    sample_count: int,
+    resolved_ranges: list[tuple[float, float]],
+    bins_per_dimension: list[int],
+    bin_widths: list[float],
+) -> tuple[Tensor, Tensor]:
+    flat_indices = Tensor.zeros(sample_count, dtype=dtypes.int32)
+    valid_mask = Tensor.ones(sample_count, dtype=dtypes.bool)
+    stride = 1
+
+    # Build row-major flat indices: (...((i0 * b1 + i1) * b2 + i2) ...)
+    # Process dimensions from last to first so the last axis varies fastest
+    # (matches numpy.histogramdd / C-order reshape).
+    for dimension_index in range(dimension_count - 1, -1, -1):
+        column = sample_matrix[:, dimension_index]
+        minimum_value, maximum_value = resolved_ranges[dimension_index]
+        bin_count_for_axis = bins_per_dimension[dimension_index]
+        bin_width = bin_widths[dimension_index]
+
+        indices = ((column - minimum_value) / bin_width).floor().cast(dtypes.int32)
+        indices = (column == maximum_value).where(bin_count_for_axis - 1, indices)
+
+        in_range = (column >= minimum_value) & (column <= maximum_value)
+        valid_mask = valid_mask & in_range
+
+        flat_indices = flat_indices + indices * stride
+        stride *= bin_count_for_axis
+
+    return flat_indices, valid_mask
+
+
+def _resolve_axes(
+    sample_matrix: Tensor,
+    dimension_count: int,
+    bins_per_dimension: list[int],
+    value_ranges: Sequence[tuple[float, float] | list[float]] | None,
+) -> tuple[list[tuple[float, float]], list[Tensor], list[float]]:
+    resolved_ranges: list[tuple[float, float]] = []
+    edges: list[Tensor] = []
+    bin_widths: list[float] = []
+
+    for dimension_index in range(dimension_count):
+        column = sample_matrix[:, dimension_index]
+        explicit_range = None if value_ranges is None else value_ranges[dimension_index]
+        minimum_value, maximum_value = resolve_histogram_range(column, explicit_range)
+        resolved_ranges.append((minimum_value, maximum_value))
+        bin_count_for_axis = bins_per_dimension[dimension_index]
+        edges.append(Tensor.linspace(minimum_value, maximum_value, bin_count_for_axis + 1))
+        bin_widths.append((maximum_value - minimum_value) / bin_count_for_axis)
+
+    return resolved_ranges, edges, bin_widths
+
+
 def histogram_dd(
     samples: Tensor,
     number_of_bins: int | Sequence[int] = 10,
@@ -71,45 +126,23 @@ def histogram_dd(
                 f"weights must have shape ({sample_count},), got {weights.shape}"
             )
 
-    resolved_ranges: list[tuple[float, float]] = []
-    edges: list[Tensor] = []
-    bin_widths: list[float] = []
-
-    for dimension_index in range(dimension_count):
-        column = sample_matrix[:, dimension_index]
-        explicit_range = None if value_ranges is None else value_ranges[dimension_index]
-        minimum_value, maximum_value = resolve_histogram_range(column, explicit_range)
-        resolved_ranges.append((minimum_value, maximum_value))
-        bin_count_for_axis = bins_per_dimension[dimension_index]
-        edges.append(Tensor.linspace(minimum_value, maximum_value, bin_count_for_axis + 1))
-        bin_widths.append((maximum_value - minimum_value) / bin_count_for_axis)
+    resolved_ranges, edges, bin_widths = _resolve_axes(
+        sample_matrix, dimension_count, bins_per_dimension, value_ranges
+    )
 
     total_bins = math.prod(bins_per_dimension)
 
     if sample_count == 0:
         return Tensor.zeros(*bins_per_dimension), edges
 
-    flat_indices = Tensor.zeros(sample_count, dtype=dtypes.int32)
-    valid_mask = Tensor.ones(sample_count, dtype=dtypes.bool)
-    stride = 1
-
-    # Build row-major flat indices: (...((i0 * b1 + i1) * b2 + i2) ...)
-    # Process dimensions from last to first so the last axis varies fastest
-    # (matches numpy.histogramdd / C-order reshape).
-    for dimension_index in range(dimension_count - 1, -1, -1):
-        column = sample_matrix[:, dimension_index]
-        minimum_value, maximum_value = resolved_ranges[dimension_index]
-        bin_count_for_axis = bins_per_dimension[dimension_index]
-        bin_width = bin_widths[dimension_index]
-
-        indices = ((column - minimum_value) / bin_width).floor().cast(dtypes.int32)
-        indices = (column == maximum_value).where(bin_count_for_axis - 1, indices)
-
-        in_range = (column >= minimum_value) & (column <= maximum_value)
-        valid_mask = valid_mask & in_range
-
-        flat_indices = flat_indices + indices * stride
-        stride *= bin_count_for_axis
+    flat_indices, valid_mask = _compute_flat_indices(
+        sample_matrix,
+        dimension_count,
+        sample_count,
+        resolved_ranges,
+        bins_per_dimension,
+        bin_widths,
+    )
 
     final_indices = valid_mask.where(flat_indices.cast(dtypes.int32), total_bins)
 
