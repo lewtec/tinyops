@@ -1,6 +1,43 @@
 from tinygrad import Tensor, dtypes
 
 
+def _prepare_percentages(tensor: Tensor, percentages: float | list[float] | Tensor) -> tuple[Tensor, bool]:
+    is_scalar_query = False
+    if isinstance(percentages, (int, float)):
+        percentages = [float(percentages)]
+        is_scalar_query = True
+    elif isinstance(percentages, list):
+        percentages = [float(p) for p in percentages]
+
+    if not isinstance(percentages, Tensor):
+        percentages_tensor = Tensor(percentages, device=tensor.device, dtype=tensor.dtype)
+    else:
+        percentages_tensor = percentages.cast(tensor.dtype)
+        if len(percentages_tensor.shape) == 0:
+            percentages_tensor = percentages_tensor.reshape(1)
+            is_scalar_query = True
+        elif len(percentages_tensor.shape) > 1:
+            raise ValueError("percentages must be 1D or scalar")
+    return percentages_tensor, is_scalar_query
+
+
+def _prepare_tensor_and_sort(tensor: Tensor, axis: int | None) -> tuple[Tensor, int, int]:
+    if axis is None:
+        tensor = tensor.flatten()
+        axis = 0
+
+    number_of_dimensions = len(tensor.shape)
+    if axis < 0:
+        axis += number_of_dimensions
+
+    if axis != number_of_dimensions - 1:
+        permutation = [i for i in range(number_of_dimensions) if i != axis] + [axis]
+        tensor = tensor.permute(permutation)
+
+    sorted_tensor, _ = tensor.sort()
+    return sorted_tensor, axis, number_of_dimensions
+
+
 def percentile(
     tensor: Tensor,
     percentages: float | list[float] | Tensor,
@@ -20,36 +57,9 @@ def percentile(
     Returns:
         Tensor containing the requested percentile values.
     """
-    is_scalar_query = False
-    if isinstance(percentages, (int, float)):
-        percentages = [float(percentages)]
-        is_scalar_query = True
-    elif isinstance(percentages, list):
-        percentages = [float(p) for p in percentages]
+    percentages_tensor, is_scalar_query = _prepare_percentages(tensor, percentages)
+    sorted_tensor, axis, number_of_dimensions = _prepare_tensor_and_sort(tensor, axis)
 
-    if not isinstance(percentages, Tensor):
-        percentages_tensor = Tensor(percentages, device=tensor.device, dtype=tensor.dtype)
-    else:
-        percentages_tensor = percentages.cast(tensor.dtype)
-        if len(percentages_tensor.shape) == 0:
-            percentages_tensor = percentages_tensor.reshape(1)
-            is_scalar_query = True
-        elif len(percentages_tensor.shape) > 1:
-            raise ValueError("percentages must be 1D or scalar")
-
-    if axis is None:
-        tensor = tensor.flatten()
-        axis = 0
-
-    number_of_dimensions = len(tensor.shape)
-    if axis < 0:
-        axis += number_of_dimensions
-
-    if axis != number_of_dimensions - 1:
-        permutation = [i for i in range(number_of_dimensions) if i != axis] + [axis]
-        tensor = tensor.permute(permutation)
-
-    sorted_tensor, _ = tensor.sort()
     sample_count = sorted_tensor.shape[-1]
 
     indices = (sample_count - 1) * percentages_tensor / 100.0
