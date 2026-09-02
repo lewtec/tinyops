@@ -1,0 +1,11 @@
+{
+  "dependencies": [
+    {
+      "kind": "tool",
+      "ref": "github:astral-sh/ruff",
+      "depName": "astral-sh/ruff",
+      "currentValue": "0.16.5",
+      "datasource": "github-releases"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+[tools]
+"github:lucasew/ci-status" = "0.3.0"
+uv = "0.11.29"
+"vfox:clang" = "18.1.8"
+
+[tasks."install:uv"]
+run = "uv sync"
+
+[tasks.install]
+depends = ["install:*"]
+
+[tasks."lint:ruff"]
+run = "uv run ruff check ."
+
+[tasks.lint]
+depends = ["lint:*"]
+
+[tasks."fmt:ruff"]
+run = "uv run ruff format ."
+
+[tasks.fmt]
+depends = ["fmt:*"]
+
+[tasks."test:pytest"]
+run = "ci-status run test -- uv run pytest"
+
+[tasks.test]
+depends = ["test:*"]
+
+[tasks."codegen:noop"]
+run = "true"
+
+[tasks.codegen]
+depends = ["codegen:*"]
+
+[tasks.ci]
+depends = ["lint", "test"]
