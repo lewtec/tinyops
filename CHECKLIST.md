@@ -1,0 +1,307 @@
+# CHECKLIST
+- [x] `np.dot`
+- [x] `np.matmul`
+- [x] `np.vdot`
+- [x] `np.inner`
+- [x] `np.outer`
+- [x] `np.tensordot`
+- [x] `np.einsum`
+- [x] `np.trace`
+- [x] `np.diagonal`
+- [x] `np.kron`
+- [x] `np.linalg.norm`
+- [x] `np.linalg.det`
+- [x] `np.linalg.inv`
+- [x] `np.linalg.pinv`
+- [x] `np.linalg.solve`
+- [x] `np.linalg.lstsq`
+- [ ] `np.linalg.cond`
+- [x] `np.linalg.matrix_rank`
+- [x] `np.linalg.cholesky`
+- [x] `np.linalg.qr`
+- [ ] `np.linalg.eig`
+- [ ] `np.linalg.eigh`
+- [ ] `np.linalg.eigvals`
+- [ ] `np.linalg.svd`
+- [x] `np.linalg.matrix_power`
+- [x] `np.mean`
+- [x] `np.median`
+- [x] `np.std`
+- [x] `np.var`
+- [x] `np.average`
+- [x] `np.percentile`
+- [x] `np.quantile`
+- [x] `np.ptp`
+- [x] `np.bincount`
+- [x] `np.digitize`
+- [x] `np.corrcoef`
+- [x] `np.correlate`
+- [x] `np.cov`
+- [x] `np.histogram`
+- [x] `np.histogram2d`
+- [x] `np.histogramdd`
+- [x] `np.convolve`
+- [x] `np.hanning`
+- [x] `np.hamming`
+- [x] `np.blackman`
+- [x] `np.kaiser`
+- [x] `np.fft.fft`
+- [x] `np.fft.ifft`
+- [x] `np.fft.fft2`
+- [x] `np.fft.ifft2`
+- [x] `np.fft.rfft`
+- [x] `np.fft.irfft`
+- [x] `np.fft.fftfreq`
+- [x] `filterpy.kalman.MerweScaledSigmaPoints`
+- [x] `filterpy.common.Q_discrete_white_noise`
+- [ ] `filterpy.kalman.KalmanFilter`
+- [ ] `filterpy.kalman.ExtendedKalmanFilter`
+- [ ] `filterpy.kalman.UnscentedKalmanFilter`
+- [ ] wav decode
+- [ ] wav encode
+- [ ] bmp decode
+- [ ] bmp encode
+- [x] `cv2.resize`
+- [x] `cv2.rotate`
+- [x] `cv2.flip`
+- [ ] `cv2.warpAffine`
+- [ ] `cv2.warpPerspective`
+- [x] `cv2.blur`
+- [x] `cv2.boxFilter`
+- [x] `cv2.GaussianBlur`
+- [ ] `cv2.medianBlur`
+- [ ] `cv2.bilateralFilter`
+- [x] `cv2.filter2D`
+- [ ] `cv2.Sobel`
+- [ ] `cv2.Scharr`
+- [x] `cv2.Laplacian`
+- [ ] `cv2.Canny`
+- [x] `cv2.dilate`
+- [x] `cv2.erode`
+- [x] `cv2.morphologyEx`
+- [x] `cv2.threshold`
+- [ ] `cv2.adaptiveThreshold`
+- [x] `cv2.cvtColor`
+- [x] `cv2.equalizeHist`
+- [ ] `cv2.normalize`
+- [x] `torchvision.transforms.CenterCrop`
+- [x] `torchvision.transforms.Pad`
+- [ ] `torchvision.transforms.ColorJitter`
+- [ ] `torchaudio.transforms.MelScale`
+- [x] `torchaudio.transforms.AmplitudeToDB`
+- [ ] `torchaudio.transforms.Resample`
+- [x] `torchaudio.transforms.MuLawEncoding`
+- [x] `torchaudio.transforms.MuLawDecoding`
+- [x] `torchaudio.transforms.Fade`
+- [ ] `torchaudio.transforms.Spectrogram`
+- [ ] `torchaudio.transforms.MelSpectrogram`
+- [ ] `torchaudio.transforms.MFCC`
+- [ ] `torchaudio.transforms.GriffinLim`
+- [ ] `torchaudio.transforms.TimeStretch`
+- [x] `torchaudio.transforms.FrequencyMasking`
+- [x] `torchaudio.transforms.TimeMasking`
+- [x] `scipy.spatial.distance.hamming`
+- [ ] `difflib.SequenceMatcher.ratio`
+- [ ] `jellyfish.levenshtein_distance`
+- [ ] `nltk.edit_distance`
+- [ ] `jellyfish.jaro_winkler_similarity`
+- [ ] `sklearn.metrics.pairwise_distances(metric='hamming')`
+- [x] `sklearn.feature_extraction.text.CountVectorizer`
+- [x] `sklearn.feature_extraction.text.TfidfVectorizer`
+- [x] `sklearn.preprocessing.StandardScaler`
+- [x] `sklearn.preprocessing.MinMaxScaler`
+- [x] `sklearn.preprocessing.MaxAbsScaler`
+- [x] `sklearn.preprocessing.RobustScaler`
+- [x] `sklearn.preprocessing.Normalizer`
+- [x] `sklearn.preprocessing.Binarizer`
+- [ ] `sklearn.preprocessing.OneHotEncoder`
+- [ ] `sklearn.preprocessing.LabelEncoder`
+- [x] `sklearn.preprocessing.PolynomialFeatures`
+- [x] `sklearn.metrics.accuracy_score`
+- [x] `sklearn.metrics.precision_score`
+- [x] `sklearn.metrics.recall_score`
+- [x] `sklearn.metrics.f1_score`
+- [x] `sklearn.metrics.confusion_matrix`
+- [x] `sklearn.metrics.roc_auc_score`
+- [x] `sklearn.metrics.mean_squared_error`
+- [x] `sklearn.metrics.mean_absolute_error`
+- [x] `sklearn.metrics.r2_score`
+- [ ] `sklearn.metrics.silhouette_score`
+- [ ] `sklearn.neighbors.NearestNeighbors`
+- [ ] `sklearn.neighbors.KNeighborsClassifier`
+- [ ] `sklearn.neighbors.KNeighborsRegressor`
+- [ ] `sklearn.naive_bayes.GaussianNB`
+- [x] `sklearn.naive_bayes.MultinomialNB`
+- [x] `sklearn.naive_bayes.BernoulliNB`
+- [ ] `sklearn.linear_model.LinearRegression`
+- [ ] `sklearn.linear_model.Ridge`
+- [ ] `sklearn.linear_model.Lasso`
+- [ ] `sklearn.linear_model.ElasticNet`
+- [ ] `sklearn.linear_model.LogisticRegression`
+- [ ] `sklearn.linear_model.SGDClassifier`
+- [ ] `sklearn.linear_model.SGDRegressor`
+- [ ] `sklearn.svm.LinearSVC`
+- [ ] `sklearn.svm.LinearSVR`
+- [ ] `sklearn.svm.SVC`
+- [ ] `sklearn.svm.SVR`
+- [ ] `sklearn.tree.DecisionTreeClassifier`
+- [ ] `sklearn.tree.DecisionTreeRegressor`
+- [ ] `sklearn.cluster.KMeans`
+- [ ] `sklearn.cluster.MiniBatchKMeans`
+- [ ] `sklearn.cluster.MeanShift`
+- [ ] `sklearn.cluster.DBSCAN`
+- [ ] `sklearn.cluster.AgglomerativeClustering`
+- [ ] `sklearn.cluster.SpectralClustering`
+- [ ] `sklearn.decomposition.PCA`
+- [ ] `sklearn.decomposition.TruncatedSVD`
+- [ ] `sklearn.decomposition.NMF`
+- [ ] `sklearn.decomposition.FastICA`
+- [ ] `sklearn.decomposition.FactorAnalysis`
+- [ ] `sklearn.manifold.MDS`
+- [ ] `sklearn.manifold.Isomap`
+- [ ] `sklearn.manifold.TSNE`
+- [ ] `sklearn.mixture.GaussianMixture`
+- [ ] `sklearn.mixture.BayesianGaussianMixture`
+- [ ] `sklearn.ensemble.RandomForestClassifier`
+- [ ] `sklearn.ensemble.RandomForestRegressor`
+- [ ] `sklearn.ensemble.AdaBoostClassifier`
+- [ ] `sklearn.ensemble.AdaBoostRegressor`
+- [ ] `sklearn.ensemble.GradientBoostingClassifier`
+- [ ] `sklearn.ensemble.GradientBoostingRegressor`
+- [ ] `gguf.GGUFReader`
+- [ ] `gguf.GGUFWriter`
+- [ ] `gguf.GGUFValueType`
+- [ ] `gguf.GGMLQuantizationType`
+- [ ] `gguf.MODEL_ARCH`
+- [ ] `gguf.MODEL_TENSOR`
+- [ ] `gguf.TensorNameMap`
+- [ ] `gguf.get_tensor_name_map`
+- [ ] `gguf.quants.dequantize`
+- [ ] `gguf.quants.quantize`
+- [ ] `gguf.quants.quant_shape_to_byte_shape`
+- [ ] `gguf.quants.quant_shape_from_byte_shape`
+- [ ] `gguf.quants.Q8_0`
+- [ ] `gguf.quants.Q4_0`
+- [ ] `gguf.quants.Q4_1`
+- [ ] `gguf.quants.Q5_0`
+- [ ] `gguf.quants.Q5_1`
+- [ ] `gguf.quants.Q2_K`
+- [ ] `gguf.quants.Q3_K`
+- [ ] `gguf.quants.Q4_K`
+- [ ] `gguf.quants.Q5_K`
+- [ ] `gguf.quants.Q6_K`
+- [ ] `gguf.quants.TQ1_0`
+- [ ] `gguf.quants.TQ2_0`
+- [ ] `gguf.quants.IQ2_XXS`
+- [ ] `gguf.quants.IQ2_XS`
+- [ ] `gguf.quants.IQ2_S`
+- [ ] `gguf.quants.IQ3_XXS`
+- [ ] `gguf.quants.IQ3_S`
+- [ ] `gguf.quants.IQ4_NL`
+- [ ] `gguf.quants.IQ4_XS`
+- [ ] `ggml_quantize_requires_imatrix`
+- [ ] `safetensors.safe_open`
+- [ ] `safetensors.numpy.load_file`
+- [ ] `safetensors.numpy.save_file`
+- [ ] `sentencepiece.SentencePieceProcessor.encode`
+- [ ] `sentencepiece.SentencePieceProcessor.decode`
+- [ ] `sentencepiece.SentencePieceProcessor.encode_as_ids`
+- [ ] `sentencepiece.SentencePieceProcessor.encode_as_pieces`
+- [ ] `sentencepiece.SentencePieceProcessor.id_to_piece`
+- [ ] `sentencepiece.SentencePieceProcessor.piece_to_id`
+- [ ] `sentencepiece.SentencePieceProcessor.is_byte`
+- [ ] `sentencepiece.SentencePieceProcessor.is_control`
+- [ ] `sentencepiece.SentencePieceProcessor.is_unknown`
+- [ ] `sentencepiece.SentencePieceProcessor.sample_encode_as_ids`
+- [ ] `sentencepiece.SentencePieceProcessor.nbest_encode_as_ids`
+- [ ] `sentencepiece.SentencePieceNormalizer.normalize`
+- [ ] `tokenizers.Tokenizer`
+- [ ] `tokenizers.models.BPE`
+- [ ] `tokenizers.models.Unigram`
+- [ ] `tokenizers.models.WordPiece`
+- [ ] `tokenizers.models.WordLevel`
+- [ ] `tokenizers.pre_tokenizers.ByteLevel`
+- [ ] `tokenizers.pre_tokenizers.Metaspace`
+- [ ] `tokenizers.pre_tokenizers.Whitespace`
+- [ ] `tokenizers.pre_tokenizers.Split`
+- [ ] `tokenizers.normalizers.NFC`
+- [ ] `tokenizers.normalizers.NFKC`
+- [ ] `tokenizers.normalizers.Replace`
+- [ ] `tokenizers.normalizers.Prepend`
+- [ ] `tokenizers.decoders.ByteLevel`
+- [ ] `tokenizers.decoders.ByteFallback`
+- [ ] `tokenizers.decoders.Metaspace`
+- [ ] `tokenizers.decoders.WordPiece`
+- [ ] `tokenizers.processors.TemplateProcessing`
+- [ ] `tokenizers.AddedToken`
+- [ ] `transformers.modeling_rope_utils.ROPE_INIT_FUNCTIONS["default"]`
+- [ ] `transformers.modeling_rope_utils.ROPE_INIT_FUNCTIONS["linear"]`
+- [ ] `transformers.modeling_rope_utils.ROPE_INIT_FUNCTIONS["dynamic"]`
+- [ ] `transformers.modeling_rope_utils.ROPE_INIT_FUNCTIONS["yarn"]`
+- [ ] `transformers.modeling_rope_utils.ROPE_INIT_FUNCTIONS["longrope"]`
+- [ ] `transformers.modeling_rope_utils.ROPE_INIT_FUNCTIONS["llama3"]`
+- [ ] `transformers.models.gpt_neox.modeling_gpt_neox.GPTNeoXRotaryEmbedding`
+- [ ] `transformers.models.qwen2_vl.modeling_qwen2_vl.Qwen2VLRotaryEmbedding`
+- [ ] `transformers.models.t5.modeling_t5.T5Attention._relative_position_bucket`
+- [ ] `transformers.models.deberta_v2.modeling_deberta_v2.DisentangledSelfAttention`
+- [ ] `transformers.TemperatureLogitsWarper`
+- [ ] `transformers.TopKLogitsWarper`
+- [ ] `transformers.TopPLogitsWarper`
+- [ ] `transformers.MinPLogitsWarper`
+- [ ] `transformers.TypicalLogitsWarper`
+- [ ] `transformers.EpsilonLogitsWarper`
+- [ ] `transformers.EtaLogitsWarper`
+- [ ] `transformers.RepetitionPenaltyLogitsProcessor`
+- [ ] `transformers.FrequencyPenaltyLogitsProcessor`
+- [ ] `transformers.PresencePenaltyLogitsProcessor`
+- [ ] `transformers.NoRepeatNGramLogitsProcessor`
+- [ ] `transformers.SequenceBiasLogitsProcessor`
+- [ ] `transformers.SuppressTokensLogitsProcessor`
+- [ ] `transformers.SuppressTokensAtBeginLogitsProcessor`
+- [ ] `transformers.ForcedBOSTokenLogitsProcessor`
+- [ ] `transformers.ForcedEOSTokenLogitsProcessor`
+- [ ] `transformers.BadWordsLogitsProcessor`
+- [ ] `transformers.LogitNormalization`
+- [ ] `transformers.InfNanRemoveLogitsProcessor`
+- [ ] `llama_sampler_init_temp_ext`
+- [ ] `llama_sampler_init_xtc`
+- [ ] `llama_sampler_init_mirostat`
+- [ ] `llama_sampler_init_mirostat_v2`
+- [ ] `llama_sampler_init_dry`
+- [ ] `llama_sampler_init_logit_bias`
+- [ ] `xgrammar.Grammar.from_ebnf`
+- [ ] `xgrammar.Grammar.from_json_schema`
+- [ ] `xgrammar.Grammar.from_regex`
+- [ ] `xgrammar.Grammar.builtin_json_grammar`
+- [ ] `xgrammar.GrammarCompiler.compile_grammar`
+- [ ] `xgrammar.GrammarMatcher.fill_next_token_bitmask`
+- [ ] `xgrammar.GrammarMatcher.accept_token`
+- [ ] `xgrammar.GrammarMatcher.rollback`
+- [ ] `xgrammar.apply_token_bitmask_inplace`
+- [ ] `outlines_core.json_schema.build_regex_from_schema`
+- [ ] `outlines_core.fsm.regex.make_deterministic_fsm`
+- [ ] `outlines_core.fsm.regex.create_fsm_index_tokenizer`
+- [ ] `transformers.cache_utils.DynamicCache`
+- [ ] `transformers.cache_utils.StaticCache`
+- [ ] `transformers.cache_utils.SlidingWindowCache`
+- [ ] `transformers.cache_utils.HybridCache`
+- [ ] `transformers.cache_utils.QuantizedCache`
+- [ ] `transformers.cache_utils.Cache.reorder_cache`
+- [ ] `transformers.cache_utils.Cache.batch_repeat_interleave`
+- [ ] `transformers.cache_utils.Cache.batch_select_indices`
+- [ ] `transformers.models.mixtral.modeling_mixtral.MixtralSparseMoeBlock`
+- [ ] `transformers.models.qwen2_moe.modeling_qwen2_moe.Qwen2MoeSparseMoeBlock`
+- [ ] `transformers.models.deepseek_v2.modeling_deepseek_v2.DeepseekV2MoE`
+- [ ] `transformers.models.switch_transformers.modeling_switch_transformers.SwitchTransformersSparseMLP`
+- [ ] `transformers.models.mamba.modeling_mamba.MambaMixer`
+- [ ] `transformers.models.mamba2.modeling_mamba2.Mamba2Mixer`
+- [ ] `transformers.models.rwkv.modeling_rwkv.RwkvLinearAttention`
+- [ ] `transformers.models.rwkv.modeling_rwkv.RwkvFeedForward`
+- [ ] `transformers.models.recurrent_gemma.modeling_recurrent_gemma.RecurrentGemmaRecurrentBlock`
+- [ ] `peft.tuners.lora.layer.Linear`
+- [ ] `peft.tuners.lora.layer.Embedding`
+- [ ] `peft.utils.merge_utils.task_arithmetic`
+- [ ] `peft.utils.merge_utils.ties`
+- [ ] `peft.utils.merge_utils.dare_linear`
+- [ ] `transformers.generation.utils._speculative_sampling`
+- [ ] `transformers.generation.candidate_generator.PromptLookupCandidateGenerator`
