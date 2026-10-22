@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install mise
-        uses: jdx/mise-action@dad1bfd3df957f44999b559dd69dc1671cb4e9ea # v4
+        uses: jdx/mise-action@8418fedb1110381a0d3ba51a7a415d7c1b884550 # v5
 
       - name: Install dependencies
         run: mise run install
